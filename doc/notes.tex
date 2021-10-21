@@ -1,0 +1,312 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[left=20mm,right=20mm,top=20mm,bottom=30mm]{geometry}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Form factors}
+
+Form factor of a point particle:
+\begin{equation}
+  F_0(Q^2) = 1,
+\end{equation}
+where $Q^2$ is the photon 3-momentum squared.
+
+Monopole form factor:
+\begin{equation}
+  F_1(Q^2) = \frac{1}{1 + \frac{Q^2}{\Lambda^2}}.
+\end{equation}
+
+Dipole form factor:
+\begin{equation}
+  F_2(Q^2) = \frac{1}{\left( 1 + \frac{Q^2}{\Lambda^2} \right)^2}.
+\end{equation}
+
+\section{EPA spectra}
+
+Equivalent photon spectrum integrated across transversal plane:
+\begin{equation}
+  n(\omega)
+  = \frac{2 Z^2 \alpha}{\pi \omega}
+    \int\limits_0^\infty
+      \left[
+        \frac{F(q_\perp^2 + (\omega / \gamma)^2)}
+             {q_\perp^2 + (\omega / \gamma)^2}
+      \right]^2
+      q_\perp^3
+      \, \mathrm{d} q_\perp,
+\end{equation}
+where $\omega$ is the photon energy $Z e$ is the charge of the particle,
+$\gamma$ is its Lorentz factor, $\alpha$ is the fine structure constant,
+$q_\perp$ is the photon transverse momentum, $F(Q^2)$ is the particle
+electromagnetic form factor.
+
+Equivalent photon spectrum of a point particle is logarithmically divergent.
+
+Equivalent photon spectrum for monopole form factor:
+\begin{equation}
+  n_1(\omega)
+  = \frac{Z^2 \alpha}{\pi \omega}
+    \left[ (2 a + 1) \ln \left(1 + \frac{1}{a} \right) - 2 \right],
+\end{equation}
+where $a = (\omega / \Lambda \gamma)^2$.
+
+Equivalent photon spectrum for dipole form factor:
+\begin{equation}
+  n_2(\omega)
+  = \frac{Z^2 \alpha}{\pi \omega}
+    \left[
+      (4 a + 1) \ln \left(1 + \frac{1}{a} \right)
+      - \frac{24 a^2 + 42 a + 17}{6 (a + 1)^2}
+    \right],
+\end{equation}
+where $a = (\omega / \Lambda \gamma)^2$.
+
+Equivalent photon spectrum at distance $b$ from the source particle:
+\begin{equation}
+  n(b, \omega)
+  = \frac{Z^2 \alpha}{\pi^2 \omega}
+    \left[
+      \int\limits_0^\infty
+        \frac{F(q_\perp^2 + (\omega / \gamma)^2)}
+             {q_\perp^2 + (\omega / \gamma)^2}
+        J_1(b q_\perp)
+        \, q_\perp^2
+        \, \mathrm{d} q_\perp
+    \right]^2,
+\end{equation}
+where $J_1(x)$ is the Bessel function of the first kind.
+
+Equivalent photon spectrum of point-like particle:
+\begin{equation}
+  n_0(b, \omega)
+  = \frac{Z^2 \alpha \omega}{\pi^2 \gamma^2}
+    K_1^2 \left( \frac{b \omega}{\gamma} \right),
+\end{equation}
+where $K_1(x)$ is the modified Bessel function of the second kind (the Macdonald
+function).
+
+Equivalent photon spectrum for monopole form factor:
+\begin{equation}
+  n_1(b, \omega)
+  = \frac{Z^2 \alpha}{\pi^2 \omega}
+    \left[
+        \frac{\omega}{\gamma} K_1 \left( \frac{b \omega}{\gamma} \right)
+      - \sqrt{\Lambda^2 + \left( \frac{\omega}{\gamma} \right)^2}
+        K_1 \left(
+          b \sqrt{\Lambda^2 + \left( \frac{\omega}{\gamma} \right)^2}
+        \right)
+    \right]^2.
+\end{equation}
+
+Equivalent photon spectrum for dipole form factor:
+\begin{multline}
+  n_2(b, \omega)
+  = \frac{Z^2 \alpha}{\pi^2 \omega}
+    \left[
+        \frac{\omega}{\gamma} K_1 \left( \frac{b \omega}{\gamma} \right)
+      - \sqrt{\Lambda^2 + \left( \frac{\omega}{\gamma} \right)^2}
+        K_1 \left(
+          b \sqrt{\Lambda^2 + \left( \frac{\omega}{\gamma} \right)^2}
+        \right)
+  \right. \\ \left.
+      - \frac{b \Lambda^2}{2}
+        K_0 \left(
+          b \sqrt{\Lambda^2 + \left( \frac{\omega}{\gamma} \right)^2}
+        \right)
+    \right].
+\end{multline}
+
+Equivalent photon spectrum at distance $b$ with the form factor given as a set
+of points $(Q_i^2, F(Q_i)^2)$ is calculated with the help of the following
+relations:
+\begin{gather}
+  n(b, \omega)
+  = \frac{Z^2 \alpha}{\pi^2 \omega}
+    \left[
+      \sum\limits_i
+        \int\limits_{\sqrt{Q_i^2 - \left( \frac{\omega}{\gamma} \right)^2}}
+                   ^{\sqrt{Q_{i+1}^2 - \left( \frac{\omega}{\gamma} \right)^2}}
+          \left(
+              A_i q_\perp^2
+            + B_i
+            - \frac{B_i \ (\omega / \gamma)^2}{q_\perp^2 + (\omega / \gamma)^2}
+          \right)
+          J_1(b q_\perp)
+    \right]^2,
+  \\
+  A_i = \frac{F(Q_{i+1}^2) - F(Q_i^2)}{Q_{i+1}^2 - Q_i^2},
+  \ 
+  B_i = F(Q_i^2) - A Q_i^2,
+  \\
+  \int x^2 J_1(a x) \mathrm{d} x = \frac{x^2}{a} J_2(a x) + \text{const}, \\
+  \int J_1(a x) \mathrm{d} x = -\frac{1}{a} J_0(x) + \text{const}.
+\end{gather}
+
+\section{Luminosity}
+
+Photon-photon luminosity in ultraperipheral collision of particles $A$ and $B$
+differentiated with respect to rapidity of the system $y = \tfrac12 \ln
+\tfrac{\omega_1}{\omega_2}$ with non-electromagnetic interactions neglected:
+\begin{equation}
+  \frac{\mathrm{d} L_{AB}}{\mathrm{d} s}
+  = \frac14
+    \int\limits_{-\infty}^{\infty}
+      n_A \left( \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
+      n_B \left( \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
+    \mathrm{d} y,
+\end{equation}
+where $n_A$ and $n_B$ are the equivalent photon spectra of the particles $A$ and
+$B$, $s = 4 \omega_1 \omega_2$ is the invariant mass of the photons. Calculation
+convergence is better when we change the integration variable to $x =
+\frac{\omega_1}{\omega_2} = \exp{2 y}$:
+\begin{equation}
+  \frac{\mathrm{d} L_{AB}}{\mathrm{d} s}
+  = \frac18
+    \int\limits_0^\infty
+       n_A \left( \sqrt{\frac{sx}{4}} \right)
+       n_B \left( \sqrt{\frac{s}{4x}} \right)
+       \frac{\mathrm{d} x}{x}.
+\end{equation}
+
+Simplification when $A = B$:
+\begin{equation}
+  \frac{\mathrm {d} L}{\mathrm{d} s}
+  = 2 \int\limits_0^\infty
+        n \left( \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
+        n \left( \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
+      \mathrm{d} y
+  = \frac14
+    \int\limits_0^1
+      n \left( \sqrt{\frac{sx}{4}} \right)
+      n \left( \sqrt{\frac{s}{4x}} \right)
+      \frac{\mathrm{d} x}{x}.
+\end{equation}
+
+%Photon-photon luminosity with non-electromagnetic interactions respected:
+%\begin{equation}
+%  \frac{\mathrm{d} L_\parallel}{\mathrm{d} s}
+%  = \frac14
+%    \int\limits_{-\infty}^\infty \mathrm{d} y
+%    \int\limits_{b_1 > \hat r} \mathrm{d}^2 b_1
+%    \int\limits_{b_2 > \hat r} \mathrm{d}^2 b_2
+%    n_A \left( b_1, \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
+%    n_B \left( b_1, \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
+%    P(b) \cos^2 \varphi
+
+\section{Proton}
+
+Proton dipole form factor:
+\begin{equation}
+  F_p(Q^2)
+  = \frac{1 + \frac{(\mu_p - 1) \tau}{1 + \tau}}
+         {\left( 1 + \frac{Q^2}{\Lambda^2} \right)^2},
+\end{equation}
+where $\tau = Q^2 / 4 m_p^2$, $m_p$ is the proton mass, $\mu_p$ is the proton
+magnetic moment (ratio to nuclear magneton).
+
+Equivalent photon spectrum of a proton with the form factor approximated with
+the dipole formula:
+\begin{equation}
+  \begin{split}
+    n_p(\omega)
+   &= \frac{\alpha}{\pi \omega}
+      \left\{
+          \left( 1 + 4 a - 2 (\mu - 1) \frac{a}{b} \right)
+          \ln\left( 1 + \frac{1}{a} \right)
+   \right. \\ &\qquad \left. {}
+        + \frac{\mu - 1}{(b - 1)^4}
+          \left(
+            \frac{\mu - 1}{b - 1} (1 + 4 a + 3 b) - 2 \left( 1 + \frac{a}{b} \right)
+          \right)
+          \ln \frac{a + b}{a + 1}
+        - \left( 4 + \frac{1}{a + 1} + \frac{1}{6 (a + 1)^2} \right)
+   \right. \\ &\qquad \left. {}
+        + 2 (\mu - 1) \left[
+              \left( \frac{a}{b} + \frac{1 + a/b}{(b - 1)^3} \right)
+              \frac{1}{a + 1}
+            + \frac12
+              \left( \frac{a}{b} - \frac{1 + a/b}{(b - 1)^2} \right)
+              \frac{1}{(a + 1)^2}
+            + \frac13
+              \left( \frac{a}{b} + \frac{1 + a/b}{b - 1} \right)
+              \frac{1}{(a + 1)^3}
+         \right]
+   \right. \\ &\qquad \left. {}
+       - (\mu - 1)^2
+         \left[
+           \frac{1}{(b - 1)^4}
+           + \frac{1 + 3 a + 2 b}{(a + 1) (b - 1)^4}
+           - \frac{1 + 2 a + b}{2 (a + 1)^2 (b - 1)^3}
+           + \frac{1}{3 (a + 1)^2 (b - 1)^2}
+         \right]
+     \right\}
+    \\
+    &= \frac{\alpha}{\pi \omega}
+       \left\{
+           \left( 1 + 4 u - 2 (\mu_p - 1) \frac{u}{v} \right)
+           \ln \left( 1 + \frac{1}{u} \right)
+    \right. \\ &\qquad \left. {}
+         + \frac{\mu_p - 1}{(v - 1)^4} \left[
+               \frac{\mu_p - 1}{v - 1} (1 + 4 u + 3 v)
+             - 2 \left( 1 + \frac{u}{v} \right)
+           \right]
+           \ln \frac{u + v}{u + 1}
+         - \frac{24 u^2 + 42 u + 17}{6 (u + 1)^2}
+    \right. \\ &\qquad \left. {}
+         + (\mu_p - 1) \,
+           \frac{
+             6 u^2 (v^2 - 3 v + 3) + 3 u (3 v^2 - 9 v + 10) + 2 v^2 - 7 v + 11
+           }{
+             3 (u + 1)^2 (v - 1)^3
+           }
+    \right. \\ &\qquad \left. {}
+         - (\mu_p - 1)^2 \,
+           \frac{
+             24 u^2 + 6 u (v + 7) - v^2 + 8 v + 17
+           }{
+             6 (u + 1)^2 (v - 1)^4
+           }
+       \right\},
+    \\
+  \end{split}
+\end{equation}
+where
+\begin{equation}
+  u = \left( \frac{\omega}{\Lambda \gamma} \right)^2, \ 
+  v = \left( \frac{2 m_p}{\Lambda} \right)^2.
+\end{equation}
+
+Equivalent photon spectrum at distance $b$ of a proton with the form factor
+approximated with the dipole formula:
+\begin{multline}
+  \begin{split}
+    n(b, \omega)
+    &= \frac{\alpha}{\pi^2 \omega}
+       \left[
+           \frac{\omega}{\gamma} K_1 \left( \frac{b \omega}{\gamma} \right)
+         - \left(
+               1
+             + \frac{(\mu_p - 1) \frac{\Lambda^4}{16 m_p^4}}{
+                 \left( 1 - \frac{\Lambda^2}{4 m_p^2} \right)^2
+               }
+           \right)
+           \sqrt{\Lambda^2 + \frac{\omega^2}{\gamma^2}}
+           \, K_1 \left( b \sqrt{\Lambda^2 + \frac{\omega^2}{\gamma^2}} \right)
+    \right. \\ &\qquad \left.
+         + \frac{(\mu_p - 1) \frac{\Lambda^4}{16 m_p^4}}{
+             \left( 1 - \frac{\Lambda^2}{4 m_p^2}  \right)^2
+           }
+           \sqrt{4 m_p^2 + \frac{\omega^2}{\gamma^2}}
+           \, K_1 \left( b \sqrt{4 m_p^2 + \frac{\omega^2}{\gamma^2}} \right)
+    \right. \\ &\qquad \left.
+         - \frac{1 - \frac{\mu_p \Lambda^2}{4 m_p^2}}
+                {1 - \frac{\Lambda^2}{4 m_p^2}}
+         \cdot
+           \frac{b \Lambda^2}{2}
+           \, K_0 \left( b \sqrt{\Lambda^2 + \frac{\omega^2}{\gamma^2}} \right)
+       \right]^2.
+  \end{split}
+\end{multline}
+
+\end{document}

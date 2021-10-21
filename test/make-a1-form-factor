@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+print <<'END';
+const double A1_FORM_FACTOR[] = {
+  // q2, electric, magnetic
+END
+
+my $first = 1;
+while (<>) {
+  if (/^\s*#/) {
+    s,#,  //,;
+    print;
+    next;
+  };
+
+  if ($first) {
+    $first = undef;
+  } else {
+    print ", \n";
+  };
+
+  s,#.*,,;
+  print '  ', join ', ', (split ' ')[0,1,7];
+}
+
+print "\n};\n";
