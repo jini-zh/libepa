@@ -6,6 +6,7 @@
 #include <functional>
 #include <utility>
 #include <stdexcept>
+#include <limits>
 
 namespace gsl {
 
@@ -18,6 +19,8 @@ class Error: public std::exception {
   private:
     int err_;
 };
+
+const double infinity = std::numeric_limits<double>().infinity();
 
 const auto bessel_J0 = gsl_sf_bessel_J0;
 const auto bessel_J1 = gsl_sf_bessel_J1;
@@ -62,6 +65,8 @@ enum QAGMethod {
   GAUSS61 = GSL_INTEG_GAUSS61
 };
 
+// Unified interface for quadrature integration (qag, qagiu, qagil, qagi). Pass
+// the infinity constant to integrate to infinity.
 std::pair<double, double> qag(
     const std::function<double (double)>& f,
     double a,
@@ -73,23 +78,8 @@ std::pair<double, double> qag(
     const Workspace&
 );
 
-std::pair<double, double> qagiu(
-    const std::function<double (double)>& f,
-    double a,
-    double epsabs,
-    double epsrel,
-    size_t limit,
-    const Workspace&
-);
-
-std::pair<double, double> qagi(
-    const std::function<double (double)>& f,
-    double epsabs,
-    double epsrel,
-    size_t limit,
-    const Workspace&
-);
-
 }; // namespace integration
+
+const auto integrate = integration::qag;
 
 }; // namespace gsl

@@ -39,8 +39,8 @@ Workspace::~Workspace() {
 
 std::pair<double, double> qag(
     const std::function<double (double)>& f,
-    double a,
-    double b,
+    double from,
+    double to,
     double epsabs,
     double epsrel,
     size_t limit,
@@ -52,70 +52,52 @@ std::pair<double, double> qag(
   F.params = const_cast<std::function<double (double)>*>(&f);
 
   std::pair<double, double> result;
-  gsl_integration_qag(
-      &F,
-      a,
-      b,
-      epsabs,
-      epsrel,
-      limit,
-      method,
-      workspace.get(),
-      &result.first,
-      &result.second
-  );
-
-  return result;
-};
-
-std::pair<double, double> qagiu(
-    const std::function<double (double)>& f,
-    double a,
-    double epsabs,
-    double epsrel,
-    size_t limit,
-    const Workspace& workspace
-) {
-  gsl_function F;
-  F.function = closure_trampoline;
-  F.params = const_cast<std::function<double (double)>*>(&f);
-
-  std::pair<double, double> result;
-  gsl_integration_qagiu(
-      &F,
-      a,
-      epsabs,
-      epsrel,
-      limit,
-      workspace.get(),
-      &result.first,
-      &result.second
-  );
-
-  return result;
-};
-
-std::pair<double, double> qagi(
-    const std::function<double (double)>& f,
-    double epsabs,
-    double epsrel,
-    size_t limit,
-    const Workspace& workspace
-) {
-  gsl_function F;
-  F.function = closure_trampoline;
-  F.params = const_cast<std::function<double (double)>*>(&f);
-
-  std::pair<double, double> result;
-  gsl_integration_qagi(
-      &F,
-      epsabs,
-      epsrel,
-      limit,
-      workspace.get(),
-      &result.first,
-      &result.second
-  );
+  if (from == -infinity)
+    if (to == infinity)
+      gsl_integration_qagi(
+          &F,
+          epsabs,
+          epsrel,
+          limit,
+          workspace.get(),
+          &result.first,
+          &result.second
+      );
+    else
+      gsl_integration_qagil(
+          &F,
+          to,
+          epsabs,
+          epsrel,
+          limit,
+          workspace.get(),
+          &result.first,
+          &result.second
+      );
+  else if (to == infinity)
+    gsl_integration_qagiu(
+        &F,
+        from,
+        epsabs,
+        epsrel,
+        limit,
+        workspace.get(),
+        &result.first,
+        &result.second
+    );
+  else
+    gsl_integration_qag(
+        &F,
+        from,
+        to,
+        epsabs,
+        epsrel,
+        limit,
+        method,
+        workspace.get(),
+        &result.first,
+        &result.second
+    );
 
   return result;
 };

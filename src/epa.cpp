@@ -10,7 +10,9 @@ double default_error_step         = 1e-1;
 size_t default_integration_limit  = 1000;
 gsl::integration::QAGMethod default_integration_method = gsl::integration::GAUSS41;
 
-IntegratorAB gsl_integrator_ab(
+const double infinity = gsl::infinity;
+
+Integrator gsl_integrator(
     double absolute_error,
     double relative_error,
     size_t limit,
@@ -21,44 +23,14 @@ IntegratorAB gsl_integrator_ab(
     workspace = std::make_shared<gsl::integration::Workspace>(limit);
   return [=](const std::function<double (double)>& f, double a, double b)
          -> double {
-    return gsl::integration::qag(
+    return gsl::integrate(
         f, a, b, absolute_error, relative_error, limit, method, *workspace
     ).first;
   };
 };
 
-IntegratorAInf gsl_integrator_ainf(
-    double absolute_error,
-    double relative_error,
-    size_t limit,
-    std::shared_ptr<gsl::integration::Workspace> workspace
-) {
-  if (!workspace)
-    workspace = std::make_shared<gsl::integration::Workspace>(limit);
-  return [=](const std::function<double (double)>& f, double a) -> double {
-    return gsl::integration::qagiu(
-        f, a, absolute_error, relative_error, limit, *workspace
-    ).first;
-  };
-};
-
-IntegratorInf gsl_integrator_inf(
-    double absolute_error,
-    double relative_error,
-    size_t limit,
-    std::shared_ptr<gsl::integration::Workspace> workspace
-) {
-  if (!workspace)
-    workspace = std::make_shared<gsl::integration::Workspace>(limit);
-  return [=](const std::function<double (double)>& f) -> double {
-    return gsl::integration::qagi(
-        f, absolute_error, relative_error, limit, *workspace
-    ).first;
-  };
-};
-
-IntegratorAB gsl_integrator_ab(const gsl_integrator_ab_keys& keys) {
-  return gsl_integrator_ab(
+Integrator gsl_integrator(const gsl_integrator_keys& keys) {
+  return gsl_integrator(
       keys.absolute_error,
       keys.relative_error,
       keys.limit,
@@ -67,46 +39,14 @@ IntegratorAB gsl_integrator_ab(const gsl_integrator_ab_keys& keys) {
   );
 };
 
-IntegratorAInf gsl_integrator_ainf(const gsl_integrator_inf_keys& keys) {
-  return gsl_integrator_ainf(
-      keys.absolute_error,
-      keys.relative_error,
-      keys.limit,
-      keys.workspace
-  );
-};
-
-IntegratorInf gsl_integrator_inf(const gsl_integrator_inf_keys& keys) {
-  return gsl_integrator_inf(
-      keys.absolute_error,
-      keys.relative_error,
-      keys.limit,
-      keys.workspace
-  );
-};
-
-IntegratorAB gsl_integrator_ab(unsigned level) {
-  return gsl_integrator_ab(
+Integrator gsl_integrator(unsigned level) {
+  return gsl_integrator(
       default_absolute_error,
       default_relative_error * pow(default_error_step, level)
   );
 };
 
-IntegratorAInf gsl_integrator_ainf(unsigned level) {
-  return gsl_integrator_ainf(
-      default_absolute_error,
-      default_relative_error * pow(default_error_step, level)
-  );
-};
-
-IntegratorInf gsl_integrator_inf(unsigned level) {
-  return gsl_integrator_inf(
-      default_absolute_error,
-      default_relative_error * pow(default_error_step, level)
-  );
-};
-
-IntegratorAB_I gsl_integrator_ab_i(
+Integrator_I gsl_integrator_i(
     double relative_error,
     size_t limit,
     gsl::integration::QAGMethod method,
@@ -117,7 +57,7 @@ IntegratorAB_I gsl_integrator_ab_i(
   return [=](
       const std::function<double (double)>& f, double a, double b, double I
   ) -> double {
-    return gsl::integration::qag(
+    return gsl::integrate(
         f,
         a,
         b,
@@ -130,23 +70,8 @@ IntegratorAB_I gsl_integrator_ab_i(
   };
 };
 
-IntegratorAInf_I gsl_integrator_ainf_i(
-    double relative_error,
-    size_t limit,
-    std::shared_ptr<gsl::integration::Workspace> workspace
-) {
-  if (!workspace)
-    workspace = std::make_shared<gsl::integration::Workspace>(limit);
-  return [=](const std::function<double (double)>& f, double a, double I)
-         -> double {
-    return gsl::integration::qagiu(
-        f, a, relative_error * abs(I), relative_error, limit, *workspace
-    ).first;
-  };
-};
-
-IntegratorAB_I gsl_integrator_ab_i(const gsl_integrator_ab_keys& keys) {
-  return gsl_integrator_ab_i(
+Integrator_I gsl_integrator_i(const gsl_integrator_keys& keys) {
+  return gsl_integrator_i(
       keys.relative_error,
       keys.limit,
       keys.method,
@@ -154,22 +79,8 @@ IntegratorAB_I gsl_integrator_ab_i(const gsl_integrator_ab_keys& keys) {
   );
 };
 
-IntegratorAInf_I gsl_integrator_ainf_i(const gsl_integrator_inf_keys& keys) {
-  return gsl_integrator_ainf_i(
-      keys.relative_error,
-      keys.limit,
-      keys.workspace
-  );
-};
-
-IntegratorAB_I gsl_integrator_ab_i(unsigned level) {
-  return gsl_integrator_ab_i(default_relative_error * pow(default_error_step, level));
-};
-
-IntegratorAInf_I gsl_integrator_ainf_i(unsigned level) {
-  return gsl_integrator_ainf_i(
-      default_relative_error * pow(default_error_step, level)
-  );
+Integrator_I gsl_integrator_i(unsigned level) {
+  return gsl_integrator_i(default_relative_error * pow(default_error_step, level));
 };
 
 // avoid underflow
@@ -197,7 +108,7 @@ FormFactor form_factor_dipole(double lambda2) {
 
 Spectrum
 spectrum(
-    unsigned Z, double gamma, FormFactor form_factor, IntegratorAInf integrate
+    unsigned Z, double gamma, FormFactor form_factor, Integrator integrate
 ) {
   auto wg2 = std::make_shared<double>();
 
@@ -210,7 +121,7 @@ spectrum(
 
   return [=, integrate = std::move(integrate)](double w) -> double {
     *wg2 = sqr(w / gamma);
-    return c / w * integrate(iqt, 0);
+    return c / w * integrate(iqt, 0, infinity);
   };
 };
 
@@ -239,7 +150,7 @@ spectrum_dipole(unsigned Z, double gamma, double lambda2) {
 
 Spectrum_b
 spectrum_b(
-    unsigned Z, double gamma, FormFactor form_factor, IntegratorAInf integrate
+    unsigned Z, double gamma, FormFactor form_factor, Integrator integrate
 ) {
   struct Env {
     double b;
@@ -259,7 +170,7 @@ spectrum_b(
   return [=, integrate = std::move(integrate)](double b, double w) -> double {
     env->b   = b;
     env->wg2 = sqr(w / gamma);
-    return c / w * sqr(integrate(iqt, 0));
+    return c / w * sqr(integrate(iqt, 0, infinity));
   };
 };
 
@@ -325,8 +236,7 @@ spectrum_b_function1d_x(
     Spectrum_b rest_spectrum,
     double b_max,
     std::function<double (double, double, double)>&& integral_qt_max,
-    IntegratorAB_I   integrate_ab,
-    IntegratorAInf_I integrate_ainf
+    Integrator_I integrate
 ) {
   if (!form_factor || form_factor->points.size() < 2)
     if (rest_spectrum)
@@ -369,8 +279,7 @@ spectrum_b_function1d_x(
   return [
     =,
     integral_qt_max = std::move(integral_qt_max),
-    integrate_ab    = std::move(integrate_ab),
-    integrate_ainf  = std::move(integrate_ainf),
+    integrate       = std::move(integrate),
     n0              = std::move(n0)
   ](double b, double w) -> double {
     if (b_max > 0 && b > b_max) return n0(b, w);
@@ -387,8 +296,8 @@ spectrum_b_function1d_x(
     if (rest_form_factor)
       I += norm * (
           rest_spectrum
-          ? sqrt(rest_spectrum(b, w) / C) - integrate_ab(rqt, 0, qt_max, I)
-          : integrate_ainf(rqt, qt_max, I)
+          ? sqrt(rest_spectrum(b, w) / C) - integrate(rqt, 0, qt_max, I)
+          : integrate(rqt, qt_max, infinity, I)
       );
     return C * sqr(I);
   };
@@ -402,8 +311,7 @@ spectrum_b_function1d_g(
     FormFactor rest_form_factor,
     Spectrum_b rest_spectrum,
     double b_max,
-    IntegratorAB_I   integrate_ab,
-    IntegratorAInf_I integrate_ainf
+    Integrator_I integrate
 ) {
   struct Env {
     double b;
@@ -425,14 +333,13 @@ spectrum_b_function1d_g(
       rest_form_factor,
       rest_spectrum,
       b_max,
-      [env, fqt = std::move(fqt), integrate_ab]
+      [env, fqt = std::move(fqt), integrate]
       (double b, double wg2, double qt_max) -> double {
         env->b = b;
         env->wg2 = wg2;
-        return integrate_ab(fqt, 0, qt_max, 0);
+        return integrate(fqt, 0, qt_max, 0);
       },
-      integrate_ab,
-      integrate_ainf
+      integrate
   );
 };
 
@@ -444,8 +351,7 @@ spectrum_b_function1d_s(
     FormFactor rest_form_factor,
     Spectrum_b rest_spectrum,
     double b_max,
-    IntegratorAB_I   integrate_ab,
-    IntegratorAInf_I integrate_ainf
+    Integrator_I integrate
 ) {
   struct Env {
     double b;
@@ -465,7 +371,7 @@ spectrum_b_function1d_s(
       rest_form_factor,
       rest_spectrum,
       b_max,
-      [form_factor, env, fj1 = std::move(fj1), integrate_ab]
+      [form_factor, env, fj1 = std::move(fj1), integrate]
       (double b, double wg2, double qt_max) -> double {
         env->b   = b;
         env->wg2 = wg2;
@@ -486,14 +392,13 @@ spectrum_b_function1d_s(
                  )
              + B / b
                * (gsl::bessel_J0(b * start) - gsl::bessel_J0(b * end))
-             - B * wg2 * integrate_ab(fj1, start, end, 0);
+             - B * wg2 * integrate(fj1, start, end, 0);
           left = right;
           start = end;
         };
         return I;
       },
-      integrate_ab,
-      integrate_ainf
+      integrate
   );
 };
 
@@ -505,8 +410,7 @@ spectrum_b_function1d(
     FormFactor rest_form_factor,
     Spectrum_b rest_spectrum,
     double b_max,
-    IntegratorAB_I   integrate_ab,
-    IntegratorAInf_I integrate_ainf
+    Integrator_I integrate
 ) {
   auto global = spectrum_b_function1d_g(
       z,
@@ -515,8 +419,7 @@ spectrum_b_function1d(
       rest_form_factor,
       rest_spectrum,
       b_max,
-      integrate_ab,
-      integrate_ainf
+      integrate
   );
   auto segmented = spectrum_b_function1d_s(
       z,
@@ -525,8 +428,7 @@ spectrum_b_function1d(
       rest_form_factor,
       rest_spectrum,
       b_max,
-      integrate_ab,
-      integrate_ainf
+      integrate
   );
 
   return [global = std::move(global), segmented = std::move(segmented)]
@@ -549,7 +451,7 @@ Luminosity_y luminosity_y(Spectrum n) {
   return luminosity_y(n, n);
 };
 
-Luminosity luminosity(Spectrum nA, Spectrum nB, IntegratorAInf integrate) {
+Luminosity luminosity(Spectrum nA, Spectrum nB, Integrator integrate) {
   auto rs = std::make_shared<double>();
   auto fx = [rs, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
     double rx = sqrt(x);
@@ -560,15 +462,11 @@ Luminosity luminosity(Spectrum nA, Spectrum nB, IntegratorAInf integrate) {
       double s
   ) -> double {
     *rs = sqrt(s) / 2;
-    return 0.125 * integrate(fx, 0);
+    return 0.125 * integrate(fx, 0, infinity);
   };
 };
 
-Luminosity luminosity(Spectrum n, IntegratorAInf integrate) {
-  return luminosity(n, n, integrate);
-};
-
-Luminosity luminosity(Spectrum n, IntegratorAB integrate) {
+Luminosity luminosity(Spectrum n, Integrator integrate) {
   auto rs = std::make_shared<double>();
   auto fx = [rs, n = std::move(n)](double x) -> double {
     double rx = sqrt(x);

@@ -32,36 +32,18 @@ extern gsl::integration::QAGMethod default_integration_method;
 // Function: f, a, b -> integral of f from a to b
 typedef std::function<
           double (const std::function<double (double)>&, double, double)
-        > IntegratorAB;
-// Function: f, a -> integral of f from a to infinity
-typedef std::function<double (const std::function<double (double)>&, double)>
-        IntegratorAInf;
-// Function: f -> integral of f from a to infinity
-typedef std::function<double (const std::function<double (double)>&)>
-        IntegratorInf;
+        > Integrator;
 
 // GSL integrators  with default initialization
-IntegratorAB gsl_integrator_ab(
+Integrator gsl_integrator(
     double absolute_error = default_absolute_error,
     double relative_error = default_relative_error,
     size_t limit          = default_integration_limit,
     gsl::integration::QAGMethod = gsl::integration::GAUSS41,
     std::shared_ptr<gsl::integration::Workspace> = nullptr
 );
-IntegratorAInf gsl_integrator_ainf(
-    double absolute_error = default_absolute_error,
-    double relative_error = default_relative_error,
-    size_t limit          = default_integration_limit,
-    std::shared_ptr<gsl::integration::Workspace> = nullptr
-);
-IntegratorInf gsl_integrator_inf(
-    double absolute_error = default_absolute_error,
-    double relative_error = default_relative_error,
-    size_t limit          = default_integration_limit,
-    std::shared_ptr<gsl::integration::Workspace> = nullptr
-);
 
-struct gsl_integrator_ab_keys {
+struct gsl_integrator_keys {
   double absolute_error = default_absolute_error;
   double relative_error = default_relative_error;
   size_t limit          = default_integration_limit;
@@ -69,73 +51,45 @@ struct gsl_integrator_ab_keys {
   std::shared_ptr<gsl::integration::Workspace> workspace;
 };
 
-struct gsl_integrator_inf_keys {
-  double absolute_error = default_absolute_error;
-  double relative_error = default_relative_error;
-  size_t limit          = default_integration_limit;
-  std::shared_ptr<gsl::integration::Workspace> workspace;
-};
-
-// Helper functions --- with keyword parameters
-IntegratorAB   gsl_integrator_ab  (const gsl_integrator_ab_keys&);
-IntegratorAInf gsl_integrator_ainf(const gsl_integrator_inf_keys&);
-IntegratorInf  gsl_integrator_inf (const gsl_integrator_inf_keys&);
+// Helper function --- with keyword parameters
+Integrator gsl_integrator(const gsl_integrator_keys&);
 
 // GSL integrator with relative_error = default_relative_error *
 // default_error_step ** level
-IntegratorAB   gsl_integrator_ab  (unsigned level = 0);
-IntegratorAInf gsl_integrator_ainf(unsigned level = 0);
-IntegratorInf  gsl_integrator_inf (unsigned level = 0);
+Integrator gsl_integrator(unsigned level = 0);
 
-// Default integrators
-const std::function<IntegratorAB (unsigned)> default_integrator_ab
-  = static_cast<IntegratorAB (*)(unsigned)>(gsl_integrator_ab);
-const std::function<IntegratorAInf (unsigned)> default_integrator_ainf
-  = static_cast<IntegratorAInf (*)(unsigned)>(gsl_integrator_ainf);
-const std::function<IntegratorInf (unsigned)> default_integrator_inf
-  = static_cast<IntegratorInf (*)(unsigned)>(gsl_integrator_inf);
+// Default integrator
+const std::function<Integrator (unsigned)> default_integrator
+  = static_cast<Integrator (*)(unsigned)>(gsl_integrator);
 
-// Integrators that take one extra parameter: the value of the integral
+// Integrator that takes one extra parameter: the value of the integral
 // calculated so far. It can be used to avoid extra work in calculations that
-// don't need that much accuracy. These integrators are currently used in
+// don't need that much accuracy. This kind of integrator is currently used in
 // spectrum_b_function1d* functions to evaluate the integral of the form factor
 // in the region after the one described by Function1d. 
 typedef std::function<
           double (const std::function<double (double)>&, double, double, double)
-        > IntegratorAB_I;
-typedef std::function<
-          double (const std::function<double (double)>&, double, double)
-        > IntegratorAInf_I;
-IntegratorAB_I gsl_integrator_ab_i(
+        > Integrator_I;
+
+Integrator_I gsl_integrator_i(
     double relative_error = default_relative_error,
     size_t limit          = default_integration_limit,
     gsl::integration::QAGMethod = gsl::integration::GAUSS41,
     std::shared_ptr<gsl::integration::Workspace> = nullptr
 );
-IntegratorAInf_I gsl_integrator_ainf_i(
-    double relative_error = default_relative_error,
-    size_t limit          = default_integration_limit,
-    std::shared_ptr<gsl::integration::Workspace> = nullptr
-);
-struct gsl_integrator_ab_i_keys {
+
+struct gsl_integrator_i_keys {
   double relative_error = default_relative_error;
   size_t limit          = default_integration_limit;
   gsl::integration::QAGMethod method = gsl::integration::GAUSS41;
   std::shared_ptr<gsl::integration::Workspace> workspace;
 };
-struct gsl_integrator_ainf_i_keys {
-  double relative_error = default_relative_error;
-  size_t limit          = default_integration_limit;
-  std::shared_ptr<gsl::integration::Workspace> workspace;
-};
-IntegratorAB_I   gsl_integrator_ab_i  (const gsl_integrator_ab_keys&);
-IntegratorAInf_I gsl_integrator_ainf_i(const gsl_integrator_inf_keys&);
-IntegratorAB_I   gsl_integrator_ab_i  (unsigned level = 0);
-IntegratorAInf_I gsl_integrator_ainf_i(unsigned level = 0);
-const std::function<IntegratorAB_I (unsigned)> default_integrator_ab_i
-  = static_cast<IntegratorAB_I (*)(unsigned)>(gsl_integrator_ab_i);
-const std::function<IntegratorAInf_I (unsigned)> default_integrator_ainf_i
-  = static_cast<IntegratorAInf_I (*)(unsigned)>(gsl_integrator_ainf_i);
+
+Integrator_I gsl_integrator_i(const gsl_integrator_keys&);
+Integrator_I gsl_integrator_i(unsigned level = 0);
+
+const std::function<Integrator_I (unsigned)> default_integrator_i
+  = static_cast<Integrator_I (*)(unsigned)>(gsl_integrator_i);
 
 // Electromagnetic form factor of a particle. Q2 is the photon 3-momentum
 // squared
@@ -155,7 +109,7 @@ Spectrum spectrum(
     unsigned Z,
     double gamma,
     FormFactor,
-    IntegratorAInf = default_integrator_ainf(0)
+    Integrator = default_integrator(0)
 );
 
 // EPA spectrum for monopole form factor with the parameter lambda^2
@@ -180,7 +134,7 @@ Spectrum_b spectrum_b(
     unsigned Z,
     double gamma,
     FormFactor,
-    IntegratorAInf = default_integrator_ainf(0)
+    Integrator = default_integrator(0)
 );
 
 // EPA spectrum for point-like particle
@@ -210,17 +164,13 @@ Spectrum_b spectrum_b_dipole(unsigned Z, double gamma, double lambda2);
 // use spectrum_b_pointlike.
 //
 // This function uses slightly different integration interface:
-// integrate_ab parameters are:
+// integrate parameters are:
 //   the function to integrate
 //   integration lower bound
 //   integration upper bound
 //   absolute value of already calculated part of the integral. It can be used
 //     to speed up convergence by requiring that absolute error of numerical
 //     integration is something like 1e-3 times the value of this parameter.
-// integrate_ainf parameters are similar:
-//   the function to integrate
-//   integration lower bound; upper bound is infinity
-//   absolute value of already calculated part of the integral
 Spectrum_b
 spectrum_b_function1d_g(
     unsigned z,
@@ -229,8 +179,7 @@ spectrum_b_function1d_g(
     FormFactor rest_form_factor = FormFactor(),
     Spectrum_b rest_spectrum    = Spectrum_b(),
     double b_max = 0,
-    IntegratorAB_I   = default_integrator_ab_i(0),
-    IntegratorAInf_I = default_integrator_ainf_i(0)
+    Integrator_I = default_integrator_i(0)
 );
 
 // EPA spectrum for form factor given by Function1d as a set of points (q2, ff)
@@ -247,8 +196,7 @@ spectrum_b_function1d_s(
     FormFactor rest_form_factor = FormFactor(),
     Spectrum_b rest_spectrum    = Spectrum_b(),
     double b_max = 0,
-    IntegratorAB_I   = default_integrator_ab_i(0),
-    IntegratorAInf_I = default_integrator_ainf_i(0)
+    Integrator_I = default_integrator_i(0)
 );
 
 // EPA spectrum for form factor given by Function1d as a set of points (q2, ff)
@@ -262,8 +210,7 @@ spectrum_b_function1d(
     FormFactor rest_form_factor = FormFactor(),
     Spectrum_b rest_spectrum    = Spectrum_b(),
     double b_max = 0,
-    IntegratorAB_I   = default_integrator_ab_i(0),
-    IntegratorAInf_I = default_integrator_ainf_i(0)
+    Integrator_I = default_integrator_i(0)
 );
 
 // Photon-photon luminosity with non-electromagnetic interactions neglected
@@ -280,11 +227,9 @@ Luminosity_y luminosity_y(Spectrum);
 
 // Photon-photon luminosity
 Luminosity luminosity(
-    Spectrum nA, Spectrum nB, IntegratorAInf = default_integrator_ainf(0)
+    Spectrum nA, Spectrum nB, Integrator = default_integrator(0)
 );
-Luminosity luminosity(Spectrum, IntegratorAInf);
-// This function takes advantage of the symmetry of the system
-Luminosity luminosity(Spectrum, IntegratorAB = default_integrator_ab(0));
+Luminosity luminosity(Spectrum, Integrator = default_integrator(0));
 
 // Photon-photon luminosity with non-electromagnetic interactions taken into account
 

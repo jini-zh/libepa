@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(epa_spectra, *boost::unit_test::tolerance(1e-5)) {
         82,
         5.02e3 / 2 / amu,
         [](double) -> double { return 1; },
-        gsl_integrator_ainf({ .relative_error = 1e-5 })
+        gsl_integrator({ .relative_error = 1e-5 })
       )(1e2)
       == 111.73111054940296
   );
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(epa_spectra, *boost::unit_test::tolerance(1e-5)) {
         82,
         5.02e3 / 2 / amu,
         form_factor_monopole(sqr(80e-3)),
-        gsl_integrator_ainf({ .relative_error = 1e-3 })
+        gsl_integrator({ .relative_error = 1e-3 })
       )(1e1 * fm, 1e2),
       1.4675442690292509e-06,
       1e-3
