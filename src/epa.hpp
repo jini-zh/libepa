@@ -238,6 +238,85 @@ Luminosity_fid luminosity_fid(
 );
 Luminosity_fid luminosity_fid(Spectrum, Integrator = default_integrator(0));
 
+// Photon-photon luminosity with non-electromagnetic interactions respected.
+// `parallel' and `perpendicular' are the weights to multiply components with
+// parallel or perpendicular photons polarizations. Pass parallel = 1,
+// perpendicular = 0 to compute only for parallel photon polarization, parallel
+// = 1, perpendicular = 1 to compute for the sum of polarizations.
+typedef std::function<
+  double (
+      double /* s */,
+      double /* parallel */,
+      double /* perpendicular */
+  )
+> Luminosity_b;
+// differentiated with respect to rapidity of the system
+typedef std::function<
+  double (
+      double /* s */,
+      double /* y */,
+      double /* parallel */,
+      double /* perpendicular */
+  )
+> Luminosity_b_y;
+// for calculating fiducial cross section
+typedef std::function<
+  double (
+      double /* s */,
+      double /* parallel */,
+      double /* perpendicular */,
+      double /* ymin */,
+      double /* ymax */
+  )
+> Luminosity_b_fid;
 
+// Photon-photon luminosity in ultraperipheral collisions of particles with EPA
+// spectra nA and nB and the probability to survive upc_probability(b) where b
+// is the impact parameter of the collision.
+Luminosity_b
+luminosity_b(
+    Spectrum_b nA,
+    Spectrum_b nB,
+    std::function<double (double)> upc_probability,
+    const std::function<Integrator (unsigned)>& = default_integrator
+);
+
+Luminosity_b
+luminosity_b(
+    Spectrum_b,
+    std::function<double (double)> upc_probability,
+    const std::function<Integrator (unsigned)>& = default_integrator
+);
+
+// differentiated with respect to rapidity of the system
+Luminosity_b_y
+luminosity_b_y(
+    Spectrum_b nA,
+    Spectrum_b nB,
+    std::function<double (double)> upc_probability,
+    const std::function<Integrator (unsigned)>& = default_integrator
+);
+
+Luminosity_b_y
+luminosity_b_y(
+    Spectrum_b,
+    std::function<double (double)> upc_probability,
+    const std::function<Integrator (unsigned)>& = default_integrator
+);
+
+// for calculating fiducial cross section
+Luminosity_b_fid
+luminosity_b_fid(
+    Spectrum_b nA,
+    Spectrum_b nB,
+    std::function<double (double)> upc_probability,
+    const std::function<Integrator (unsigned)>& = default_integrator
+);
+Luminosity_b_fid
+luminosity_b_fid(
+    Spectrum_b,
+    std::function<double (double)> upc_probability,
+    const std::function<Integrator (unsigned)>& = default_integrator
+);
 
 }; // namespace epa

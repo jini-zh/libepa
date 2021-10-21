@@ -69,4 +69,21 @@ proton_dipole_spectrum_b(double energy, double lambda2) {
   };
 };
 
+double pp_elastic_slope(double collision_energy) {
+  const double B0 = 12;    // GeV^{-2}
+  const double B1 = -0.22; // +/- 0.17 GeV^{-2}
+  const double B2 = 0.037; // +/- 0.006 GeV^{-2}
+  double l = log(collision_energy /* / 1 GeV */);
+  return B0 + 2 * (B1 + 2 * B2 * l) * l;
+};
+
+std::function<double (double)>
+pp_upc_probability(double collision_energy) {
+  // see hep-ph/0608271
+  double B = 2 * pp_elastic_slope(collision_energy);
+  return [B](double b) -> double {
+    return sqr(1 - exp(-sqr(b) / B));
+  };
+};
+
 }; // namespace epa

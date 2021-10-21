@@ -2,7 +2,7 @@ CXXFLAGS ?= -O2 -pipe -march=native -fno-stack-protector
 
 cxx = $(CXX) $(CXXFLAGS) -std=gnu++17
 
-.PHONY: clean test doc all
+.PHONY: clean test doc all test_all
 
 objects := gsl algorithms epa proton
 objects := $(foreach object,$(objects),src/$(object).o)
@@ -14,11 +14,14 @@ libepa.so: $(objects)
 
 src/gsl.o: src/gsl.hpp
 src/epa.o: src/epa.hpp src/gsl.hpp src/algorithms.hpp
-src/proton.o: src/proton.hpp src/epa.hpp src/algorithms.hpp
+src/proton.o: src/proton.hpp src/epa.hpp src/gsl.hpp src/algorithms.hpp
 src/algorithms.o: src/algorithms.hpp
 
 %.o: %.cpp
 	$(cxx) -fPIC -c $< -o $@
+
+test_all: test/test
+	LD_LIBRARY_PATH=. $< -l success -t '*'
 
 test: test/test
 	LD_LIBRARY_PATH=. $< -l success

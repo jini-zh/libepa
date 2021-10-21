@@ -458,18 +458,204 @@ Luminosity_fid luminosity_fid(Spectrum nA, Spectrum nB, Integrator integrate) {
 };
 
 Luminosity_fid luminosity_fid(Spectrum n, Integrator integrate) {
-  return luminosity_fid(n, n, integrate);
+  return [l = luminosity_fid(n, n, std::move(integrate))](
+      double s, double ymin, double ymax
+  ) -> double {
+    return ymin == -ymax ? 2 * l(s, ymin, 0) : l(s, ymin, ymax);
+  };
 };
 
 Luminosity luminosity(Spectrum nA, Spectrum nB, Integrator integrate) {
-  return [l = luminosity_fid(nA, nB, integrate)](double s) -> double {
+  return [l = luminosity_fid(nA, nB, std::move(integrate))](
+      double s
+  ) -> double {
     return l(s, -infinity, infinity);
   };
 };
 
 Luminosity luminosity(Spectrum n, Integrator integrate) {
-  return [l = luminosity_fid(n, n, integrate)](double s) -> double {
+  return [l = luminosity_fid(n, n, std::move(integrate))](double s) -> double {
     return 2 * l(s, -infinity, 0);
+  };
+};
+
+Luminosity_b_y
+luminosity_b_y(
+    Spectrum_b nA,
+    Spectrum_b nB,
+    std::function<double (double)> upc,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  struct Env {
+    double rs;
+    double rx;
+    double b1;
+    double b2;
+    double parallel;
+    double perpendicular;
+  };
+
+  auto env = std::make_shared<Env>();
+
+  auto fphi = [env, upc = std::move(upc)](double phi) -> double {
+    double c = cos(phi);
+    double s = sin(phi);
+    return upc(sqrt(sqr(env->b1) + sqr(env->b2) - 2 * env->b1 * env->b2 * c))
+         * (env->parallel * sqr(c) + env->perpendicular * sqr(s));
+  };
+
+  auto fb2 = [
+    env,
+    nA   = std::move(nA),
+    nB   = std::move(nB),
+    fphi = std::move(fphi),
+    integrate = integrator(2)
+  ](double b2) -> double {
+    env->b2 = b2;
+    return b2
+           * nA(env->b1, env->rs * env->rx)
+           * nB(b2, env->rs / env->rx)
+           * integrate(fphi, 0, 2 * pi);
+  };
+
+  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
+      double b1
+  ) -> double {
+    env->b1 = b1;
+    return b1 * integrate(fb2, 0, infinity);
+  };
+
+  return [env, fb1 = std::move(fb1), integrate = integrator(0)](
+      double s, double y, double parallel, double perpendicular
+  ) -> double {
+    env->rs = 0.5 * sqrt(s);
+    env->rx = exp(y);
+    env->parallel = parallel;
+    env->perpendicular = perpendicular;
+    return 0.25 * pi / sqr(env->rx) * integrate(fb1, 0, infinity);
+  };
+};
+
+Luminosity_b_y
+luminosity_b_y(
+    Spectrum_b n,
+    std::function<double (double)> upc,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  return luminosity_b_y(n, n, std::move(upc), integrator);
+};
+
+Luminosity_b_fid
+luminosity_b_fid(
+    Spectrum_b nA,
+    Spectrum_b nB,
+    std::function<double (double)> upc,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  // luminosity_b_y is not used here because it would result in an unoptimal
+  // order of integration
+  struct Env {
+    double rs;
+    double xmin;
+    double xmax;
+    double b1;
+    double b2;
+    double parallel;
+    double perpendicular;
+  };
+
+  auto env = std::make_shared<Env>();
+
+  auto fx = [env, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
+    double rx = sqrt(x);
+    return nA(env->b1, env->rs * rx) * nB(env->b2, env->rs / rx) / x;
+  };
+
+  auto fphi = [env, upc = std::move(upc)](double phi) -> double {
+    double c = cos(phi);
+    double s = sin(phi);
+    return upc(sqrt(sqr(env->b1) + sqr(env->b2) - 2 * env->b1 * env->b2 * c))
+         * (env->parallel * sqr(c) + env->perpendicular * sqr(s));
+  };
+
+  auto fb2 = [
+    env, fx = std::move(fx), fphi = std::move(fphi), integrate = integrator(2)
+  ](double b2) -> double {
+    env->b2 = b2;
+    return b2 * integrate(fx, env->xmin, env->xmax) * integrate(fphi, 0, 2 * pi);
+  };
+
+  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
+      double b1
+  ) -> double {
+    env->b1 = b1;
+    return b1 * integrate(fb2, 0, infinity);
+  };
+
+  return [env, fb1 = std::move(fb1), integrate = integrator(0)](
+        double s,
+        double parallel,
+        double perpendicular,
+        double ymin,
+        double ymax
+  ) -> double {
+    env->rs            = 0.5 * sqrt(s);
+    env->xmin          = exp(2 * ymin);
+    env->xmax          = exp(2 * ymax);
+    env->parallel      = parallel;
+    env->perpendicular = perpendicular;
+    return 0.25 * pi * integrate(fb1, 0, infinity);
+  };
+};
+
+Luminosity_b_fid
+luminosity_b_fid(
+    Spectrum_b n,
+    std::function<double (double)> upc,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  return [l = luminosity_b_fid(n, n, std::move(upc), integrator)](
+      double s,
+      double parallel,
+      double perpendicular,
+      double ymin,
+      double ymax
+  ) -> double {
+    return ymin == -ymax
+         ? 2 * l(s, parallel, perpendicular, ymin, 0)
+         : l(s, parallel, perpendicular, ymin, ymax);
+  };
+};
+
+Luminosity_b
+luminosity_b(
+    Spectrum_b nA,
+    Spectrum_b nB,
+    std::function<double (double)> upc,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  return [
+    l = luminosity_b_fid(
+            std::move(nA),
+            std::move(nB),
+            std::move(upc),
+            integrator
+        )
+  ](double s, double parallel, double perpendicular) -> double {
+    return l(s, parallel, perpendicular, -infinity, infinity);
+  };
+};
+
+Luminosity_b
+luminosity_b(
+    Spectrum_b n,
+    std::function<double (double)> upc,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  return [l = luminosity_b_fid(n, n, std::move(upc), integrator)](
+      double s, double parallel, double perpendicular
+  ) -> double {
+    return 2 * l(s, parallel, perpendicular, -infinity, 0);
   };
 };
 

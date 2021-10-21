@@ -1,6 +1,17 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage[left=20mm,right=20mm,top=20mm,bottom=30mm]{geometry}
+\usepackage{microtype}
 \usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+\hypersetup{
+  colorlinks,
+  linkcolor={blue!50!black},
+  citecolor={blue!50!black},
+  urlcolor={blue!50!black}
+}
 
 \begin{document}
 
@@ -183,16 +194,80 @@ Simplification when $A = B$:
       \frac{\mathrm{d} x}{x}.
 \end{equation}
 
-%Photon-photon luminosity with non-electromagnetic interactions respected:
-%\begin{equation}
-%  \frac{\mathrm{d} L_\parallel}{\mathrm{d} s}
-%  = \frac14
-%    \int\limits_{-\infty}^\infty \mathrm{d} y
-%    \int\limits_{b_1 > \hat r} \mathrm{d}^2 b_1
-%    \int\limits_{b_2 > \hat r} \mathrm{d}^2 b_2
-%    n_A \left( b_1, \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
-%    n_B \left( b_1, \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
-%    P(b) \cos^2 \varphi
+Photon-photon luminosity with non-electromagnetic interactions respected:
+\begin{equation}
+  \begin{aligned}
+    \frac{\mathrm{d} L_\parallel}{\mathrm{d} s}
+    &= \frac14
+       \int\limits_{-\infty}^\infty \mathrm{d} y
+       \int\limits \mathrm{d}^2 b_1
+       \int\limits \mathrm{d}^2 b_2
+       \, n \left( b_1, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^y \right)
+       \, n \left( b_2, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^{-y} \right)
+       \, P(b)
+       \, \cos^2 \varphi,
+    \\
+    \frac{\mathrm{d} L_\perp}{\mathrm{d} s}
+    &= \frac14
+       \int\limits_{-\infty}^\infty \mathrm{d} y
+       \int\limits \mathrm{d}^2 b_1
+       \int\limits \mathrm{d}^2 b_2
+       \, n \left( b_1, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^y \right)
+       \, n \left( b_2, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^{-y} \right)
+       \, P(b)
+       \, \sin^2 \varphi,
+  \end{aligned}
+\end{equation}
+where $\mathrm{d} L_\parallel / \mathrm{d} s$ is the luminosity of photons with
+parallel polarizations, $\mathrm{d} L_\perp / \mathrm{d} s$ is the luminosity
+of photons with perpendicular polarizations, $P(b)$ is the probability for the
+particles to survive in an ultraperipheral collision with the impact parameter
+$b$ (the probability to avoid non-electromagnetic interactions), $b =
+\sqrt{b_1^2 + b_2^2 - 2 b_1 b_2 \cos \varphi}$. The integration can be
+rearranged as follows:
+\begin{equation}
+  \begin{aligned}
+    \frac{\mathrm{d} L_\perp }{\mathrm{d} s}
+    &= \begin{multlined}[t]
+         \frac{\pi}{4}
+         \int\limits_0^\infty
+           b_1
+           \int\limits_0^\infty
+             b_2
+             \int\limits_0^\infty
+               n_A \left( b_1, \sqrt{\frac{sx}{4}} \right)
+               n_B \left( b_2, \sqrt{\frac{s}{4x}} \right)
+             \frac{\mathrm{d} x}{x}
+      \times {} \\
+             \int\limits_0^{2 \pi}
+               P \left( \sqrt{b_1^2 + b_2^2 - 2 b_1 b_2 \cos \varphi} \right)
+               \cos^2 \varphi
+             \, \mathrm{d} \varphi
+           \, \mathrm{d} b_2
+         \, \mathrm{d} b_1,
+       \end{multlined}
+    \\
+    \frac{\mathrm{d} L_\parallel }{\mathrm{d} s}
+    &= \begin{multlined}[t]
+         \frac{\pi}{4}
+         \int\limits_0^\infty
+           b_1
+           \int\limits_0^\infty
+             b_2
+             \int\limits_0^\infty
+               n_A \left( b_1, \sqrt{\frac{sx}{4}} \right)
+               n_B \left( b_2, \sqrt{\frac{s}{4x}} \right)
+             \frac{\mathrm{d} x}{x}
+      \times {} \\
+             \int\limits_0^{2 \pi}
+               P \left( \sqrt{b_1^2 + b_2^2 - 2 b_1 b_2 \cos \varphi} \right)
+               \sin^2 \varphi
+             \, \mathrm{d} \varphi
+           \, \mathrm{d} b_2
+         \, \mathrm{d} b_1.
+       \end{multlined}
+  \end{aligned}
+\end{equation}
 
 \section{Proton}
 
@@ -308,5 +383,34 @@ approximated with the dipole formula:
        \right]^2.
   \end{split}
 \end{multline}
+
+Empirical formula for the probability to avoid non-electromagnetic interactions
+in an ultraperipheral collision of two protons~\cite{hep-ph-0608271}:
+\begin{equation}
+  P(b) = \left( 1 - \mathrm{e}^{-\frac{b^2}{2B}} \right)^2,
+\end{equation}
+where~\cite{1112.3243}
+\begin{equation}
+  B = B_0 + 2 B_1 \ln(E / E_0) + 4 B_2 \ln^2 (E / E_0),
+\end{equation}
+$B_0 = 12~\text{GeV}^{-2}$, $B_1 = -0.22 \pm 0.17~\text{GeV}^2$, $B_2 = 0.037
+\pm 0.006~\text{GeV}^{-2}$, $E$ is the collision energy, $E_0 = 1$~GeV.
+
+\newcommand{\arxiv}[1]{\href{http://arxiv.org/abs/#1}{arXiv:\nolinebreak[3]#1}}
+\begin{thebibliography}{99}
+  \bibitem{hep-ph-0608271}
+  L.~Frankfurt, C.~E.~Hyde-Wright, M.~Strikman, C.~Weiss.
+  Generalized parton distributions and rapidity gap survival in exclusive diffractive $p p$ scattering.
+  Phys.Rev.~D75, 054009 (2007).
+  \href{http://arxiv.org/abs/hep-ph/0608271}{arXiv:\nolinebreak[3]hep-ph/0608271}
+
+  \bibitem{1112.3243}
+  V.~A.~Schegelsky, M.~G.~Ryskin.
+  Diffraction cone shrinkage speed up with the collision energy.
+  Phys.Rev.~D85, 094024 (2012).
+  \arxiv{1112.3243}
+\end{thebibliography}
+
+
 
 \end{document}

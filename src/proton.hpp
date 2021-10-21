@@ -32,4 +32,13 @@ proton_dipole_spectrum_b(
     double lambda = proton_dipole_form_factor_lambda2
 );
 
+// The slope of the cross section for elastic scattering of two protons
+// (parameter B in [1112.3243])
+double pp_elastic_slope(double collision_energy);
+
+// The probability to avoid non-electromagnetic interactions in an
+// ultraperipheral collision of two protons with the impact parameter b
+std::function<double (double /* b */)>
+pp_upc_probability(double collision_energy);
+
 }; // namespace epa
