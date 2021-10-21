@@ -83,17 +83,6 @@ Integrator_I gsl_integrator_i(unsigned level) {
   return gsl_integrator_i(default_relative_error * pow(default_error_step, level));
 };
 
-// avoid underflow
-static double K0(double x) {
-  if (x > 700) return 0;
-  return gsl::bessel_K0(x);
-};
-
-static double K1(double x) {
-  if (x > 700) return 0;
-  return gsl::bessel_K1(x);
-};
-
 FormFactor form_factor_monopole(double lambda2) {
   return [=](double q2) -> double {
     return 1. / (1 + q2 / lambda2);
@@ -201,13 +190,13 @@ spectrum_b_monopole(unsigned Z, double gamma, double lambda2) {
    double a = lambda2 / sqr(wg);
    double d;
    if (a < 1e-6)
-     d = 0.5 * b * lambda2 * K0(u);
+     d = 0.5 * b * lambda2 * gsl::bessel_K0(u);
    else {
      double v = sqrt(b * b * lambda2 + sqr(u));
      if (v < 1e-2)
        d = xk1_1(u) - xk1_1(v);
      else
-       d = u * K1(u) - v * K1(v);
+       d = u * gsl::bessel_K1(u) - v * gsl::bessel_K1(v);
      d /= b;
    };
    return c / w * sqr(d);
@@ -221,7 +210,9 @@ spectrum_b_dipole(unsigned Z, double gamma, double lambda2) {
     double wg = w / gamma;
     double r = sqrt(lambda2 + sqr(wg));
     return c / w * sqr(
-        wg * K1(b*wg) - r * K1(b*r) - 0.5 * b * lambda2 * K0(b*r)
+          wg * gsl::bessel_K1(b*wg)
+        - r * gsl::bessel_K1(b*r)
+        - 0.5 * b * lambda2 * gsl::bessel_K0(b*r)
     );
   };
 };

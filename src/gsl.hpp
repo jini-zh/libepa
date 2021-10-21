@@ -25,8 +25,17 @@ const double infinity = std::numeric_limits<double>().infinity();
 const auto bessel_J0 = gsl_sf_bessel_J0;
 const auto bessel_J1 = gsl_sf_bessel_J1;
 const auto bessel_Jn = gsl_sf_bessel_Jn;
-const auto bessel_K0 = gsl_sf_bessel_K0;
-const auto bessel_K1 = gsl_sf_bessel_K1;
+
+// avoid underflow
+inline double bessel_K0(double x) {
+  if (x > 700) return 0;
+  return gsl_sf_bessel_K0(x);
+};
+
+inline double bessel_K1(double x) {
+  if (x > 700) return 0;
+  return gsl_sf_bessel_K1(x);
+};
 
 void init();
 
