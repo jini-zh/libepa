@@ -451,7 +451,7 @@ Luminosity_y luminosity_y(Spectrum n) {
   return luminosity_y(n, n);
 };
 
-Luminosity luminosity(Spectrum nA, Spectrum nB, Integrator integrate) {
+Luminosity_fid luminosity_fid(Spectrum nA, Spectrum nB, Integrator integrate) {
   auto rs = std::make_shared<double>();
   auto fx = [rs, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
     double rx = sqrt(x);
@@ -459,27 +459,27 @@ Luminosity luminosity(Spectrum nA, Spectrum nB, Integrator integrate) {
   };
 
   return [rs, fx = std::move(fx), integrate = std::move(integrate)](
-      double s
+      double s, double ymin, double ymax
   ) -> double {
     *rs = sqrt(s) / 2;
-    return 0.125 * integrate(fx, 0, infinity);
+    return 0.125 * integrate(fx, exp(2 * ymin), exp(2 * ymax));
+  };
+};
+
+Luminosity_fid luminosity_fid(Spectrum n, Integrator integrate) {
+  return luminosity_fid(n, n, integrate);
+};
+
+Luminosity luminosity(Spectrum nA, Spectrum nB, Integrator integrate) {
+  return [l = luminosity_fid(nA, nB, integrate)](double s) -> double {
+    return l(s, -infinity, infinity);
   };
 };
 
 Luminosity luminosity(Spectrum n, Integrator integrate) {
-  auto rs = std::make_shared<double>();
-  auto fx = [rs, n = std::move(n)](double x) -> double {
-    double rx = sqrt(x);
-    return n(*rs * rx) * n(*rs / rx) / x;
-  };
-
-  return [rs, fx = std::move(fx), integrate = std::move(integrate)](
-      double s
-  ) -> double {
-    *rs = sqrt(s) / 2;
-    return 0.25 * integrate(fx, 0, 1);
+  return [l = luminosity_fid(n, n, integrate)](double s) -> double {
+    return 2 * l(s, -infinity, 0);
   };
 };
-
 
 }; // namespace epa

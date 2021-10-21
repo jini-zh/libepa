@@ -215,23 +215,29 @@ spectrum_b_function1d(
 
 // Photon-photon luminosity with non-electromagnetic interactions neglected
 typedef std::function<double (double /* s */)> Luminosity;
-// same differentiated with respect to rapidity of the system
+// differentiated with respect to rapidity of the system
 typedef std::function<double (double /* s */, double /* y */)> Luminosity_y;
+// for calculating fiducial cross section
+typedef std::function<double (
+    double /* s */, double /* ymin */, double /* ymax */
+)> Luminosity_fid;
 
 // Photon-photon luminosity in ultraperipheral collisions of particles with EPA
-// spectra nA and nB differentiated with respect to rapidity of
-// the system.
-Luminosity_y luminosity_y(Spectrum nA, Spectrum nB);
-// Same for identical particles.
-Luminosity_y luminosity_y(Spectrum);
-
-// Photon-photon luminosity
+// spectra nA and nB with non-electromagnetic interactions neglected
 Luminosity luminosity(
     Spectrum nA, Spectrum nB, Integrator = default_integrator(0)
 );
+// Same for identical particles.
 Luminosity luminosity(Spectrum, Integrator = default_integrator(0));
 
-// Photon-photon luminosity with non-electromagnetic interactions taken into account
+Luminosity_y luminosity_y(Spectrum nA, Spectrum nB);
+Luminosity_y luminosity_y(Spectrum);
+
+Luminosity_fid luminosity_fid(
+    Spectrum nA, Spectrum nB, Integrator = default_integrator(0)
+);
+Luminosity_fid luminosity_fid(Spectrum, Integrator = default_integrator(0));
+
 
 
 }; // namespace epa
