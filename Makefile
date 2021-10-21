@@ -1,3 +1,5 @@
+CXXFLAGS ?= -O2 -pipe -march=native -fno-stack-protector
+
 cxx = $(CXX) $(CXXFLAGS) -std=gnu++17
 
 .PHONY: clean test doc all
