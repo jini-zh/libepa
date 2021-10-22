@@ -41,7 +41,7 @@ double pp_elastic_slope(double collision_energy);
 std::function<double (double /* b */)>
 pp_upc_probability(double collision_energy);
 
-// Photon-photon luminosity in an ultraperipheral proton-proton collision with
+// Photon-photon luminosity in ultraperipheral proton-proton collisions with
 // non-electromagnetic interactions neglected
 Luminosity     pp_luminosity(
     double collision_energy, Integrator = default_integrator(0)
@@ -51,7 +51,7 @@ Luminosity_fid pp_luminosity_fid(
     double collision_energy, Integrator = default_integrator(0)
 );
 
-// Photon-photon luminosity in an ultraperipheral collision of two identical
+// Photon-photon luminosity in ultraperipheral collisions of two identical
 // particles with the same probability to avoid non-electromagnetic
 // interactions as proton but with arbitrary spectrum. Use this function if you
 // want to try non-default proton spectrum.
@@ -73,7 +73,7 @@ Luminosity_b_fid ppx_luminosity_b_fid(
     const std::function<Integrator (unsigned)>& = default_integrator
 );
 
-// Photon-photon luminosity in a proton-proton ultraperipheral collision
+// Photon-photon luminosity in proton-proton ultraperipheral collisions
 Luminosity_b pp_luminosity_b(
     double collision_energy,
     const std::function<Integrator (unsigned)>& = default_integrator
