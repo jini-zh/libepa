@@ -4,6 +4,8 @@
 
 namespace epa {
 
+bool print_backtrace = true;
+
 double default_absolute_error     = 0;
 double default_relative_error     = 1e-3;
 double default_error_step         = 1e-1;
@@ -102,15 +104,19 @@ spectrum(
   auto wg2 = std::make_shared<double>();
 
   auto iqt = [=, F = std::move(form_factor)](double qt) -> double {
-    double q2 = sqr(qt) + *wg2;
-    return qt * sqr(qt / q2 * F(q2));
+    EPA_TRY
+      double q2 = sqr(qt) + *wg2;
+      return qt * sqr(qt / q2 * F(q2));
+    EPA_BACKTRACE("lambda (qt) %e", qt);
   };
 
   double c = 2 * sqr(Z) * alpha / pi;
 
   return [=, integrate = std::move(integrate)](double w) -> double {
-    *wg2 = sqr(w / gamma);
-    return c / w * integrate(iqt, 0, infinity);
+    EPA_TRY
+      *wg2 = sqr(w / gamma);
+      return c / w * integrate(iqt, 0, infinity);
+    EPA_BACKTRACE("lambda (w) %e\n  defined in epa::spectrum(%u, %e)", w, Z, gamma);
   };
 };
 
@@ -149,17 +155,24 @@ spectrum_b(
   auto env = std::make_shared<Env>();
 
   auto iqt = [=, F = std::move(form_factor)](double qt) -> double {
-    double qt2 = sqr(qt);
-    double q2  = qt2 + env->wg2;
-    return qt2 / q2 * F(q2) * gsl::bessel_J1(env->b * qt);
+    EPA_TRY
+      double qt2 = sqr(qt);
+      double q2  = qt2 + env->wg2;
+      return qt2 / q2 * F(q2) * gsl::bessel_J1(env->b * qt);
+    EPA_BACKTRACE("lambda (qt) %e", qt);
   };
 
   double c = alpha * sqr(Z / pi);
 
   return [=, integrate = std::move(integrate)](double b, double w) -> double {
-    env->b   = b;
-    env->wg2 = sqr(w / gamma);
-    return c / w * sqr(integrate(iqt, 0, infinity));
+    EPA_TRY
+      env->b   = b;
+      env->wg2 = sqr(w / gamma);
+      return c / w * sqr(integrate(iqt, 0, infinity));
+    EPA_BACKTRACE(
+        "lambda (b, w) %e, %e\n  defined in epa::spectrum_b(%u, %e)",
+        b, w, Z, gamma
+    );
   };
 };
 
@@ -167,7 +180,12 @@ Spectrum_b
 spectrum_b_point(unsigned Z, double gamma) {
   double c = alpha * sqr(Z / pi / gamma);
   return [=](double b, double w) -> double {
-    return c * w * sqr(gsl::bessel_K1(b * w / gamma));
+    EPA_TRY
+      return c * w * sqr(gsl::bessel_K1(b * w / gamma));
+    EPA_BACKTRACE(
+        "lambda (b, w) %e, %e\n  defined in epa::spectrum_b_point(%u, %e)",
+        b, w, Z, gamma
+    );
   };
 };
 
@@ -185,21 +203,26 @@ Spectrum_b
 spectrum_b_monopole(unsigned Z, double gamma, double lambda2) {
   double c = alpha * sqr(Z / pi);
   return [=](double b, double w) -> double {
-   double wg = w / gamma;
-   double u = b * wg;
-   double a = lambda2 / sqr(wg);
-   double d;
-   if (a < 1e-6)
-     d = 0.5 * b * lambda2 * gsl::bessel_K0(u);
-   else {
-     double v = sqrt(b * b * lambda2 + sqr(u));
-     if (v < 1e-2)
-       d = xk1_1(u) - xk1_1(v);
-     else
-       d = u * gsl::bessel_K1(u) - v * gsl::bessel_K1(v);
-     d /= b;
-   };
-   return c / w * sqr(d);
+    EPA_TRY
+      double wg = w / gamma;
+      double u = b * wg;
+      double a = lambda2 / sqr(wg);
+      double d;
+      if (a < 1e-6)
+        d = 0.5 * b * lambda2 * gsl::bessel_K0(u);
+      else {
+        double v = sqrt(b * b * lambda2 + sqr(u));
+        if (v < 1e-2)
+          d = xk1_1(u) - xk1_1(v);
+        else
+          d = u * gsl::bessel_K1(u) - v * gsl::bessel_K1(v);
+        d /= b;
+      };
+      return c / w * sqr(d);
+    EPA_BACKTRACE(
+        "lambda (b, w) %e, %e\n  defined in epa::spectrum_b_monopole(%u, %e, %e)",
+        b, w, Z, gamma, lambda2
+    );
   };
 };
 
@@ -207,12 +230,17 @@ Spectrum_b
 spectrum_b_dipole(unsigned Z, double gamma, double lambda2) {
   double c = alpha * sqr(Z / pi);
   return [=](double b, double w) -> double {
-    double wg = w / gamma;
-    double r = sqrt(lambda2 + sqr(wg));
-    return c / w * sqr(
-          wg * gsl::bessel_K1(b*wg)
-        - r * gsl::bessel_K1(b*r)
-        - 0.5 * b * lambda2 * gsl::bessel_K0(b*r)
+    EPA_TRY
+      double wg = w / gamma;
+      double r = sqrt(lambda2 + sqr(wg));
+      return c / w * sqr(
+            wg * gsl::bessel_K1(b*wg)
+          - r * gsl::bessel_K1(b*r)
+          - 0.5 * b * lambda2 * gsl::bessel_K0(b*r)
+      );
+    EPA_BACKTRACE(
+        "lambda (b, w) %e, %e\n  defined in epa::spectrum_b_dipole(%u, %e, %e)",
+        b, w, Z, gamma, lambda2
     );
   };
 };
@@ -262,9 +290,11 @@ spectrum_b_function1d_x(
   if (b_max > 0) n0 = spectrum_b_point(Z, gamma);
 
   auto rqt = [env, ff = std::move(rest_form_factor)](double qt) -> double {
-    double qt2 = sqr(qt);
-    double q2  = qt2 + env->wg2;
-    return qt2 / q2 * ff(q2) * gsl::bessel_J1(env->b * qt);
+    EPA_TRY
+      double qt2 = sqr(qt);
+      double q2  = qt2 + env->wg2;
+      return qt2 / q2 * ff(q2) * gsl::bessel_J1(env->b * qt);
+    EPA_BACKTRACE("lambda (qt) %e", qt);
   };
 
   return [
@@ -273,24 +303,34 @@ spectrum_b_function1d_x(
     integrate       = std::move(integrate),
     n0              = std::move(n0)
   ](double b, double w) -> double {
-    if (b_max > 0 && b > b_max) return n0(b, w);
-    double wg2 = sqr(w / gamma);
-    env->b   = b;
-    env->wg2 = wg2;
+    EPA_TRY
+      if (b_max > 0 && b > b_max) return n0(b, w);
+      double wg2 = sqr(w / gamma);
+      env->b   = b;
+      env->wg2 = wg2;
 
-    double qt_max = form_factor->points.back().first - wg2;
-    qt_max = qt_max > 0 ? sqrt(qt_max) : 0;
+      double qt_max = form_factor->points.back().first - wg2;
+      qt_max = qt_max > 0 ? sqrt(qt_max) : 0;
 
-    double I = qt_max == 0 ? 0 : integral_qt_max(b, wg2, qt_max);
+      double I = qt_max == 0 ? 0 : integral_qt_max(b, wg2, qt_max);
 
-    double C = c / w;
-    if (rest_form_factor)
-      I += norm * (
-          rest_spectrum
-          ? sqrt(rest_spectrum(b, w) / C) - integrate(rqt, 0, qt_max, I)
-          : integrate(rqt, qt_max, infinity, I)
-      );
-    return C * sqr(I);
+      double C = c / w;
+      if (rest_form_factor)
+        I += norm * (
+            rest_spectrum
+            ? sqrt(rest_spectrum(b, w) / C) - integrate(rqt, 0, qt_max, I)
+            : integrate(rqt, qt_max, infinity, I)
+        );
+      return C * sqr(I);
+    EPA_BACKTRACE(
+        "lambda (b, w) %e, %e\n"
+        "  defined in epa::spectrum_b_function1d_x(%u, %e, %p, %s, %s, %e)",
+        b, w,
+        Z, gamma, form_factor.get(),
+        rest_form_factor ? "<rest_form_factor>" : "nullptr",
+        rest_spectrum    ? "<rest_spectrum>"    : "nullptr",
+        b_max
+    );
   };
 };
 
@@ -326,9 +366,15 @@ spectrum_b_function1d_g(
       b_max,
       [env, fqt = std::move(fqt), integrate]
       (double b, double wg2, double qt_max) -> double {
-        env->b = b;
-        env->wg2 = wg2;
-        return integrate(fqt, 0, qt_max, 0);
+        EPA_TRY
+          env->b = b;
+          env->wg2 = wg2;
+          return integrate(fqt, 0, qt_max, 0);
+        EPA_BACKTRACE(
+            "lambda (b, sqr(w/gamma), qt_max) %e, %e, %e\n"
+            "  defined in epa::spectrum_b_function1d_g",
+            b, wg2, qt_max
+        );
       },
       integrate
   );
@@ -352,7 +398,9 @@ spectrum_b_function1d_s(
   auto env = std::make_shared<Env>();
 
   auto fj1 = [env](double qt) -> double {
-    return gsl::bessel_J1(env->b * qt) / (sqr(qt) + env->wg2);
+    EPA_TRY
+      return gsl::bessel_J1(env->b * qt) / (sqr(qt) + env->wg2);
+    EPA_BACKTRACE("lambda (qt) %e", qt);
   };
 
   return spectrum_b_function1d_x(
@@ -364,30 +412,36 @@ spectrum_b_function1d_s(
       b_max,
       [form_factor, env, fj1 = std::move(fj1), integrate]
       (double b, double wg2, double qt_max) -> double {
-        env->b   = b;
-        env->wg2 = wg2;
-        std::vector<std::pair<double, double>>::const_iterator left
-          = form_factor->locate(wg2);
-        double start = left->first < wg2 ? 0 : sqrt(left->first - wg2);
-        double I = 0;
-        while (true) {
-          auto right = left + 1;
-          if (right == form_factor->points.end()) break;
-          double end = sqrt(right->first - wg2);
-          double A = (right->second - left->second)
-                   / sqrt(right->first - left->first);
-          double B = left->second - A * left->first;
-          I += A / b
-               * ( sqr(end)   * gsl::bessel_Jn(2, b * end)
-                 - sqr(start) * gsl::bessel_Jn(2, b * start)
-                 )
-             + B / b
-               * (gsl::bessel_J0(b * start) - gsl::bessel_J0(b * end))
-             - B * wg2 * integrate(fj1, start, end, 0);
-          left = right;
-          start = end;
-        };
-        return I;
+        EPA_TRY
+          env->b   = b;
+          env->wg2 = wg2;
+          std::vector<std::pair<double, double>>::const_iterator left
+            = form_factor->locate(wg2);
+          double start = left->first < wg2 ? 0 : sqrt(left->first - wg2);
+          double I = 0;
+          while (true) {
+            auto right = left + 1;
+            if (right == form_factor->points.end()) break;
+            double end = sqrt(right->first - wg2);
+            double A = (right->second - left->second)
+                     / sqrt(right->first - left->first);
+            double B = left->second - A * left->first;
+            I += A / b
+                 * ( sqr(end)   * gsl::bessel_Jn(2, b * end)
+                   - sqr(start) * gsl::bessel_Jn(2, b * start)
+                   )
+               + B / b
+                 * (gsl::bessel_J0(b * start) - gsl::bessel_J0(b * end))
+               - B * wg2 * integrate(fj1, start, end, 0);
+            left = right;
+            start = end;
+          };
+          return I;
+        EPA_BACKTRACE(
+            "lambda (b, sqr(w/gamma), qt_max) %e, %e, %e\n"
+            "  defined in epa::spectrum_b_function1d_s",
+            b, wg2, qt_max
+        );
       },
       integrate
   );
@@ -432,9 +486,13 @@ spectrum_b_function1d(
 Luminosity_y luminosity_y(Spectrum nA, Spectrum nB) {
   return [nA = std::move(nA), nB = std::move(nB)]
          (double s, double y) -> double {
-    s = 0.5 * sqrt(s);
-    y = exp(y);
-    return 0.25 * nA(s * y) * nB(s / y);
+    EPA_TRY
+      s = 0.5 * sqrt(s);
+      y = exp(y);
+      return 0.25 * nA(s * y) * nB(s / y);
+    EPA_BACKTRACE(
+        "lambda (s, y) %e, %e\n  defined in epa::luminosity_y", s, y
+    );
   };
 };
 
@@ -445,15 +503,22 @@ Luminosity_y luminosity_y(Spectrum n) {
 Luminosity_fid luminosity_fid(Spectrum nA, Spectrum nB, Integrator integrate) {
   auto rs = std::make_shared<double>();
   auto fx = [rs, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
-    double rx = sqrt(x);
-    return nA(*rs * rx) * nB(*rs / rx) / x;
+    EPA_TRY
+      double rx = sqrt(x);
+      return nA(*rs * rx) * nB(*rs / rx) / x;
+    EPA_BACKTRACE("lambda (x) %e; y = %e", x, 0.5 * log(x));
   };
 
   return [rs, fx = std::move(fx), integrate = std::move(integrate)](
       double s, double ymin, double ymax
   ) -> double {
-    *rs = sqrt(s) / 2;
-    return 0.125 * integrate(fx, exp(2 * ymin), exp(2 * ymax));
+    EPA_TRY
+      *rs = sqrt(s) / 2;
+      return 0.125 * integrate(fx, exp(2 * ymin), exp(2 * ymax));
+    EPA_BACKTRACE(
+        "lambda (s, ymin, ymax) %e, %e, %e\n  defined in epa::luminosity_fid",
+        s, ymin, ymax
+    );
   };
 };
 
@@ -498,10 +563,12 @@ luminosity_b_y(
   auto env = std::make_shared<Env>();
 
   auto fphi = [env, upc = std::move(upc)](double phi) -> double {
-    double c = cos(phi);
-    double s = sin(phi);
-    return upc(sqrt(sqr(env->b1) + sqr(env->b2) - 2 * env->b1 * env->b2 * c))
-         * (env->parallel * sqr(c) + env->perpendicular * sqr(s));
+    EPA_TRY
+      double c = cos(phi);
+      double s = sin(phi);
+      return upc(sqrt(sqr(env->b1) + sqr(env->b2) - 2 * env->b1 * env->b2 * c))
+           * (env->parallel * sqr(c) + env->perpendicular * sqr(s));
+    EPA_BACKTRACE("lambda (phi) %e", phi);
   };
 
   auto fb2 = [
@@ -511,28 +578,38 @@ luminosity_b_y(
     fphi = std::move(fphi),
     integrate = integrator(2)
   ](double b2) -> double {
-    env->b2 = b2;
-    return b2
-           * nA(env->b1, env->rs * env->rx)
-           * nB(b2, env->rs / env->rx)
-           * integrate(fphi, 0, 2 * pi);
+    EPA_TRY
+      env->b2 = b2;
+      return b2
+             * nA(env->b1, env->rs * env->rx)
+             * nB(b2, env->rs / env->rx)
+             * integrate(fphi, 0, 2 * pi);
+    EPA_BACKTRACE("lambda (b2) %e", b2);
   };
 
   auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
       double b1
   ) -> double {
-    env->b1 = b1;
-    return b1 * integrate(fb2, 0, infinity);
+    EPA_TRY
+      env->b1 = b1;
+      return b1 * integrate(fb2, 0, infinity);
+    EPA_BACKTRACE("lambda (b1) %e", b1);
   };
 
   return [env, fb1 = std::move(fb1), integrate = integrator(0)](
       double s, double y, double parallel, double perpendicular
   ) -> double {
-    env->rs = 0.5 * sqrt(s);
-    env->rx = exp(y);
-    env->parallel = parallel;
-    env->perpendicular = perpendicular;
-    return 0.25 * pi / sqr(env->rx) * integrate(fb1, 0, infinity);
+    EPA_TRY
+      env->rs = 0.5 * sqrt(s);
+      env->rx = exp(y);
+      env->parallel = parallel;
+      env->perpendicular = perpendicular;
+      return 0.25 * pi / sqr(env->rx) * integrate(fb1, 0, infinity);
+    EPA_BACKTRACE(
+        "lambda (s, y, parallel, perpendicular) %e, %e, %e, %e\n"
+        "  defined in luminosity_b_y",
+        s, y, parallel, perpendicular
+    );
   };
 };
 
@@ -567,29 +644,37 @@ luminosity_b_fid(
   auto env = std::make_shared<Env>();
 
   auto fx = [env, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
-    double rx = sqrt(x);
-    return nA(env->b1, env->rs * rx) * nB(env->b2, env->rs / rx) / x;
+    EPA_TRY
+      double rx = sqrt(x);
+      return nA(env->b1, env->rs * rx) * nB(env->b2, env->rs / rx) / x;
+    EPA_BACKTRACE("lambda (x) %e; y = %e", x, 0.5 * log(x));
   };
 
   auto fphi = [env, upc = std::move(upc)](double phi) -> double {
-    double c = cos(phi);
-    double s = sin(phi);
-    return upc(sqrt(sqr(env->b1) + sqr(env->b2) - 2 * env->b1 * env->b2 * c))
-         * (env->parallel * sqr(c) + env->perpendicular * sqr(s));
+    EPA_TRY
+      double c = cos(phi);
+      double s = sin(phi);
+      return upc(sqrt(sqr(env->b1) + sqr(env->b2) - 2 * env->b1 * env->b2 * c))
+           * (env->parallel * sqr(c) + env->perpendicular * sqr(s));
+    EPA_BACKTRACE("lambda (phi) %e", phi);
   };
 
   auto fb2 = [
     env, fx = std::move(fx), fphi = std::move(fphi), integrate = integrator(2)
   ](double b2) -> double {
-    env->b2 = b2;
-    return b2 * integrate(fx, env->xmin, env->xmax) * integrate(fphi, 0, 2 * pi);
+    EPA_TRY
+      env->b2 = b2;
+      return b2 * integrate(fx, env->xmin, env->xmax) * integrate(fphi, 0, 2 * pi);
+    EPA_BACKTRACE("lambda (b2) %e", b2);
   };
 
   auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
       double b1
   ) -> double {
-    env->b1 = b1;
-    return b1 * integrate(fb2, 0, infinity);
+    EPA_TRY
+      env->b1 = b1;
+      return b1 * integrate(fb2, 0, infinity);
+    EPA_BACKTRACE("lambda (b1) %e", b1);
   };
 
   return [env, fb1 = std::move(fb1), integrate = integrator(0)](
@@ -599,12 +684,18 @@ luminosity_b_fid(
         double ymin,
         double ymax
   ) -> double {
-    env->rs            = 0.5 * sqrt(s);
-    env->xmin          = exp(2 * ymin);
-    env->xmax          = exp(2 * ymax);
-    env->parallel      = parallel;
-    env->perpendicular = perpendicular;
-    return 0.25 * pi * integrate(fb1, 0, infinity);
+    EPA_TRY
+      env->rs            = 0.5 * sqrt(s);
+      env->xmin          = exp(2 * ymin);
+      env->xmax          = exp(2 * ymax);
+      env->parallel      = parallel;
+      env->perpendicular = perpendicular;
+      return 0.25 * pi * integrate(fb1, 0, infinity);
+    EPA_BACKTRACE(
+        "lambda (s, parallel, perpendicular, ymin, ymax) %e, %e, %e, %e, %e\n"
+        "  defined in luminosity_b_fid",
+        s, parallel, perpendicular, ymin, ymax
+    );
   };
 };
 

@@ -56,15 +56,20 @@ proton_dipole_spectrum_b(double energy, double lambda2) {
   double k11 = 1 + k12;
   double k00 = (1 - mu * x) / (1 - x) * lambda2 / 2;
   return [=](double b, double w) -> double {
-    double wg = w / gamma;
-    double wg2 = sqr(wg);
-    double rl = sqrt(lambda2 + wg2);
-    double rm = sqrt(m2      + wg2);
-    return c / w * sqr(
-          wg * gsl::bessel_K1(b * wg)
-        - k11 * rl * gsl::bessel_K1(b * rl)
-        + k12 * rm * gsl::bessel_K1(b * rm)
-        - k00 * b  * gsl::bessel_K0(b * rl)
+    EPA_TRY
+      double wg = w / gamma;
+      double wg2 = sqr(wg);
+      double rl = sqrt(lambda2 + wg2);
+      double rm = sqrt(m2      + wg2);
+      return c / w * sqr(
+            wg * gsl::bessel_K1(b * wg)
+          - k11 * rl * gsl::bessel_K1(b * rl)
+          + k12 * rm * gsl::bessel_K1(b * rm)
+          - k00 * b  * gsl::bessel_K0(b * rl)
+      );
+    EPA_BACKTRACE(
+        "lambda (b, w) %e, %e\n  defined in proton_dipole_spectrum_b(%e, %e)",
+        b, w, energy, lambda2
     );
   };
 };

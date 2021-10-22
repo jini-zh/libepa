@@ -8,7 +8,7 @@
 namespace epa {
 
 const double pi              = M_PI;
-const double alpha           = 7.2973525693e-3; // [1] (fine structure constant)
+const double alpha           = 7.2973525693e-3;        // [1] (fine structure constant)
 const double planck          = 0.1973269804;           // GeV fm [1]
 const double barn            = sqr(planck) * 1e-2;     // (GeV * barn)^{-2}
 const double fm              = 1. / (10 * sqrt(barn)); // (GeV fm)^{-1}
@@ -21,6 +21,15 @@ const double amu
      CODATA recommended values of the fundamental physical constants: 2018.
      Reviews of Modern Physics 93, 025010 (2020).
 */
+
+extern bool print_backtrace;
+
+#define EPA_TRY try {
+#define EPA_BACKTRACE(message, ...) \
+  } catch (std::exception&) { \
+    if (print_backtrace) fprintf(stderr, message "\n", __VA_ARGS__); \
+    throw; \
+  }
 
 // default parameters for GSL routines for quadrature integration
 extern double default_absolute_error;
