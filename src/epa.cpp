@@ -220,7 +220,7 @@ spectrum_b_dipole(unsigned Z, double gamma, double lambda2) {
 static
 Spectrum_b
 spectrum_b_function1d_x(
-    unsigned z,
+    unsigned Z,
     double gamma,
     std::shared_ptr<Function1d> form_factor,
     FormFactor rest_form_factor,
@@ -233,7 +233,7 @@ spectrum_b_function1d_x(
     if (rest_spectrum)
       return rest_spectrum;
     else if (rest_form_factor)
-      return spectrum_b(z, gamma, rest_form_factor);
+      return spectrum_b(Z, gamma, rest_form_factor);
     else if (!form_factor)
       throw std::invalid_argument(
           "epa::spectrum_b_function1d_x: null form factor"
@@ -250,7 +250,7 @@ spectrum_b_function1d_x(
 
   auto env = std::make_shared<Env>();
 
-  double c = alpha * sqr(z / pi);
+  double c = alpha * sqr(Z / pi);
 
   double norm;
   if (rest_form_factor) {
@@ -259,7 +259,7 @@ spectrum_b_function1d_x(
   };
 
   Spectrum_b n0;
-  if (b_max > 0) n0 = spectrum_b_point(z, gamma);
+  if (b_max > 0) n0 = spectrum_b_point(Z, gamma);
 
   auto rqt = [env, ff = std::move(rest_form_factor)](double qt) -> double {
     double qt2 = sqr(qt);
@@ -296,7 +296,7 @@ spectrum_b_function1d_x(
 
 Spectrum_b
 spectrum_b_function1d_g(
-    unsigned z,
+    unsigned Z,
     double gamma,
     std::shared_ptr<Function1d> form_factor,
     FormFactor rest_form_factor,
@@ -318,7 +318,7 @@ spectrum_b_function1d_g(
   };
 
   return spectrum_b_function1d_x(
-      z,
+      Z,
       gamma,
       form_factor,
       rest_form_factor,
@@ -336,7 +336,7 @@ spectrum_b_function1d_g(
 
 Spectrum_b
 spectrum_b_function1d_s(
-    unsigned z,
+    unsigned Z,
     double gamma,
     std::shared_ptr<Function1d> form_factor,
     FormFactor rest_form_factor,
@@ -356,7 +356,7 @@ spectrum_b_function1d_s(
   };
 
   return spectrum_b_function1d_x(
-      z,
+      Z,
       gamma,
       form_factor,
       rest_form_factor,
@@ -395,7 +395,7 @@ spectrum_b_function1d_s(
 
 Spectrum_b
 spectrum_b_function1d(
-    unsigned z,
+    unsigned Z,
     double gamma,
     std::shared_ptr<Function1d> form_factor,
     FormFactor rest_form_factor,
@@ -404,7 +404,7 @@ spectrum_b_function1d(
     Integrator_I integrate
 ) {
   auto global = spectrum_b_function1d_g(
-      z,
+      Z,
       gamma,
       form_factor,
       rest_form_factor,
@@ -413,7 +413,7 @@ spectrum_b_function1d(
       integrate
   );
   auto segmented = spectrum_b_function1d_s(
-      z,
+      Z,
       gamma,
       form_factor,
       rest_form_factor,
