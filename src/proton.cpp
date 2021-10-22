@@ -161,20 +161,20 @@ ppx_luminosity_b_y(
   };
 
   return [env, fb1 = std::move(fb1), integrate = integrator(0)](
-      double s, double y, double parallel, double perpendicular
+      double s, double y, Polarization polarization
   ) -> double {
     EPA_TRY
       double rs = sqrt(s);
       double rx = exp(y);
       env->w1          = rs * rx;
       env->w2          = rs / rx;
-      env->psum        = parallel + perpendicular;
-      env->pdifference = parallel - perpendicular;
+      env->psum        = polarization.parallel + polarization.perpendicular;
+      env->pdifference = polarization.parallel - polarization.perpendicular;
       return 0.5 * sqr(pi) * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
-        "lambda (s, y, parallel, perpendicular) %e, %e, %e, %e\n"
+        "lambda (s, y, polarization) %e, %e, {%e, %e}\n"
         "  defined in ppx_luminosity_y",
-        s, y, parallel, perpendicular
+        s, y, polarization.parallel, polarization.perpendicular
     );
   };
 };
@@ -236,20 +236,20 @@ ppx_luminosity_b_fid(
     fb1       = std::move(fb1),
     integrate = integrator(0)
   ](
-      double s, double parallel, double perpendicular, double ymin, double ymax
+      double s, Polarization polarization, double ymin, double ymax
   ) -> double {
     EPA_TRY
       env->rs          = 0.5 * sqrt(s);
       env->xmin        = exp(2 * ymin);
       env->xmax        = exp(2 * ymax);
-      env->psum        = parallel + perpendicular;
-      env->pdifference = parallel - perpendicular;
+      env->psum        = polarization.parallel + polarization.perpendicular;
+      env->pdifference = polarization.parallel - polarization.perpendicular;
       return (l ? 0.5 * env->psum * l(s, ymin, ymax) : 0)
              + 0.25 * sqr(pi) * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
-        "lambda (s, parallel, perpendicular, ymin, ymax) %e, %e, %e, %e, %e\n"
+        "lambda (s, polarization, ymin, ymax) %e, {%e, %e}, %e, %e\n"
         "  defined in ppx_luminosity_fid",
-        s, parallel, perpendicular, ymin, ymax
+        s, polarization.parallel, polarization.perpendicular, ymin, ymax
     );
   };
 };
@@ -262,8 +262,8 @@ Luminosity_b ppx_luminosity_b(
 ) {
   return [
     l = ppx_luminosity_b_fid(std::move(n), std::move(n_b), B, integrator)
-  ](double s, double parallel, double perpendicular) -> double {
-    return 2 * l(s, parallel, perpendicular, -infinity, 0);
+  ](double s, Polarization polarization) -> double {
+    return 2 * l(s, polarization, -infinity, 0);
   };
 };
 

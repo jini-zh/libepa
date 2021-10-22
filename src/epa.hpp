@@ -249,36 +249,24 @@ Luminosity_fid luminosity_fid(
 );
 Luminosity_fid luminosity_fid(Spectrum, Integrator = default_integrator(0));
 
+struct Polarization {
+  double parallel;
+  double perpendicular;
+};
+
 // Photon-photon luminosity with non-electromagnetic interactions respected.
-// `parallel' and `perpendicular' are the weights to multiply components with
-// parallel or perpendicular photons polarizations. Pass parallel = 1,
-// perpendicular = 0 to compute only for parallel photon polarization, parallel
-// = 1, perpendicular = 1 to compute for the sum of polarizations.
-typedef std::function<
-  double (
-      double /* s */,
-      double /* parallel */,
-      double /* perpendicular */
-  )
-> Luminosity_b;
+// `Polarization' are the weights to multiply components with parallel or
+// perpendicular photons polarizations. Pass parallel = 1, perpendicular = 0 to
+// compute only for parallel photon polarization, parallel = 1, perpendicular =
+// 1 to compute for the sum of polarizations.
+typedef std::function<double (double /* s */, Polarization)> Luminosity_b;
 // differentiated with respect to rapidity of the system
 typedef std::function<
-  double (
-      double /* s */,
-      double /* y */,
-      double /* parallel */,
-      double /* perpendicular */
-  )
+  double (double /* s */, double /* y */, Polarization)
 > Luminosity_b_y;
 // for calculating fiducial cross section
 typedef std::function<
-  double (
-      double /* s */,
-      double /* parallel */,
-      double /* perpendicular */,
-      double /* ymin */,
-      double /* ymax */
-  )
+  double (double /* s */, Polarization, double /* ymin */, double /* ymax */)
 > Luminosity_b_fid;
 
 // Photon-photon luminosity in ultraperipheral collisions of particles with EPA

@@ -210,13 +210,13 @@ BOOST_AUTO_TEST_SUITE(expensive, *boost::unit_test::disabled())
 BOOST_AUTO_TEST_CASE(test_luminosity_b, *boost::unit_test::tolerance(1e-5)) {
   BOOST_TEST(
       luminosity_b(proton_dipole_spectrum_b(13e3 / 2), pp_upc_probability(13e3))(
-        1e4, 1, 1
+        1e4, { 1, 1 }
       ) == 1.1451311654455229e-07
   );
 };
 
 BOOST_AUTO_TEST_CASE(test_pp_luminosity_b, *boost::unit_test::tolerance(1e-5)) {
-  BOOST_TEST(pp_luminosity_b(13e3)(1e4, 1, 1) == 1.1451289852721231e-07);
+  BOOST_TEST(pp_luminosity_b(13e3)(1e4, { 1, 1 }) == 1.1451289852721231e-07);
 };
 
 BOOST_AUTO_TEST_SUITE_END(); // expensive

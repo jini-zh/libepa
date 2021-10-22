@@ -554,8 +554,7 @@ luminosity_b_y(
     double rx;
     double b1;
     double b2;
-    double parallel;
-    double perpendicular;
+    Polarization polarization;
   };
 
   auto env = std::make_shared<Env>();
@@ -565,7 +564,10 @@ luminosity_b_y(
       double c = cos(phi);
       double s = sin(phi);
       return upc(sqrt(sqr(env->b1) + sqr(env->b2) - 2 * env->b1 * env->b2 * c))
-           * (env->parallel * sqr(c) + env->perpendicular * sqr(s));
+           * (
+               env->polarization.parallel * sqr(c)
+             + env->polarization.perpendicular * sqr(s)
+             );
     EPA_BACKTRACE("lambda (phi) %e", phi);
   };
 
@@ -595,18 +597,17 @@ luminosity_b_y(
   };
 
   return [env, fb1 = std::move(fb1), integrate = integrator(0)](
-      double s, double y, double parallel, double perpendicular
+      double s, double y, Polarization polarization
   ) -> double {
     EPA_TRY
       env->rs = 0.5 * sqrt(s);
       env->rx = exp(y);
-      env->parallel = parallel;
-      env->perpendicular = perpendicular;
+      env->polarization = polarization;
       return 0.25 * pi / sqr(env->rx) * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
-        "lambda (s, y, parallel, perpendicular) %e, %e, %e, %e\n"
+        "lambda (s, y, polarization) %e, %e, {%e, %e}\n"
         "  defined in luminosity_b_y",
-        s, y, parallel, perpendicular
+        s, y, polarization.parallel, polarization.perpendicular
     );
   };
 };
@@ -635,8 +636,7 @@ luminosity_b_fid(
     double xmax;
     double b1;
     double b2;
-    double parallel;
-    double perpendicular;
+    Polarization polarization;
   };
 
   auto env = std::make_shared<Env>();
@@ -653,7 +653,10 @@ luminosity_b_fid(
       double c = cos(phi);
       double s = sin(phi);
       return upc(sqrt(sqr(env->b1) + sqr(env->b2) - 2 * env->b1 * env->b2 * c))
-           * (env->parallel * sqr(c) + env->perpendicular * sqr(s));
+           * (
+               env->polarization.parallel * sqr(c)
+             + env->polarization.perpendicular * sqr(s)
+             );
     EPA_BACKTRACE("lambda (phi) %e", phi);
   };
 
@@ -677,8 +680,7 @@ luminosity_b_fid(
 
   return [env, fb1 = std::move(fb1), integrate = integrator(0)](
         double s,
-        double parallel,
-        double perpendicular,
+        Polarization polarization,
         double ymin,
         double ymax
   ) -> double {
@@ -686,13 +688,12 @@ luminosity_b_fid(
       env->rs            = 0.5 * sqrt(s);
       env->xmin          = exp(2 * ymin);
       env->xmax          = exp(2 * ymax);
-      env->parallel      = parallel;
-      env->perpendicular = perpendicular;
+      env->polarization  = polarization;
       return 0.25 * pi * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
-        "lambda (s, parallel, perpendicular, ymin, ymax) %e, %e, %e, %e, %e\n"
+        "lambda (s, polarization, ymin, ymax) %e, {%e, %e}, %e, %e\n"
         "  defined in luminosity_b_fid",
-        s, parallel, perpendicular, ymin, ymax
+        s, polarization.parallel, polarization.perpendicular, ymin, ymax
     );
   };
 };
@@ -705,14 +706,13 @@ luminosity_b_fid(
 ) {
   return [l = luminosity_b_fid(n, n, std::move(upc), integrator)](
       double s,
-      double parallel,
-      double perpendicular,
+      Polarization polarization,
       double ymin,
       double ymax
   ) -> double {
     return ymin == -ymax
-         ? 2 * l(s, parallel, perpendicular, ymin, 0)
-         : l(s, parallel, perpendicular, ymin, ymax);
+         ? 2 * l(s, polarization, ymin, 0)
+         : l(s, polarization, ymin, ymax);
   };
 };
 
@@ -730,8 +730,8 @@ luminosity_b(
             std::move(upc),
             integrator
         )
-  ](double s, double parallel, double perpendicular) -> double {
-    return l(s, parallel, perpendicular, -infinity, infinity);
+  ](double s, Polarization polarization) -> double {
+    return l(s, polarization, -infinity, infinity);
   };
 };
 
@@ -742,9 +742,9 @@ luminosity_b(
     const std::function<Integrator (unsigned)>& integrator
 ) {
   return [l = luminosity_b_fid(n, n, std::move(upc), integrator)](
-      double s, double parallel, double perpendicular
+      double s, Polarization polarization
   ) -> double {
-    return 2 * l(s, parallel, perpendicular, -infinity, 0);
+    return 2 * l(s, polarization, -infinity, 0);
   };
 };
 
