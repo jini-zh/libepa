@@ -91,4 +91,217 @@ pp_upc_probability(double collision_energy) {
   };
 };
 
+Luminosity_y
+pp_luminosity_y(double collision_energy) {
+  return luminosity_y(proton_dipole_spectrum(collision_energy / 2));
+};
+
+Luminosity
+pp_luminosity(double collision_energy, Integrator integrate) {
+  return luminosity(proton_dipole_spectrum(collision_energy / 2), integrate);
+};
+
+Luminosity_fid
+pp_luminosity_fid(double collision_energy, Integrator integrate) {
+  return luminosity_fid(
+      proton_dipole_spectrum(collision_energy / 2), integrate
+  );
+};
+
+static double ppx_luminosity_internal(
+    double b1, double b2, double B, double psum, double pdifference
+) {
+  double e = exp(-0.5 * sqr(b1 - b2) / B);
+  double z = b1 * b2 / B;
+  double i01 = psum * gsl::bessel_I0_scaled(z);
+  double i02 = psum * gsl::bessel_I0_scaled(2 * z);
+  double i21, i22;
+  if (pdifference != 0) {
+    i21 = pdifference * gsl::bessel_In_scaled(2, z);
+    i22 = pdifference * gsl::bessel_In_scaled(2, 2 * z);
+  } else {
+    i21 = 0;
+    i22 = 0;
+  };
+  return psum - 2 * e * (i01 + i21) + e * e * (i02 + i22);
+};
+
+Luminosity_b_y
+ppx_luminosity_b_y(
+    Spectrum_b n,
+    double B,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  struct Env {
+    double w1;
+    double w2;
+    double b1;
+    double psum;
+    double pdifference;
+  };
+
+  auto env = std::make_shared<Env>();
+
+  auto fb2 = [env, B, n = std::move(n)](double b2) -> double {
+    EPA_TRY
+      return b2 * n(env->b1, env->w1) * n(b2, env->w2)
+           * ppx_luminosity_internal(
+               env->b1, b2, B, env->psum, env->pdifference
+             );
+    EPA_BACKTRACE("lambda (b2) %e", b2);
+  };
+
+  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
+      double b1
+  ) -> double {
+    EPA_TRY
+      env->b1 = b1;
+      return b1 * integrate(fb2, 0, infinity);
+    EPA_BACKTRACE("lambda (b1) %e", b1);
+  };
+
+  return [env, fb1 = std::move(fb1), integrate = integrator(0)](
+      double s, double y, double parallel, double perpendicular
+  ) -> double {
+    EPA_TRY
+      double rs = sqrt(s);
+      double rx = exp(y);
+      env->w1          = rs * rx;
+      env->w2          = rs / rx;
+      env->psum        = parallel + perpendicular;
+      env->pdifference = parallel - perpendicular;
+      return 0.5 * sqr(pi) * integrate(fb1, 0, infinity);
+    EPA_BACKTRACE(
+        "lambda (s, y, parallel, perpendicular) %e, %e, %e, %e\n"
+        "  defined in ppx_luminosity_y",
+        s, y, parallel, perpendicular
+    );
+  };
+};
+
+Luminosity_b_fid
+ppx_luminosity_b_fid(
+    Spectrum n,
+    Spectrum_b n_b,
+    double B,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  struct Env {
+    double rs;
+    double xmin;
+    double xmax;
+    double b1;
+    double b2;
+    double psum;
+    double pdifference;
+  };
+
+  auto env = std::make_shared<Env>();
+
+  auto fx = [env, n_b = std::move(n_b)](double x) -> double {
+    EPA_TRY
+      double rx = sqrt(x);
+      return n_b(env->b1, env->rs * rx) * n_b(env->b2, env->rs / rx) / x;
+    EPA_BACKTRACE("lambda (x) %e; y = %e", x, 0.5 * log(x));
+  };
+
+  auto fb2 = [
+    env,
+    B,
+    fx        = std::move(fx),
+    integrate = integrator(2),
+    one       = n ? 1 : 0
+  ](double b2) -> double {
+    EPA_TRY
+      env->b2 = b2;
+      return b2 * integrate(fx, env->xmin, env->xmax) * (
+        ppx_luminosity_internal(env->b1, b2, B, env->psum, env->pdifference)
+        - one * env->psum
+      );
+    EPA_BACKTRACE("lambda (b2) %e", b2);
+  };
+
+  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
+      double b1
+  ) -> double {
+    EPA_TRY
+      env->b1 = b1;
+      return b1 * integrate(fb2, 0, infinity);
+    EPA_BACKTRACE("lambda (b1) %e", b1);
+  };
+
+  return [
+    env,
+    l         = n ? luminosity_fid(std::move(n)) : Luminosity_fid(),
+    fb1       = std::move(fb1),
+    integrate = integrator(0)
+  ](
+      double s, double parallel, double perpendicular, double ymin, double ymax
+  ) -> double {
+    EPA_TRY
+      env->rs          = 0.5 * sqrt(s);
+      env->xmin        = exp(2 * ymin);
+      env->xmax        = exp(2 * ymax);
+      env->psum        = parallel + perpendicular;
+      env->pdifference = parallel - perpendicular;
+      return (l ? 0.5 * env->psum * l(s, ymin, ymax) : 0)
+             + 0.25 * sqr(pi) * integrate(fb1, 0, infinity);
+    EPA_BACKTRACE(
+        "lambda (s, parallel, perpendicular, ymin, ymax) %e, %e, %e, %e, %e\n"
+        "  defined in ppx_luminosity_fid",
+        s, parallel, perpendicular, ymin, ymax
+    );
+  };
+};
+
+Luminosity_b ppx_luminosity_b(
+    Spectrum n,
+    Spectrum_b n_b,
+    double B,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  return [
+    l = ppx_luminosity_b_fid(std::move(n), std::move(n_b), B, integrator)
+  ](double s, double parallel, double perpendicular) -> double {
+    return 2 * l(s, parallel, perpendicular, -infinity, 0);
+  };
+};
+
+Luminosity_b_y pp_luminosity_b_y(
+    double collision_energy,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  return ppx_luminosity_b_y(
+      proton_dipole_spectrum_b(0.5 * collision_energy),
+      pp_elastic_slope(collision_energy),
+      integrator
+  );
+};
+
+Luminosity_b_fid pp_luminosity_b_fid(
+    double collision_energy,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  double energy = 0.5 * collision_energy;
+  return ppx_luminosity_b_fid(
+      proton_dipole_spectrum(energy),
+      proton_dipole_spectrum_b(energy),
+      pp_elastic_slope(collision_energy),
+      integrator
+  );
+};
+
+Luminosity_b pp_luminosity_b(
+    double collision_energy,
+    const std::function<Integrator (unsigned)>& integrator
+) {
+  double energy = 0.5 * collision_energy;
+  return ppx_luminosity_b(
+      proton_dipole_spectrum(energy),
+      proton_dipole_spectrum_b(energy),
+      pp_elastic_slope(collision_energy),
+      integrator
+  );
+};
+
 }; // namespace epa

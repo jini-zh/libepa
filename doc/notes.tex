@@ -396,6 +396,60 @@ where~\cite{1112.3243}
 $B_0 = 12~\text{GeV}^{-2}$, $B_1 = -0.22 \pm 0.17~\text{GeV}^2$, $B_2 = 0.037
 \pm 0.006~\text{GeV}^{-2}$, $E$ is the collision energy, $E_0 = 1$~GeV.
 
+Photon-photon luminosity in an ultraperipheral collison of two protons:
+\begin{equation}
+  \begin{gathered}
+    \begin{multlined}
+      \frac{\mathrm{d} L_\parallel}{\mathrm{d} s}
+      = \frac{\pi^2}{2}
+        \int\limits_0^\infty b_1 \, \mathrm{d} b_1
+        \int\limits_0^\infty b_2 \, \mathrm{d} b_2
+        \int\limits_{-\infty}^\infty \mathrm{d} y
+        \, n \left( b_1, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^y \right)
+        \, n \left( b_2, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^{-y} \right)
+        \\  \times
+        \left\{
+            1
+          - 2 \mathrm{e}^{-\frac{b_1^2 + b_2^2}{2 B}}
+            \left[
+                I_0 \left( \frac{b_1 b_2}{B} \right)
+              + I_2 \left( \frac{b_1 b_2}{B} \right)
+            \right]
+          + \mathrm{e}^{-\frac{b_1^2 + b_2^2}{B}}
+            \left[
+                I_0 \left( \frac{2 b_1 b_2}{B} \right)
+              + I_2 \left( \frac{2 b_1 b_2}{B} \right)
+            \right]
+        \right\},
+    \end{multlined}
+    \\
+    \begin{multlined}
+      \frac{\mathrm{d} L_\perp}{\mathrm{d} s}
+      = \frac{\pi^2}{2}
+        \int\limits_0^\infty b_1 \, \mathrm{d} b_1
+        \int\limits_0^\infty b_2 \, \mathrm{d} b_2
+        \int\limits_{-\infty}^\infty \mathrm{d} y
+        \, n \left( b_1, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^y \right)
+        \, n \left( b_2, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^{-y} \right)
+        \\  \times
+        \left\{
+            1
+          - 2 \mathrm{e}^{-\frac{b_1^2 + b_2^2}{2 B}}
+            \left[
+                I_0 \left( \frac{b_1 b_2}{B} \right)
+              - I_2 \left( \frac{b_1 b_2}{B} \right)
+            \right]
+          + \mathrm{e}^{-\frac{b_1^2 + b_2^2}{B}}
+            \left[
+                I_0 \left( \frac{2 b_1 b_2}{B} \right)
+              - I_2 \left( \frac{2 b_1 b_2}{B} \right)
+            \right]
+        \right\},
+    \end{multlined}
+  \end{gathered}
+\end{equation}
+where $I_0(x)$, $I_2(x)$ are the modified Bessel function of the first kind.
+
 \newcommand{\arxiv}[1]{\href{http://arxiv.org/abs/#1}{arXiv:\nolinebreak[3]#1}}
 \begin{thebibliography}{99}
   \bibitem{hep-ph-0608271}

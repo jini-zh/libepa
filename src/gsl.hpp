@@ -26,6 +26,9 @@ const auto bessel_J0 = gsl_sf_bessel_J0;
 const auto bessel_J1 = gsl_sf_bessel_J1;
 const auto bessel_Jn = gsl_sf_bessel_Jn;
 
+const auto bessel_I0_scaled = gsl_sf_bessel_I0_scaled;
+const auto bessel_In_scaled = gsl_sf_bessel_In_scaled;
+
 // avoid underflow
 inline double bessel_K0(double x) {
   if (x > 700) return 0;
