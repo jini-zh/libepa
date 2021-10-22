@@ -16,6 +16,8 @@ const double electron_charge = 1.602176634e-19;        // C [1]
 const double light_speed     = 299792458;              // m/s [1]
 const double amu
   = (1.66053906660e-27 * sqr(light_speed)) / electron_charge * 1e-9; // GeV, [1]
+const double infinity        = gsl::infinity;
+
 /*
  [1] E. Tiesinga, P. J. Mohr, D. B. Newell, B. N. Taylor.
      CODATA recommended values of the fundamental physical constants: 2018.

@@ -12,8 +12,6 @@ double default_error_step         = 1e-1;
 size_t default_integration_limit  = 1000;
 gsl::integration::QAGMethod default_integration_method = gsl::integration::GAUSS41;
 
-const double infinity = gsl::infinity;
-
 Integrator gsl_integrator(
     double absolute_error,
     double relative_error,
