@@ -341,4 +341,29 @@ xsection_b(
     Luminosity_b luminosity
 );
 
+// Fiducial cross section for the production of a pair of charged particles in
+// ultraperipheral collision with non-electromagnetic interactions neglected
+// and with the constraints on the phase space pT > pT_max, abs(eta) < eta_max,
+// where pT and eta are the transverse momentum and pseudorapidity of each
+// particle.
+XSection
+xsection_fid(
+    // differential with respect to pT cross section of the pair production in
+    // fusion of real photons
+    std::function<double (double /* s */, double /* pT */)> xsection,
+    Luminosity_fid,
+    double mass, // the mass of the charged particle
+    double pT_min,
+    double eta_max,
+    Integrator = default_integrator(0)
+);
+
+// Cross section for the production of a pair of fermions in photon-photon
+// collisions (the Breit-Wheeler cross section) differentiated with respect to
+// pT --- fermion transverse momentum. `mass' and `charge' are the fermion mass
+// and charge.
+std::function<double (double /* s */, double /* pT */)>
+photons_to_fermions_pT(double mass, unsigned charge = 1);
+
+
 }; // namespace epa

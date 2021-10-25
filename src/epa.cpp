@@ -771,4 +771,66 @@ xsection_b(
   };
 };
 
+XSection
+xsection_fid(
+    std::function<double (double /* s */, double /* pT */)> xsection,
+    Luminosity_fid   luminosity,
+    double           mass,
+    double           pT_min,
+    double           eta_max,
+    Integrator       integrate
+) {
+  struct Env {
+    double s;
+    double rs;
+  };
+
+  auto env = std::make_shared<Env>();
+
+  double m2 = sqr(mass);
+  double sinh_eta = sinh(eta_max);
+  double cosh_eta = cosh(eta_max);
+  double cosh2_eta = sqr(cosh_eta);
+
+  auto fpT = [
+    =,
+    xsection = std::move(xsection),
+    luminosity = std::move(luminosity)
+  ](double pT) -> double {
+    EPA_TRY
+      double pT2 = sqr(pT);
+      double y = asinh(
+          pT * env->rs / (pT2 + m2)
+          * (
+                sinh_eta
+              - sqrt((cosh2_eta + m2 / pT2) * (1 - 4 * (pT2 + m2) / env->s))
+            )
+      );
+      return xsection(env->s, pT) * luminosity(env->s, -y, y);
+    EPA_BACKTRACE("lambda (pT) %e", pT);
+   };
+
+  return [=, fpT = std::move(fpT)](double s) -> double {
+    EPA_TRY
+      env->s = s;
+      env->rs = 0.5 * sqrt(s);
+      double v = env->rs * sqrt(1 - 4 * m2 / s);
+      return integrate(fpT, std::max(pT_min, v / cosh_eta), v);
+    EPA_BACKTRACE("lambda (s) %e\n  defined in xsection_fid", s);
+  };
+};
+
+std::function<double (double, double)>
+photons_to_fermions_pT(double mass, unsigned charge) {
+  double c = 8 * pi * sqr(sqr(charge) * alpha) * barn;
+  double m2 = sqr(mass);
+  double m4 = sqr(m2);
+  return [=](double s, double pT) -> double {
+    double pT2 = sqr(pT);
+    double z = pT2 + m2;
+    double sz = s * z;
+    return c * pT / sz * (1 - 2 * (sqr(pT2) + m4) / sz) / sqrt(1 - 4 * z / s);
+  };
+};
+
 }; // namespace epa

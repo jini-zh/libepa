@@ -188,6 +188,20 @@ BOOST_AUTO_TEST_CASE(epa_luminosity) {
   );
 };
 
+BOOST_AUTO_TEST_CASE(epa_xsection) {
+  const double muon_mass = 0.1056583745;
+  BOOST_TEST(photons_to_fermions_pT(muon_mass)(1e4, 15) == 3.4778865310358681e-12);
+  BOOST_TEST(
+      xsection_fid(
+        photons_to_fermions_pT(muon_mass),
+        pp_luminosity_fid(13e3),
+        muon_mass,
+        10,
+        2.5
+      )(1e4) == 5.3369629925413322e-18
+  );
+};
+
 BOOST_AUTO_TEST_SUITE_END(); // epa_test
 
 

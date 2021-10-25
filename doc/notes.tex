@@ -46,6 +46,9 @@
   }
 }
 
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\DeclareMathOperator{\arcsinh}{arcsinh}
+
 \begin{document}
 
 \section{Form factors}
@@ -358,6 +361,44 @@ where $\sigma_{\parallel,\perp}(\gamma \gamma \to X)$ are the cross sections for
 the fusion of two photons with parallel or perpendicular polarizations,
 $L_{\parallel,\perp}$ are photon-photon luminosities with respect to photon
 polarizations.
+
+Differential fiducial cross section for the process $AB \to AB \chi^+ \chi^-$
+with the non-electromagnetic interactions neglected and with the constraints on
+the phase space $p_T^\pm > \hat p_T$, $\abs{\eta^\pm} < \hat \eta$, where
+$p_T^\pm$ and $\eta^\pm$ are the transverse momentum and pseudorapidity of
+$\chi^\pm$:
+\begin{gather}
+  \frac{\mathrm{d}}{\mathrm{d} s} \sigma_\text{fid.}(AB \to AB \chi^+ \chi^-)
+  = \int\limits_{
+      \max \left(
+        \hat p_T,
+        \frac{\sqrt{s}}{2 \cosh \hat \eta} \sqrt{1 - \frac{4 m_\chi^2}{s}}
+      \right)
+    }^{\frac{\sqrt{s}}{2} \sqrt{1 - \frac{4 m_\chi^2}{s}}}
+      \mathrm{d} p_T
+      \, \frac{\mathrm{d}}{\mathrm{d} p_T}
+         \sigma(\gamma \gamma \to \chi^+ \chi^-)
+      \, \frac{\mathrm{d} \hat L}{\mathrm{d} s},
+  \\
+  \frac{\mathrm{d}}{\mathrm{d} p_T} \sigma(\gamma \gamma \to \chi^+ \chi^-)
+  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
+    \cdot \frac{1 - \frac{2 (p_T^4 + m_\chi^4)}{s (p_T^2 + m_\chi^2)}}
+               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
+  \\
+  \frac{\mathrm{d} \hat L}{\mathrm{d} s}
+  = \frac14
+    \int\limits_{-\hat y}^{\hat y} \mathrm{d} y
+    \, n \left( \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
+    \, n \left( \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right),
+  \\
+  \hat y = \arcsinh \left[
+    \frac{p_T \sqrt{s}}{2 (p_T^2 + m_\chi^2)} \left(
+      \sinh \hat \eta
+      - \sqrt{\cosh^2 \hat \eta + \frac{m_\chi^2}{p_T^2}}
+        \cdot \sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}
+    \right)
+  \right].
+\end{gather}
 
 \section{Proton}
 
