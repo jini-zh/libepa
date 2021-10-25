@@ -748,4 +748,27 @@ luminosity_b(
   };
 };
 
+XSection
+xsection(XSection xsection, Luminosity luminosity) {
+  return [
+    xsection   = std::move(xsection),
+    luminosity = std::move(luminosity)
+  ](double s) -> double {
+    return xsection(s) * luminosity(s);
+  };
+};
+
+XSection
+xsection_b(
+    XSection_b   xsection,
+    Luminosity_b luminosity
+) {
+  return [
+    xsection   = std::move(xsection),
+    luminosity = std::move(luminosity)
+  ](double s) -> double {
+    return luminosity(s, xsection(s));
+  };
+};
+
 }; // namespace epa

@@ -318,4 +318,27 @@ luminosity_b_fid(
     const std::function<Integrator (unsigned)>& = default_integrator
 );
 
+// Generic differential cross section. sqrt{s} is the invariant mass of the
+// system.
+typedef std::function<double (double /* s */)> XSection;
+
+// Photon fusion cross section taking into account photons polarization.
+// Returns two values: cross sections for the parallel and perpendicular
+// photons polarizations respectively.
+typedef std::function<Polarization (double /* s */)> XSection_b;
+
+// Differential cross section for a process occuring in ultraperipheral
+// collisions with non-electromagnetic interactions neglected
+XSection
+xsection(
+    XSection,  // photon fusion cross section
+    Luminosity // photon-photon luminosity
+);
+// same with non-electromagnetic interactions respected
+XSection
+xsection_b(
+    XSection_b   xsection,
+    Luminosity_b luminosity
+);
+
 }; // namespace epa

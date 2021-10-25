@@ -13,6 +13,39 @@
   urlcolor={blue!50!black}
 }
 
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{calc}
+
+\tikzset{
+  >=stealth',
+  midarrow/.style={
+    postaction={
+      decorate,
+      decoration={markings, mark=at position .55 with {\arrow{>}}}
+    }
+  },
+  fermion/.style=midarrow,
+  photon/.style={
+    decorate,
+    decoration={snake, amplitude=2pt, segment length=8pt}
+  },
+  boson/.style={
+    decorate,
+    decoration={snake, amplitude=2pt, segment length=8pt}
+  },
+  gluon/.style={
+    decorate,
+    decoration={coil, amplitude=4pt, segment length=5pt}
+  },
+  scalar/.style=densely dashed,
+  arrowsnake/.style={
+    preaction={photon, draw},
+    postaction=midarrow
+  }
+}
+
 \begin{document}
 
 \section{Form factors}
@@ -268,6 +301,63 @@ rearranged as follows:
        \end{multlined}
   \end{aligned}
 \end{equation}
+
+\section{UPC cross section}
+
+\begin{figure}[tbh]
+  \centering
+  \begin{tikzpicture}[baseline=(baseline)]
+    \coordinate (P1in)  at (-1.7,  0.7);
+    \coordinate (V1)    at (-0.7,  0.7);
+    \coordinate (P1out) at ( 1.0,  1.7);
+    \coordinate (V)     at (   0,    0);
+    \coordinate (P2in)  at (-1.7, -0.7);
+    \coordinate (V2)    at (-0.7, -0.7);
+    \coordinate (P2out) at ( 1.0, -1.7);
+
+    \draw [fermion] (P1in) node [left] {$A$} -- (V1);
+    \draw [fermion] (V1)   -- (P1out) node [right] {$A$};
+    \draw [fermion] (P2in) node [left] {$B$} -- (V2);
+    \draw [fermion] (V2)   -- (P2out) node [right] {$B$};
+    \draw [photon]  (V1)   -- node [above right] {$\gamma$} (V);
+    \draw [photon]  (V2)   -- node [below right] {$\gamma$} (V);
+
+    \draw (V) -- +( 15:1);
+    \draw (V) -- +(  5:1);
+    \draw (V) -- +( -5:1);
+    \draw (V) -- +(-15:1);
+
+    \node at (1.25, 0) {$X$};
+
+    \draw [fill=gray] (V) circle (0.2);
+
+    \coordinate (baseline) at ([yshift=-0.5ex]current bounding box.center);
+  \end{tikzpicture}
+  \caption{Feynman diagram of an ultraperipheral collision $AB \to ABX$.}
+  \label{f:upc}
+\end{figure}
+Differential cross section for the process $AB \to ABX$ (see fig.~\ref{f:upc})
+with non-electromagnetic interactions neglected:
+\begin{equation}
+  \frac{\mathrm{d}}{\mathrm{d} s} \sigma(AB \to ABX)
+  = \sigma(\gamma \gamma \to X) \frac{\mathrm{d} L}{\mathrm{d} s},
+\end{equation}
+where $\sigma(\gamma \gamma \to X)$ is the cross section for the fusion of two
+(real) photons to a system $X$.
+
+Differential cross section for the process $AB \to ABX$ with non-electromagnetic
+interactions respected:
+\begin{equation}
+  \frac{\mathrm{d}}{\mathrm{d} s} \sigma(AB \to ABX)
+  = \sigma_\parallel(\gamma \gamma \to X)
+    \frac{\mathrm{d} L_\parallel}{\mathrm{d} s}
+  + \sigma_\perp(\gamma \gamma \to X)
+    \frac{\mathrm{d} L_\perp}{\mathrm{d} s},
+\end{equation}
+where $\sigma_{\parallel,\perp}(\gamma \gamma \to X)$ are the cross sections for
+the fusion of two photons with parallel or perpendicular polarizations,
+$L_{\parallel,\perp}$ are photon-photon luminosities with respect to photon
+polarizations.
 
 \section{Proton}
 
