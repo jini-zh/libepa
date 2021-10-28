@@ -123,7 +123,7 @@ static double ppx_luminosity_internal(
     i21 = 0;
     i22 = 0;
   };
-  return psum - 2 * e * (i01 + i21) + e * e * (i02 + i22);
+  return -2 * e * (i01 + i21) + e * e * (i02 + i22);
 };
 
 Luminosity_b_y
@@ -145,8 +145,10 @@ ppx_luminosity_b_y(
   auto fb2 = [env, B, n = std::move(n)](double b2) -> double {
     EPA_TRY
       return b2 * n(env->b1, env->w1) * n(b2, env->w2)
-           * ppx_luminosity_internal(
-               env->b1, b2, B, env->psum, env->pdifference
+           * (env->psum
+              + ppx_luminosity_internal(
+                  env->b1, b2, B, env->psum, env->pdifference
+                )
              );
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
@@ -214,10 +216,10 @@ ppx_luminosity_b_fid(
   ](double b2) -> double {
     EPA_TRY
       env->b2 = b2;
-      return b2 * integrate(fx, env->xmin, env->xmax) * (
-        ppx_luminosity_internal(env->b1, b2, B, env->psum, env->pdifference)
-        - one * env->psum
-      );
+      return b2 * integrate(fx, env->xmin, env->xmax)
+           * ppx_luminosity_internal(
+               env->b1, b2, B, env->psum, env->pdifference
+             );
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
 
