@@ -126,8 +126,8 @@ static double ppx_luminosity_internal(
   return -2 * e * (i01 + i21) + e * e * (i02 + i22);
 };
 
-Luminosity_b_y
-ppx_luminosity_b_y(
+Luminosity_y_b
+ppx_luminosity_y_b(
     Spectrum_b n,
     double B,
     const std::function<Integrator (unsigned)>& integrator
@@ -181,8 +181,8 @@ ppx_luminosity_b_y(
   };
 };
 
-Luminosity_b_fid
-ppx_luminosity_b_fid(
+Luminosity_fid_b
+ppx_luminosity_fid_b(
     Spectrum n,
     Spectrum_b n_b,
     double B,
@@ -263,29 +263,29 @@ Luminosity_b ppx_luminosity_b(
     const std::function<Integrator (unsigned)>& integrator
 ) {
   return [
-    l = ppx_luminosity_b_fid(std::move(n), std::move(n_b), B, integrator)
+    l = ppx_luminosity_fid_b(std::move(n), std::move(n_b), B, integrator)
   ](double s, Polarization polarization) -> double {
     return 2 * l(s, polarization, -infinity, 0);
   };
 };
 
-Luminosity_b_y pp_luminosity_b_y(
+Luminosity_y_b pp_luminosity_y_b(
     double collision_energy,
     const std::function<Integrator (unsigned)>& integrator
 ) {
-  return ppx_luminosity_b_y(
+  return ppx_luminosity_y_b(
       proton_dipole_spectrum_b(0.5 * collision_energy),
       pp_elastic_slope(collision_energy),
       integrator
   );
 };
 
-Luminosity_b_fid pp_luminosity_b_fid(
+Luminosity_fid_b pp_luminosity_fid_b(
     double collision_energy,
     const std::function<Integrator (unsigned)>& integrator
 ) {
   double energy = 0.5 * collision_energy;
-  return ppx_luminosity_b_fid(
+  return ppx_luminosity_fid_b(
       proton_dipole_spectrum(energy),
       proton_dipole_spectrum_b(energy),
       pp_elastic_slope(collision_energy),

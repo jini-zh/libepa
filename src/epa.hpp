@@ -277,11 +277,11 @@ typedef std::function<double (double /* s */, Polarization)> Luminosity_b;
 // differentiated with respect to rapidity of the system
 typedef std::function<
   double (double /* s */, double /* y */, Polarization)
-> Luminosity_b_y;
+> Luminosity_y_b;
 // for calculating fiducial cross section
 typedef std::function<
   double (double /* s */, Polarization, double /* ymin */, double /* ymax */)
-> Luminosity_b_fid;
+> Luminosity_fid_b;
 
 // Photon-photon luminosity in ultraperipheral collisions of particles with EPA
 // spectra nA and nB and the probability to survive upc_probability(b) where b
@@ -302,31 +302,31 @@ luminosity_b(
 );
 
 // differentiated with respect to rapidity of the system
-Luminosity_b_y
-luminosity_b_y(
+Luminosity_y_b
+luminosity_y_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc_probability,
     const std::function<Integrator (unsigned)>& = default_integrator
 );
 
-Luminosity_b_y
-luminosity_b_y(
+Luminosity_y_b
+luminosity_y_b(
     Spectrum_b,
     std::function<double (double)> upc_probability,
     const std::function<Integrator (unsigned)>& = default_integrator
 );
 
 // for calculating fiducial cross section
-Luminosity_b_fid
-luminosity_b_fid(
+Luminosity_fid_b
+luminosity_fid_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc_probability,
     const std::function<Integrator (unsigned)>& = default_integrator
 );
-Luminosity_b_fid
-luminosity_b_fid(
+Luminosity_fid_b
+luminosity_fid_b(
     Spectrum_b,
     std::function<double (double)> upc_probability,
     const std::function<Integrator (unsigned)>& = default_integrator
@@ -382,11 +382,11 @@ xsection_fid(
 // at pT = 0. GSL CQUAD integration method converges better in this case than
 // GSL QAG.
 XSection
-xsection_b_fid(
+xsection_fid_b(
     // differential with respect to pT cross section for the pair production in
     // fusion of real photons
     std::function<Polarization (double /* s */, double /* pT */)> xsection_pT,
-    Luminosity_b_fid,
+    Luminosity_fid_b,
     double mass, // the mass of the charged particle
     double pT_min,
     double eta_max,

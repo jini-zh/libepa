@@ -61,12 +61,12 @@ Luminosity_b ppx_luminosity_b(
     double B, // = pp_elastic_slope(collision_energy)
     const std::function<Integrator (unsigned)>& = default_integrator
 );
-Luminosity_b_y ppx_luminosity_b_y(
+Luminosity_y_b ppx_luminosity_y_b(
     Spectrum_b,
     double B,
     const std::function<Integrator (unsigned)>& = default_integrator
 );
-Luminosity_b_fid ppx_luminosity_b_fid(
+Luminosity_fid_b ppx_luminosity_fid_b(
     Spectrum,
     Spectrum_b,
     double B,
@@ -78,11 +78,11 @@ Luminosity_b pp_luminosity_b(
     double collision_energy,
     const std::function<Integrator (unsigned)>& = default_integrator
 );
-Luminosity_b_y pp_luminosity_b_y(
+Luminosity_y_b pp_luminosity_y_b(
     double collision_energy,
     const std::function<Integrator (unsigned)>& = default_integrator
 );
-Luminosity_b_fid pp_luminosity_b_fid(
+Luminosity_fid_b pp_luminosity_fid_b(
     double collision_energy,
     const std::function<Integrator (unsigned)>& = default_integrator
 );

@@ -239,11 +239,11 @@ BOOST_AUTO_TEST_CASE(test_pp_luminosity_b, *boost::unit_test::tolerance(1e-5)) {
   BOOST_TEST(pp_luminosity_b(13e3)(1e4, { 1, 1 }) == 1.1451289852721231e-07);
 };
 
-BOOST_AUTO_TEST_CASE(test_xsection_b_fid, *boost::unit_test::tolerance(1e-5)) {
+BOOST_AUTO_TEST_CASE(test_xsection_fid_b, *boost::unit_test::tolerance(1e-5)) {
   BOOST_TEST(
-      xsection_b_fid(
+      xsection_fid_b(
         photons_to_fermions_pT_b(100),
-        pp_luminosity_b_fid(13e3),
+        pp_luminosity_fid_b(13e3),
         100,
         10,
         2.5,

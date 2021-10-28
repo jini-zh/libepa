@@ -590,8 +590,8 @@ Luminosity luminosity(Spectrum n, Integrator integrate) {
   };
 };
 
-Luminosity_b_y
-luminosity_b_y(
+Luminosity_y_b
+luminosity_y_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc,
@@ -654,29 +654,29 @@ luminosity_b_y(
       return 0.25 * pi / sqr(env->rx) * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
         "lambda (s, y, polarization) %e, %e, {%e, %e}\n"
-        "  defined in luminosity_b_y",
+        "  defined in luminosity_y_b",
         s, y, polarization.parallel, polarization.perpendicular
     );
   };
 };
 
-Luminosity_b_y
-luminosity_b_y(
+Luminosity_y_b
+luminosity_y_b(
     Spectrum_b n,
     std::function<double (double)> upc,
     const std::function<Integrator (unsigned)>& integrator
 ) {
-  return luminosity_b_y(n, n, std::move(upc), integrator);
+  return luminosity_y_b(n, n, std::move(upc), integrator);
 };
 
-Luminosity_b_fid
-luminosity_b_fid(
+Luminosity_fid_b
+luminosity_fid_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc,
     const std::function<Integrator (unsigned)>& integrator
 ) {
-  // luminosity_b_y is not used here because it would result in an unoptimal
+  // luminosity_y_b is not used here because it would result in an unoptimal
   // order of integration
   struct Env {
     double rs;
@@ -740,19 +740,19 @@ luminosity_b_fid(
       return 0.25 * pi * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
         "lambda (s, polarization, ymin, ymax) %e, {%e, %e}, %e, %e\n"
-        "  defined in luminosity_b_fid",
+        "  defined in luminosity_fid_b",
         s, polarization.parallel, polarization.perpendicular, ymin, ymax
     );
   };
 };
 
-Luminosity_b_fid
-luminosity_b_fid(
+Luminosity_fid_b
+luminosity_fid_b(
     Spectrum_b n,
     std::function<double (double)> upc,
     const std::function<Integrator (unsigned)>& integrator
 ) {
-  return [l = luminosity_b_fid(n, n, std::move(upc), integrator)](
+  return [l = luminosity_fid_b(n, n, std::move(upc), integrator)](
       double s,
       Polarization polarization,
       double ymin,
@@ -772,7 +772,7 @@ luminosity_b(
     const std::function<Integrator (unsigned)>& integrator
 ) {
   return [
-    l = luminosity_b_fid(
+    l = luminosity_fid_b(
             std::move(nA),
             std::move(nB),
             std::move(upc),
@@ -789,7 +789,7 @@ luminosity_b(
     std::function<double (double)> upc,
     const std::function<Integrator (unsigned)>& integrator
 ) {
-  return [l = luminosity_b_fid(n, n, std::move(upc), integrator)](
+  return [l = luminosity_fid_b(n, n, std::move(upc), integrator)](
       double s, Polarization polarization
   ) -> double {
     return 2 * l(s, polarization, -infinity, 0);
@@ -888,9 +888,9 @@ xsection_fid(
 };
 
 XSection
-xsection_b_fid(
+xsection_fid_b(
     std::function<Polarization (double, double)> xsection,
-    Luminosity_b_fid luminosity,
+    Luminosity_fid_b luminosity,
     double mass,
     double pT_min,
     double eta_max,
