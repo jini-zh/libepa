@@ -45,13 +45,13 @@ typedef std::function<
           double (const std::function<double (double)>&, double, double)
         > Integrator;
 
-// GSL integrators  with default initialization
+// GSL quadratic adaptive integrator with default initialization
 Integrator gsl_integrator(
     double absolute_error = default_absolute_error,
     double relative_error = default_relative_error,
     size_t limit          = default_integration_limit,
     gsl::integration::QAGMethod = gsl::integration::GAUSS41,
-    std::shared_ptr<gsl::integration::Workspace> = nullptr
+    std::shared_ptr<gsl::integration::QAGWorkspace> = nullptr
 );
 
 struct gsl_integrator_keys {
@@ -59,7 +59,7 @@ struct gsl_integrator_keys {
   double relative_error = default_relative_error;
   size_t limit          = default_integration_limit;
   gsl::integration::QAGMethod method = gsl::integration::GAUSS41;
-  std::shared_ptr<gsl::integration::Workspace> workspace;
+  std::shared_ptr<gsl::integration::QAGWorkspace> workspace;
 };
 
 // Helper function --- with keyword parameters
@@ -86,14 +86,14 @@ Integrator_I gsl_integrator_i(
     double relative_error = default_relative_error,
     size_t limit          = default_integration_limit,
     gsl::integration::QAGMethod = gsl::integration::GAUSS41,
-    std::shared_ptr<gsl::integration::Workspace> = nullptr
+    std::shared_ptr<gsl::integration::QAGWorkspace> = nullptr
 );
 
 struct gsl_integrator_i_keys {
   double relative_error = default_relative_error;
   size_t limit          = default_integration_limit;
   gsl::integration::QAGMethod method = gsl::integration::GAUSS41;
-  std::shared_ptr<gsl::integration::Workspace> workspace;
+  std::shared_ptr<gsl::integration::QAGWorkspace> workspace;
 };
 
 Integrator_I gsl_integrator_i(const gsl_integrator_keys&);

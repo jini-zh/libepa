@@ -23,21 +23,25 @@ static double closure_trampoline(double x, void* data) {
   return (*f)(x);
 };
 
-Workspace::Workspace(size_t limit):
+QAGWorkspace::QAGWorkspace(size_t limit):
+  limit_(limit),
   workspace(gsl_integration_workspace_alloc(limit))
-{};
+{
+  if (!workspace)
+    throw std::runtime_error("gsl_integration_workspace_alloc: out of memory");
+};
 
-Workspace::Workspace(Workspace&& w) {
+QAGWorkspace::QAGWorkspace(QAGWorkspace&& w) {
   workspace = w.workspace;
   limit_ = w.limit_;
   w.workspace = nullptr;
 };
 
-Workspace::~Workspace() {
+QAGWorkspace::~QAGWorkspace() {
   if (workspace) gsl_integration_workspace_free(workspace);
 };
 
-std::pair<double, double> qag(
+QAGResult qag(
     const std::function<double (double)>& f,
     double from,
     double to,
@@ -45,13 +49,13 @@ std::pair<double, double> qag(
     double epsrel,
     size_t limit,
     QAGMethod method,
-    const Workspace& workspace
+    const QAGWorkspace& workspace
 ) {
   gsl_function F;
   F.function = closure_trampoline;
   F.params = const_cast<std::function<double (double)>*>(&f);
 
-  std::pair<double, double> result;
+  QAGResult result;
   if (from == -infinity)
     if (to == infinity)
       gsl_integration_qagi(
@@ -60,8 +64,8 @@ std::pair<double, double> qag(
           epsrel,
           limit,
           workspace.get(),
-          &result.first,
-          &result.second
+          &result.result,
+          &result.abserr
       );
     else
       gsl_integration_qagil(
@@ -71,8 +75,8 @@ std::pair<double, double> qag(
           epsrel,
           limit,
           workspace.get(),
-          &result.first,
-          &result.second
+          &result.result,
+          &result.abserr
       );
   else if (to == infinity)
     gsl_integration_qagiu(
@@ -82,8 +86,8 @@ std::pair<double, double> qag(
         epsrel,
         limit,
         workspace.get(),
-        &result.first,
-        &result.second
+        &result.result,
+        &result.abserr
     );
   else
     gsl_integration_qag(
@@ -95,8 +99,8 @@ std::pair<double, double> qag(
         limit,
         method,
         workspace.get(),
-        &result.first,
-        &result.second
+        &result.result,
+        &result.abserr
     );
 
   return result;

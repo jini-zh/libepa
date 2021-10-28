@@ -44,22 +44,20 @@ void init();
 
 namespace integration {
 
-class Workspace {
+class QAGWorkspace {
   public:
-    Workspace(size_t limit = 1000);
-    Workspace(const Workspace&) = delete;
-    Workspace(Workspace&&);
-    ~Workspace();
+    QAGWorkspace(size_t limit = 1000);
+    QAGWorkspace(const QAGWorkspace&) = delete;
+    QAGWorkspace(QAGWorkspace&&);
+    ~QAGWorkspace();
 
-    Workspace& operator=(const Workspace&) = delete;
+    QAGWorkspace& operator=(const QAGWorkspace&) = delete;
 
-    gsl_integration_workspace*
-    get() const {
+    gsl_integration_workspace* get() const {
       return workspace;
     }
 
-    size_t
-    limit() const {
+    size_t limit() const {
       return limit_;
     };
 
@@ -77,9 +75,14 @@ enum QAGMethod {
   GAUSS61 = GSL_INTEG_GAUSS61
 };
 
+struct QAGResult {
+  double result;
+  double abserr;
+};
+
 // Unified interface for quadrature integration (qag, qagiu, qagil, qagi). Pass
 // the infinity constant to integrate to infinity.
-std::pair<double, double> qag(
+QAGResult qag(
     const std::function<double (double)>& f,
     double a,
     double b,
@@ -87,7 +90,7 @@ std::pair<double, double> qag(
     double epsrel,
     size_t limit,
     QAGMethod,
-    const Workspace&
+    const QAGWorkspace&
 );
 
 }; // namespace integration

@@ -17,10 +17,10 @@ Integrator gsl_integrator(
     double relative_error,
     size_t limit,
     gsl::integration::QAGMethod method,
-    std::shared_ptr<gsl::integration::Workspace> workspace
+    std::shared_ptr<gsl::integration::QAGWorkspace> workspace
 ) {
   if (!workspace)
-    workspace = std::make_shared<gsl::integration::Workspace>(limit);
+    workspace = std::make_shared<gsl::integration::QAGWorkspace>(limit);
   return [=](const std::function<double (double)>& f, double a, double b)
          -> double {
     return gsl::integrate(
@@ -50,10 +50,10 @@ Integrator_I gsl_integrator_i(
     double relative_error,
     size_t limit,
     gsl::integration::QAGMethod method,
-    std::shared_ptr<gsl::integration::Workspace> workspace
+    std::shared_ptr<gsl::integration::QAGWorkspace> workspace
 ) {
   if (!workspace)
-    workspace = std::make_shared<gsl::integration::Workspace>(limit);
+    workspace = std::make_shared<gsl::integration::QAGWorkspace>(limit);
   return [=](
       const std::function<double (double)>& f, double a, double b, double I
   ) -> double {
