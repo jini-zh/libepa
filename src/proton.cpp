@@ -234,8 +234,8 @@ ppx_luminosity_b_fid(
 
   return [
     env,
-    l         = n ? luminosity_fid(std::move(n)) : Luminosity_fid(),
-    fb1       = std::move(fb1),
+    l   = n ? luminosity_fid(std::move(n), integrator(0)) : Luminosity_fid(),
+    fb1 = std::move(fb1),
     integrate = integrator(0)
   ](
       double s, Polarization polarization, double ymin, double ymax
