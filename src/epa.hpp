@@ -291,14 +291,16 @@ luminosity_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc_probability,
-    const std::function<Integrator (unsigned)>& = default_integrator
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
 );
 
 Luminosity_b
 luminosity_b(
     Spectrum_b,
     std::function<double (double)> upc_probability,
-    const std::function<Integrator (unsigned)>& = default_integrator
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
 );
 
 // differentiated with respect to rapidity of the system
@@ -307,14 +309,16 @@ luminosity_y_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc_probability,
-    const std::function<Integrator (unsigned)>& = default_integrator
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
 );
 
 Luminosity_y_b
 luminosity_y_b(
     Spectrum_b,
     std::function<double (double)> upc_probability,
-    const std::function<Integrator (unsigned)>& = default_integrator
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
 );
 
 // for calculating fiducial cross section
@@ -323,13 +327,15 @@ luminosity_fid_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc_probability,
-    const std::function<Integrator (unsigned)>& = default_integrator
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
 );
 Luminosity_fid_b
 luminosity_fid_b(
     Spectrum_b,
     std::function<double (double)> upc_probability,
-    const std::function<Integrator (unsigned)>& = default_integrator
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
 );
 
 // Generic differential cross section. sqrt{s} is the invariant mass of the

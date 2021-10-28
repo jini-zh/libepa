@@ -595,7 +595,8 @@ luminosity_y_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   struct Env {
     double rs;
@@ -624,7 +625,7 @@ luminosity_y_b(
     nA   = std::move(nA),
     nB   = std::move(nB),
     fphi = std::move(fphi),
-    integrate = integrator(2)
+    integrate = integrator(level + 2)
   ](double b2) -> double {
     EPA_TRY
       env->b2 = b2;
@@ -635,7 +636,7 @@ luminosity_y_b(
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
 
-  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
+  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(level + 1)](
       double b1
   ) -> double {
     EPA_TRY
@@ -644,7 +645,7 @@ luminosity_y_b(
     EPA_BACKTRACE("lambda (b1) %e", b1);
   };
 
-  return [env, fb1 = std::move(fb1), integrate = integrator(0)](
+  return [env, fb1 = std::move(fb1), integrate = integrator(level)](
       double s, double y, Polarization polarization
   ) -> double {
     EPA_TRY
@@ -664,7 +665,8 @@ Luminosity_y_b
 luminosity_y_b(
     Spectrum_b n,
     std::function<double (double)> upc,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   return luminosity_y_b(n, n, std::move(upc), integrator);
 };
@@ -674,7 +676,8 @@ luminosity_fid_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   // luminosity_y_b is not used here because it would result in an unoptimal
   // order of integration
@@ -709,7 +712,10 @@ luminosity_fid_b(
   };
 
   auto fb2 = [
-    env, fx = std::move(fx), fphi = std::move(fphi), integrate = integrator(2)
+    env,
+    fx        = std::move(fx),
+    fphi      = std::move(fphi),
+    integrate = integrator(level + 2)
   ](double b2) -> double {
     EPA_TRY
       env->b2 = b2;
@@ -717,7 +723,7 @@ luminosity_fid_b(
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
 
-  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
+  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(level + 1)](
       double b1
   ) -> double {
     EPA_TRY
@@ -726,7 +732,7 @@ luminosity_fid_b(
     EPA_BACKTRACE("lambda (b1) %e", b1);
   };
 
-  return [env, fb1 = std::move(fb1), integrate = integrator(0)](
+  return [env, fb1 = std::move(fb1), integrate = integrator(level)](
         double s,
         Polarization polarization,
         double ymin,
@@ -750,9 +756,10 @@ Luminosity_fid_b
 luminosity_fid_b(
     Spectrum_b n,
     std::function<double (double)> upc,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
-  return [l = luminosity_fid_b(n, n, std::move(upc), integrator)](
+  return [l = luminosity_fid_b(n, n, std::move(upc), integrator, level)](
       double s,
       Polarization polarization,
       double ymin,
@@ -769,14 +776,16 @@ luminosity_b(
     Spectrum_b nA,
     Spectrum_b nB,
     std::function<double (double)> upc,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   return [
     l = luminosity_fid_b(
             std::move(nA),
             std::move(nB),
             std::move(upc),
-            integrator
+            integrator,
+            level
         )
   ](double s, Polarization polarization) -> double {
     return l(s, polarization, -infinity, infinity);
@@ -787,9 +796,10 @@ Luminosity_b
 luminosity_b(
     Spectrum_b n,
     std::function<double (double)> upc,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
-  return [l = luminosity_fid_b(n, n, std::move(upc), integrator)](
+  return [l = luminosity_fid_b(n, n, std::move(upc), integrator, level)](
       double s, Polarization polarization
   ) -> double {
     return 2 * l(s, polarization, -infinity, 0);

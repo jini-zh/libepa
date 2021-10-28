@@ -130,7 +130,8 @@ Luminosity_y_b
 ppx_luminosity_y_b(
     Spectrum_b n,
     double B,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   struct Env {
     double w1;
@@ -153,7 +154,7 @@ ppx_luminosity_y_b(
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
 
-  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
+  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(level + 1)](
       double b1
   ) -> double {
     EPA_TRY
@@ -162,7 +163,7 @@ ppx_luminosity_y_b(
     EPA_BACKTRACE("lambda (b1) %e", b1);
   };
 
-  return [env, fb1 = std::move(fb1), integrate = integrator(0)](
+  return [env, fb1 = std::move(fb1), integrate = integrator(level)](
       double s, double y, Polarization polarization
   ) -> double {
     EPA_TRY
@@ -186,7 +187,8 @@ ppx_luminosity_fid_b(
     Spectrum n,
     Spectrum_b n_b,
     double B,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   struct Env {
     double rs;
@@ -211,7 +213,7 @@ ppx_luminosity_fid_b(
     env,
     B,
     fx        = std::move(fx),
-    integrate = integrator(2),
+    integrate = integrator(level + 2),
     one       = n ? 1 : 0
   ](double b2) -> double {
     EPA_TRY
@@ -223,7 +225,7 @@ ppx_luminosity_fid_b(
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
 
-  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(1)](
+  auto fb1 = [env, fb2 = std::move(fb2), integrate = integrator(level + 1)](
       double b1
   ) -> double {
     EPA_TRY
@@ -236,7 +238,7 @@ ppx_luminosity_fid_b(
     env,
     l   = n ? luminosity_fid(std::move(n), integrator(0)) : Luminosity_fid(),
     fb1 = std::move(fb1),
-    integrate = integrator(0)
+    integrate = integrator(level)
   ](
       double s, Polarization polarization, double ymin, double ymax
   ) -> double {
@@ -260,10 +262,11 @@ Luminosity_b ppx_luminosity_b(
     Spectrum n,
     Spectrum_b n_b,
     double B,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   return [
-    l = ppx_luminosity_fid_b(std::move(n), std::move(n_b), B, integrator)
+    l = ppx_luminosity_fid_b(std::move(n), std::move(n_b), B, integrator, level)
   ](double s, Polarization polarization) -> double {
     return 2 * l(s, polarization, -infinity, 0);
   };
@@ -271,38 +274,44 @@ Luminosity_b ppx_luminosity_b(
 
 Luminosity_y_b pp_luminosity_y_b(
     double collision_energy,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   return ppx_luminosity_y_b(
       proton_dipole_spectrum_b(0.5 * collision_energy),
       pp_elastic_slope(collision_energy),
-      integrator
+      integrator,
+      level
   );
 };
 
 Luminosity_fid_b pp_luminosity_fid_b(
     double collision_energy,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   double energy = 0.5 * collision_energy;
   return ppx_luminosity_fid_b(
       proton_dipole_spectrum(energy),
       proton_dipole_spectrum_b(energy),
       pp_elastic_slope(collision_energy),
-      integrator
+      integrator,
+      level
   );
 };
 
 Luminosity_b pp_luminosity_b(
     double collision_energy,
-    const std::function<Integrator (unsigned)>& integrator
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
 ) {
   double energy = 0.5 * collision_energy;
   return ppx_luminosity_b(
       proton_dipole_spectrum(energy),
       proton_dipole_spectrum_b(energy),
       pp_elastic_slope(collision_energy),
-      integrator
+      integrator,
+      level
   );
 };
 
