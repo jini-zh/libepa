@@ -372,12 +372,35 @@ xsection_fid(
     Integrator = default_integrator(0)
 );
 
+// Fiducial cross section for the production of a pair of charged particles in
+// ultraperipheral collision with non-electromagnetic interactions respected
+// and with the constraints on the phase space pT > pT_max, abs(eta) < eta_max,
+// where pT and eta are the transverse momentum and pseudorapidity of each
+// particle.
+//
+// Note that the photon-photon differential cross section is usually divergent
+// at pT = 0. GSL CQUAD integration method converges better in this case than
+// GSL QAG.
+XSection
+xsection_b_fid(
+    // differential with respect to pT cross section for the pair production in
+    // fusion of real photons
+    std::function<Polarization (double /* s */, double /* pT */)> xsection_pT,
+    Luminosity_b_fid,
+    double mass, // the mass of the charged particle
+    double pT_min,
+    double eta_max,
+    Integrator = gsl_cquad_integrator(0u)
+);
+
 // Cross section for the production of a pair of fermions in photon-photon
 // collisions (the Breit-Wheeler cross section) differentiated with respect to
 // pT --- fermion transverse momentum. `mass' and `charge' are the fermion mass
 // and charge.
 std::function<double (double /* s */, double /* pT */)>
 photons_to_fermions_pT(double mass, unsigned charge = 1);
-
+// same for polarized photons
+std::function<Polarization (double /* s */, double /* pT */)>
+photons_to_fermions_pT_b(double mass, unsigned charge = 1);
 
 }; // namespace epa

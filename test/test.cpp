@@ -200,6 +200,12 @@ BOOST_AUTO_TEST_CASE(epa_xsection) {
         2.5
       )(5e4) == 2.1622517276830937e-20
   );
+
+  {
+    auto x = photons_to_fermions_pT_b(100)(5e4, 15);
+    BOOST_TEST(x.parallel      == 7.7917850814805701e-15);
+    BOOST_TEST(x.perpendicular == 3.5832712510643985e-14);
+  };
 };
 
 BOOST_AUTO_TEST_SUITE_END(); // epa_test
@@ -231,6 +237,19 @@ BOOST_AUTO_TEST_CASE(test_luminosity_b, *boost::unit_test::tolerance(1e-5)) {
 
 BOOST_AUTO_TEST_CASE(test_pp_luminosity_b, *boost::unit_test::tolerance(1e-5)) {
   BOOST_TEST(pp_luminosity_b(13e3)(1e4, { 1, 1 }) == 1.1451289852721231e-07);
+};
+
+BOOST_AUTO_TEST_CASE(test_xsection_b_fid, *boost::unit_test::tolerance(1e-5)) {
+  BOOST_TEST(
+      xsection_b_fid(
+        photons_to_fermions_pT_b(100),
+        pp_luminosity_b_fid(13e3),
+        100,
+        10,
+        2.5,
+        gsl_cquad_integrator(0, 1e-2)
+      )(5e4) == 1.9075744559274611e-20
+  );
 };
 
 BOOST_AUTO_TEST_SUITE_END(); // expensive

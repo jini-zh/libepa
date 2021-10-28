@@ -820,9 +820,10 @@ xsection_b(
 };
 
 XSection
-xsection_fid(
-    std::function<double (double /* s */, double /* pT */)> xsection,
-    Luminosity_fid   luminosity,
+xsection_fid_x(
+    std::function<
+      double (double /* s */, double /* pT */, double /* ymax */)
+    > xl, // cross section * luminosity
     double           mass,
     double           pT_min,
     double           eta_max,
@@ -840,21 +841,16 @@ xsection_fid(
   double cosh_eta = cosh(eta_max);
   double cosh2_eta = sqr(cosh_eta);
 
-  auto fpT = [
-    =,
-    xsection = std::move(xsection),
-    luminosity = std::move(luminosity)
-  ](double pT) -> double {
+  auto fpT = [=, xl = std::move(xl)](double pT) -> double {
     EPA_TRY
       double pT2 = sqr(pT);
+      double p = pT2 + m2;
+      double r = 1 - 4 * p / env->s;
+      if (r <= 0) return infinity;
       double y = asinh(
-          pT * env->rs / (pT2 + m2)
-          * (
-                sinh_eta
-              - sqrt((cosh2_eta + m2 / pT2) * (1 - 4 * (pT2 + m2) / env->s))
-            )
+          pT * env->rs / p * (sinh_eta - sqrt((cosh2_eta + m2 / pT2) * r))
       );
-      return xsection(env->s, pT) * luminosity(env->s, -y, y);
+      return xl(env->s, pT, y);
     EPA_BACKTRACE("lambda (pT) %e", pT);
    };
 
@@ -863,13 +859,60 @@ xsection_fid(
       env->s = s;
       env->rs = 0.5 * sqrt(s);
       double v = env->rs * sqrt(1 - 4 * m2 / s);
-      return integrate(fpT, std::max(pT_min, v / cosh_eta), v);
-    EPA_BACKTRACE("lambda (s) %e\n  defined in xsection_fid", s);
+      double u = std::max(pT_min, v / cosh_eta);
+      if (u >= v) return 0;
+      return integrate(fpT, u, v);
+    EPA_BACKTRACE("lambda (s) %e\n  defined in xsection_fid_x", s);
   };
 };
 
+XSection
+xsection_fid(
+    std::function<double (double, double)> xsection,
+    Luminosity_fid luminosity,
+    double mass,
+    double pT_min,
+    double eta_max,
+    Integrator integrate
+) {
+  return xsection_fid_x(
+      [xsection = std::move(xsection), luminosity = std::move(luminosity)]
+      (double s, double pT, double ymax) -> double {
+        return 2 * xsection(s, pT) * luminosity(s, -ymax, 0);
+      },
+      mass,
+      pT_min,
+      eta_max,
+      std::move(integrate)
+  );
+};
+
+XSection
+xsection_b_fid(
+    std::function<Polarization (double, double)> xsection,
+    Luminosity_b_fid luminosity,
+    double mass,
+    double pT_min,
+    double eta_max,
+    Integrator integrate
+) {
+  return xsection_fid_x(
+      [xsection = std::move(xsection), luminosity = std::move(luminosity)]
+      (double s, double pT, double ymax) -> double {
+        return 2 * luminosity(s, xsection(s, pT), -ymax, 0);
+      },
+      mass,
+      pT_min,
+      eta_max,
+      std::move(integrate)
+  );
+};
+
+static
 std::function<double (double, double)>
-photons_to_fermions_pT(double mass, unsigned charge) {
+photons_to_fermions_pT_x(
+    double mass, unsigned charge, double polarization_factor
+) {
   double c = 8 * pi * sqr(sqr(charge) * alpha) * barn;
   double m2 = sqr(mass);
   double m4 = sqr(m2);
@@ -877,7 +920,24 @@ photons_to_fermions_pT(double mass, unsigned charge) {
     double pT2 = sqr(pT);
     double z = pT2 + m2;
     double sz = s * z;
-    return c * pT / sz * (1 - 2 * (sqr(pT2) + m4) / sz) / sqrt(1 - 4 * z / s);
+    return c * pT / sz
+         * (1 - 2 * (sqr(pT2) + polarization_factor * m4) / sz)
+         / sqrt(1 - 4 * z / s);
+  };
+};
+
+std::function<double (double, double)>
+photons_to_fermions_pT(double mass, unsigned charge) {
+  return photons_to_fermions_pT_x(mass, charge, 1);
+};
+
+std::function<Polarization (double, double)>
+photons_to_fermions_pT_b(double mass, unsigned charge) {
+  return [
+    parallel      = photons_to_fermions_pT_x(mass, charge, 2),
+    perpendicular = photons_to_fermions_pT_x(mass, charge, 0)
+  ](double s, double pT) -> Polarization {
+    return { parallel(s, pT), perpendicular(s, pT) };
   };
 };
 

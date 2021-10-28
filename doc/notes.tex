@@ -400,6 +400,59 @@ $\chi^\pm$:
   \right].
 \end{gather}
 
+Differential fiducial cross section for the process $AB \to AB \chi^+ \chi^-$
+with the non-electromagnetic interactions respected and with the constraints on
+the phase space $p_T^\pm > \hat p_T$, $\abs{\eta^\pm} < \hat \eta$, where
+$p_T^\pm$ and $\eta^\pm$ are the transverse momentum and pseudorapidity of
+$\chi^\pm$:
+\begin{gather}
+  \begin{multlined}
+    \frac{\mathrm{d}}{\mathrm{d} s} \sigma_\text{fid.}(AB \to AB \chi^+ \chi^-)
+    = \\ \int\limits_{
+        \max \left(
+          \hat p_T,
+          \frac{\sqrt{s}}{2 \cosh \hat \eta} \sqrt{1 - \frac{4 m_\chi^2}{s}}
+        \right)
+      }^{\frac{\sqrt{s}}{2} \sqrt{1 - \frac{4 m_\chi^2}{s}}}
+        \mathrm{d} p_T
+        \left(
+            \frac{\mathrm{d}}{\mathrm{d} p_T}
+            \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)
+            \frac{\mathrm{d} \hat L_\parallel}{\mathrm{d} s}
+          + \frac{\mathrm{d}}{\mathrm{d} p_T}
+            \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)
+            \frac{\mathrm{d} \hat L_\perp}{\mathrm{d} s}
+        \right),
+  \end{multlined}
+  \\
+  \frac{\mathrm{d}}{\mathrm{d} s}
+  \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)
+  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
+    \cdot \frac{1 - \frac{2 (p_T^4 + 2 m_\chi^4)}{s (p_T^2 + m_\chi^2)}}
+               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
+  \\
+  \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)
+  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
+    \cdot \frac{1 - \frac{2 p_T^4}{s (p_T^2 + m_\chi^2)}}
+               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
+  \\
+  \frac{\mathrm{d} \hat L_\parallel}{\mathrm{d} s}
+  = \frac14
+    \iint \mathrm{d}^2 b_1 \mathrm{d}^2 b_2 P(b)
+    \int\limits_{-\hat y}^{\hat y} \mathrm{d} y
+    \, n \left( b_1, \frac{\sqrt{s}}{2} \mathrm{e}^y    \right)
+    \, n \left( b_2, \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
+    \cos^2 \varphi
+  \\
+  \frac{\mathrm{d} \hat L_\perp}{\mathrm{d} s}
+  = \frac14
+    \iint \mathrm{d}^2 b_1 \mathrm{d}^2 b_2 P(b)
+    \int\limits_{-\hat y}^{\hat y} \mathrm{d} y
+    \, n \left( b_1, \frac{\sqrt{s}}{2} \mathrm{e}^y    \right)
+    \, n \left( b_2, \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
+    \sin^2 \varphi
+\end{gather}
+
 \section{Proton}
 
 Proton dipole form factor:
