@@ -68,9 +68,17 @@ Integrator gsl_integrator(const gsl_integrator_keys&);
 // default_error_step ** level
 Integrator gsl_integrator(unsigned level = 0);
 
-// Default integrator
+// Default integrator generator
 const std::function<Integrator (unsigned)> default_integrator
   = static_cast<Integrator (*)(unsigned)>(gsl_integrator);
+
+// GSL integrator generator with absolute_error = 0, relative_error =
+// relative_error * error_step ** level
+std::function<Integrator (unsigned)>
+gsl_integrator_generator(
+    double relative_error = default_relative_error,
+    double error_step     = default_error_step
+);
 
 // GSL CQUAD integrator with default initialization
 Integrator gsl_cquad_integrator(

@@ -55,6 +55,13 @@ Integrator gsl_integrator(unsigned level) {
   );
 };
 
+std::function<Integrator (unsigned)>
+gsl_integrator_generator(double relative_error, double error_step) {
+  return [=](unsigned level) -> Integrator {
+    return gsl_integrator(0, relative_error * pow(error_step, level));
+  };
+};
+
 Integrator gsl_cquad_integrator(
     double absolute_error,
     double relative_error,
