@@ -15,17 +15,25 @@ gsl::integration::QAGMethod default_integration_method = gsl::integration::GAUSS
 Integrator gsl_integrator(
     double absolute_error,
     double relative_error,
-    size_t limit,
     gsl::integration::QAGMethod method,
     std::shared_ptr<gsl::integration::QAGWorkspace> workspace
 ) {
   if (!workspace)
-    workspace = std::make_shared<gsl::integration::QAGWorkspace>(limit);
+    workspace = std::make_shared<gsl::integration::QAGWorkspace>(
+        default_integration_limit
+    );
   return [=](const std::function<double (double)>& f, double a, double b)
          -> double {
     return gsl::integrate(
-        f, a, b, absolute_error, relative_error, limit, method, *workspace
-    ).first;
+        f,
+        a,
+        b,
+        absolute_error,
+        relative_error,
+        workspace->limit(),
+        method,
+        *workspace
+    ).result;
   };
 };
 
@@ -33,7 +41,6 @@ Integrator gsl_integrator(const gsl_integrator_keys& keys) {
   return gsl_integrator(
       keys.absolute_error,
       keys.relative_error,
-      keys.limit,
       keys.method,
       keys.workspace
   );
@@ -48,12 +55,13 @@ Integrator gsl_integrator(unsigned level) {
 
 Integrator_I gsl_integrator_i(
     double relative_error,
-    size_t limit,
     gsl::integration::QAGMethod method,
     std::shared_ptr<gsl::integration::QAGWorkspace> workspace
 ) {
   if (!workspace)
-    workspace = std::make_shared<gsl::integration::QAGWorkspace>(limit);
+    workspace = std::make_shared<gsl::integration::QAGWorkspace>(
+        default_integration_limit
+    );
   return [=](
       const std::function<double (double)>& f, double a, double b, double I
   ) -> double {
@@ -63,17 +71,16 @@ Integrator_I gsl_integrator_i(
         b,
         relative_error * abs(I),
         relative_error,
-        limit,
+        workspace->limit(),
         method,
         *workspace
-    ).first;
+    ).result;
   };
 };
 
 Integrator_I gsl_integrator_i(const gsl_integrator_keys& keys) {
   return gsl_integrator_i(
       keys.relative_error,
-      keys.limit,
       keys.method,
       keys.workspace
   );
