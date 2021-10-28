@@ -223,6 +223,8 @@ BOOST_AUTO_TEST_CASE(proton_test, *boost::unit_test::tolerance(1e-5)) {
   );
 
   BOOST_TEST(pp_luminosity(13e3)(1e4) == 1.2549583443893129e-07);
+
+  BOOST_TEST(pp_to_ppll(13e3, 100, 10, 2.5)(5e4) == 2.1622517276830937e-20);
 };
 
 BOOST_AUTO_TEST_SUITE(expensive, *boost::unit_test::disabled())
@@ -248,6 +250,19 @@ BOOST_AUTO_TEST_CASE(test_xsection_fid_b, *boost::unit_test::tolerance(1e-5)) {
         10,
         2.5,
         gsl_cquad_integrator(0, 1e-2)
+      )(5e4) == 1.9075744559274611e-20
+  );
+};
+
+BOOST_AUTO_TEST_CASE(test_ppll_b, *boost::unit_test::tolerance(1e-5)) {
+  BOOST_TEST(
+      pp_to_ppll_b(
+        13e3, 100, 10, 2.5,
+        [](unsigned level) -> Integrator {
+           return level == 0
+                  ? gsl_cquad_integrator(0, 1e-2)
+                  : gsl_integrator(level - 1);
+        }
       )(5e4) == 1.9075744559274611e-20
   );
 };

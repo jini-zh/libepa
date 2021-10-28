@@ -315,4 +315,124 @@ Luminosity_b pp_luminosity_b(
   );
 };
 
+XSection pp_to_ppll(
+    double collision_energy,
+    double mass,
+    unsigned charge,
+    Integrator integrate
+) {
+  return xsection(
+      photons_to_fermions(mass, charge),
+      pp_luminosity(collision_energy, std::move(integrate))
+  );
+};
+
+XSection pp_to_ppll(
+    double collision_energy,
+    double mass,
+    Integrator integrate
+) {
+  return pp_to_ppll(collision_energy, mass, 1, std::move(integrate));
+};
+
+XSection pp_to_ppll(
+    double collision_energy,
+    double mass,
+    unsigned charge,
+    double pT_min,
+    double eta_max,
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
+) {
+  if (pT_min == 0 && eta_max == infinity)
+    return pp_to_ppll(collision_energy, mass, charge, integrator(level));
+  return xsection_fid(
+      photons_to_fermions_pT(mass, charge),
+      pp_luminosity_fid(collision_energy, integrator(level + 1)),
+      mass,
+      pT_min,
+      eta_max,
+      integrator(level)
+  );
+};
+
+XSection pp_to_ppll(
+    double collision_energy,
+    double mass,
+    double pT_min,
+    double eta_max,
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
+) {
+  return pp_to_ppll(
+      collision_energy, mass, 1, pT_min, eta_max, integrator, level
+  );
+};
+
+XSection pp_to_ppll_b(
+    double collision_energy,
+    double mass,
+    unsigned charge,
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
+) {
+  return xsection_b(
+      photons_to_fermions_b(mass, charge),
+      pp_luminosity_b(collision_energy, integrator, level)
+  );
+};
+
+XSection pp_to_ppll_b(
+    double collision_energy,
+    double mass,
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
+) {
+  return pp_to_ppll_b(collision_energy, mass, 1, integrator, level);
+};
+
+XSection pp_to_ppll_b(
+    double collision_energy,
+    double mass,
+    unsigned charge,
+    double pT_min,
+    double eta_max,
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
+) {
+  if (pT_min == 0 && eta_max == infinity)
+    return pp_to_ppll_b(collision_energy, mass, charge, integrator, level);
+  return xsection_fid_b(
+      photons_to_fermions_pT_b(mass, charge),
+      pp_luminosity_fid_b(
+        collision_energy,
+        integrator,
+        level + 1
+      ),
+      mass,
+      pT_min,
+      eta_max,
+      integrator(level)
+  );
+};
+
+XSection pp_to_ppll_b(
+    double collision_energy,
+    double mass,
+    double pT_min,
+    double eta_max,
+    const std::function<Integrator (unsigned)>& integrator,
+    unsigned level
+) {
+  return pp_to_ppll_b(
+      collision_energy, mass, 1, pT_min, eta_max, integrator, level
+  );
+};
+
+std::function<Integrator (unsigned)> pp_to_ppll_b_integrator(unsigned level) {
+  return [=](unsigned l) -> Integrator {
+    return l == level ? gsl_cquad_integrator(level) : gsl_integrator(l);
+  };
+};
+
 }; // namespace epa

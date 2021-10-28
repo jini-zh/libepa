@@ -93,4 +93,84 @@ Luminosity_fid_b pp_luminosity_fid_b(
     unsigned integration_level = 0
 );
 
+// Convenience functions to calculate cross sections for the production of a
+// fermion pair in ultraperipheral collisions of protons. It is assumed that
+// the fermions only interact electromagnetically with the protons
+// (approximately like leptons).
+
+// Total cross section with non-electromagnetic interactions between protons
+// neglected
+XSection pp_to_ppll(
+    double collision_energy,
+    double mass,     // of the produced particle
+    unsigned charge, // of the produced particle
+    Integrator = default_integrator(0)
+);
+// Same for charge = 1
+XSection pp_to_ppll(
+    double collision_energy,
+    double mass,
+    Integrator = default_integrator(0)
+);
+// Fiducial cross section with non-electromagnetic interactions between protons
+// neglected
+XSection pp_to_ppll(
+    double collision_energy,
+    double mass,     // of the produced particle
+    unsigned charge, // of the produced particle
+    double pT_min,   // minimal transverse momentum of the produced particle
+    double eta_max,  // maximal pseudorapidity of the produced particle
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
+);
+// Same for charge = 1
+XSection pp_to_ppll(
+    double collision_energy,
+    double mass,
+    double pT_min,
+    double eta_max,
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
+);
+// Total cross section with non-electromagnetic interactions between protons
+// respected
+XSection pp_to_ppll_b(
+    double collision_energy,
+    double mass,     // of the produced particle
+    unsigned charge, // of the produced particle
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
+);
+// Same for charge = 1
+XSection pp_to_ppll_b(
+    double collision_energy,
+    double mass,
+    const std::function<Integrator (unsigned)>& = default_integrator,
+    unsigned integration_level = 0
+);
+// Default integrator for the following function.
+// Returns gsl_cquad_integrator for level `level'
+std::function<Integrator (unsigned)>
+pp_to_ppll_b_integrator(unsigned level = 0);
+// Fiducial cross section with non-electromagnetic interactions between protons
+// respected
+XSection pp_to_ppll_b(
+    double collision_energy,
+    double mass,     // of the produced particle
+    unsigned charge, // of the produced particle
+    double pT_min,   // minimal transverse momentum of the produced particle
+    double eta_max,  // maximal pseudorapidity of the produced particle
+    const std::function<Integrator (unsigned)>& = pp_to_ppll_b_integrator(0),
+    unsigned integration_level = 0
+);
+// Same for charge = 1
+XSection pp_to_ppll_b(
+    double collision_energy,
+    double mass,
+    double pT_min,
+    double eta_max,
+    const std::function<Integrator (unsigned)>& = pp_to_ppll_b_integrator(0),
+    unsigned integration_level = 0
+);
+
 }; // namespace epa
