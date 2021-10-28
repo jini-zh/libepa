@@ -918,6 +918,37 @@ xsection_fid_b(
   );
 };
 
+std::function<double (double)>
+photons_to_fermions(double mass, unsigned charge) {
+  double c = 4 * pi * sqr(sqr(charge) * alpha) * barn;
+  double m2 = sqr(mass);
+  return [=](double s) -> double {
+    double x  = m2 / s;
+    double x2 = sqr(x);
+    double r  = sqrt(1 - 4 * x);
+    return c / s * (
+        (1 + 4 * x - 8 * x2) * log((1 + r) / (1 - r)) - (1 + 4 * x) * r
+    );
+  };
+};
+
+std::function<Polarization (double)>
+photons_to_fermions_b(double mass, unsigned charge) {
+  double c = 4 * pi * sqr(sqr(charge) * alpha) * barn;
+  double m2 = sqr(mass);
+  return [=](double s) -> Polarization {
+    double x  = m2 / s;
+    double x2 = sqr(x);
+    double r  = sqrt(1 - 4 * x);
+    double l  = log((1 + r) / (1 - r));
+    double C  = c / s;
+    return {
+      C * ((1 + 4 * x - 12 * x2) * l - (1 + 6 * x) * r),
+      C * ((1 + 4 * x -  4 * x2) * l - (1 + 2 * x) * r)
+    };
+  };
+};
+
 static
 std::function<double (double, double)>
 photons_to_fermions_pT_x(

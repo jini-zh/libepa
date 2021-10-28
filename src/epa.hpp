@@ -400,12 +400,17 @@ xsection_fid_b(
 );
 
 // Cross section for the production of a pair of fermions in photon-photon
-// collisions (the Breit-Wheeler cross section) differentiated with respect to
-// pT --- fermion transverse momentum. `mass' and `charge' are the fermion mass
-// and charge.
+// collisions (the Breit-Wheeler cross section). `mass' and `charge' are the
+// fermion mass and charge.
+std::function<double (double /* s */)>
+photons_to_fermions(double mass, unsigned charge = 1);
+// Same differentiated with respect to pT --- fermion transverse momentum.
 std::function<double (double /* s */, double /* pT */)>
 photons_to_fermions_pT(double mass, unsigned charge = 1);
-// same for polarized photons
+// Same for polarized photons
+std::function<Polarization (double /* s */)>
+photons_to_fermions_b(double mass, unsigned charge = 1);
+//
 std::function<Polarization (double /* s */, double /* pT */)>
 photons_to_fermions_pT_b(double mass, unsigned charge = 1);
 
