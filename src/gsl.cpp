@@ -106,6 +106,52 @@ QAGResult qag(
   return result;
 };
 
+CQuadWorkspace::CQuadWorkspace(size_t limit):
+  limit_(limit),
+  workspace(gsl_integration_cquad_workspace_alloc(limit))
+{
+  if (!workspace)
+    throw std::runtime_error("gsl_integration_cquad_workspace_alloc: out of memory");
+};
+
+CQuadWorkspace::~CQuadWorkspace() {
+  if (workspace) gsl_integration_cquad_workspace_free(workspace);
+};
+
+CQuadWorkspace::CQuadWorkspace(CQuadWorkspace&& w) {
+  limit_    = w.limit_;
+  workspace = w.workspace;
+  w.workspace = nullptr;
+};
+
+CQuadResult cquad(
+    const std::function<double (double)>& f,
+    double a,
+    double b,
+    double epsabs,
+    double epsrel,
+    const CQuadWorkspace& workspace
+) {
+  gsl_function F;
+  F.function = closure_trampoline;
+  F.params = const_cast<std::function<double (double)>*>(&f);
+
+  CQuadResult result;
+  gsl_integration_cquad(
+      &F,
+      a,
+      b,
+      epsabs,
+      epsrel,
+      workspace.get(),
+      &result.result,
+      &result.abserr,
+      &result.nevals
+  );
+  return result;
+};
+
+
 }; // namespace integration
 
 }; // namespace gsl

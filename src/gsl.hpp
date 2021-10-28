@@ -93,6 +93,43 @@ QAGResult qag(
     const QAGWorkspace&
 );
 
+class CQuadWorkspace {
+  public:
+    CQuadWorkspace(size_t limit = 1000);
+    CQuadWorkspace(const CQuadWorkspace&) = delete;
+    CQuadWorkspace(CQuadWorkspace&&);
+    ~CQuadWorkspace();
+
+    CQuadWorkspace& operator=(const CQuadWorkspace&) = delete;
+
+    gsl_integration_cquad_workspace* get() const {
+      return workspace;
+    };
+
+    size_t limit() const {
+      return limit_;
+    };
+
+  private:
+    gsl_integration_cquad_workspace* workspace;
+    size_t limit_;
+};
+
+struct CQuadResult {
+  double result;
+  double abserr;
+  size_t nevals;
+};
+
+CQuadResult cquad(
+    const std::function<double (double)>& f,
+    double a,
+    double b,
+    double epsabs,
+    double epsrel,
+    const CQuadWorkspace&
+);
+
 }; // namespace integration
 
 const auto integrate = integration::qag;

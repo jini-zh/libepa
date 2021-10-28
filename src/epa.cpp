@@ -6,11 +6,13 @@ namespace epa {
 
 bool print_backtrace = true;
 
-double default_absolute_error     = 0;
-double default_relative_error     = 1e-3;
-double default_error_step         = 1e-1;
-size_t default_integration_limit  = 1000;
-gsl::integration::QAGMethod default_integration_method = gsl::integration::GAUSS41;
+double default_absolute_error          = 0;
+double default_relative_error          = 1e-3;
+double default_error_step              = 1e-1;
+size_t default_integration_limit       = 1000;
+size_t default_cquad_integration_limit = 100;
+gsl::integration::QAGMethod default_integration_method
+  = gsl::integration::GAUSS41;
 
 Integrator gsl_integrator(
     double absolute_error,
@@ -48,6 +50,44 @@ Integrator gsl_integrator(const gsl_integrator_keys& keys) {
 
 Integrator gsl_integrator(unsigned level) {
   return gsl_integrator(
+      default_absolute_error,
+      default_relative_error * pow(default_error_step, level)
+  );
+};
+
+Integrator gsl_cquad_integrator(
+    double absolute_error,
+    double relative_error,
+    std::shared_ptr<gsl::integration::CQuadWorkspace> workspace
+) {
+  if (!workspace)
+    workspace = std::make_shared<gsl::integration::CQuadWorkspace>(
+        default_cquad_integration_limit
+    );
+  return [=](
+      const std::function<double (double)>& f, double a, double b
+  ) -> double {
+    return gsl::integration::cquad(
+        f,
+        a,
+        b,
+        absolute_error,
+        relative_error,
+        *workspace
+    ).result;
+  };
+};
+
+Integrator gsl_cquad_integrator(const gsl_cquad_integrator_keys& keys) {
+  return gsl_cquad_integrator(
+      keys.absolute_error,
+      keys.relative_error,
+      keys.workspace
+  );
+};
+
+Integrator gsl_cquad_integrator(unsigned level) {
+  return gsl_cquad_integrator(
       default_absolute_error,
       default_relative_error * pow(default_error_step, level)
   );

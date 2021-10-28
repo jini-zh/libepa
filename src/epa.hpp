@@ -38,6 +38,7 @@ extern double default_absolute_error;
 extern double default_relative_error;
 extern double default_error_step;
 extern size_t default_integration_limit;
+extern size_t default_cquad_integration_limit;
 extern gsl::integration::QAGMethod default_integration_method;
 
 // Function: f, a, b -> integral of f from a to b
@@ -70,6 +71,23 @@ Integrator gsl_integrator(unsigned level = 0);
 // Default integrator
 const std::function<Integrator (unsigned)> default_integrator
   = static_cast<Integrator (*)(unsigned)>(gsl_integrator);
+
+// GSL CQUAD integrator with default initialization
+Integrator gsl_cquad_integrator(
+    double absolute_error = default_absolute_error,
+    double relative_error = default_relative_error,
+    std::shared_ptr<gsl::integration::CQuadWorkspace> = nullptr
+);
+
+struct gsl_cquad_integrator_keys {
+  double absolute_error = default_absolute_error;
+  double relative_error = default_relative_error;
+  std::shared_ptr<gsl::integration::CQuadWorkspace> workspace;
+};
+
+Integrator gsl_cquad_integrator(const gsl_cquad_integrator_keys&);
+
+Integrator gsl_cquad_integrator(unsigned level = 0);
 
 // Integrator that takes one extra parameter: the value of the integral
 // calculated so far. It can be used to avoid extra work in calculations that
