@@ -362,9 +362,9 @@ xsection_b(
 // particle.
 XSection
 xsection_fid(
-    // differential with respect to pT cross section of the pair production in
+    // differential with respect to pT cross section for the pair production in
     // fusion of real photons
-    std::function<double (double /* s */, double /* pT */)> xsection,
+    std::function<double (double /* s */, double /* pT */)> xsection_pT,
     Luminosity_fid,
     double mass, // the mass of the charged particle
     double pT_min,

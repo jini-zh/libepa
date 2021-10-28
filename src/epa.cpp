@@ -547,6 +547,7 @@ Luminosity_y luminosity_y(Spectrum n) {
 
 Luminosity_fid luminosity_fid(Spectrum nA, Spectrum nB, Integrator integrate) {
   auto rs = std::make_shared<double>();
+
   auto fx = [rs, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
     EPA_TRY
       double rx = sqrt(x);
@@ -558,7 +559,7 @@ Luminosity_fid luminosity_fid(Spectrum nA, Spectrum nB, Integrator integrate) {
       double s, double ymin, double ymax
   ) -> double {
     EPA_TRY
-      *rs = sqrt(s) / 2;
+      *rs = 0.5 * sqrt(s);
       return 0.125 * integrate(fx, exp(2 * ymin), exp(2 * ymax));
     EPA_BACKTRACE(
         "lambda (s, ymin, ymax) %e, %e, %e\n  defined in epa::luminosity_fid",
