@@ -24,7 +24,15 @@ struct Function1d {
 
   std::vector<std::pair<double, double>> points;
 
+  Function1d() = default;
+  Function1d(Function1d&&);
+  Function1d(std::vector<std::pair<double, double>>&& points);
+
+  Function1d& operator=(const Function1d&) = default;
+  Function1d& operator=(Function1d&&);
+
   double operator()(double x) const;
+
   std::vector<std::pair<double, double>>::const_iterator locate(double x) const;
 
   static Function1d load(const std::filesystem::path&);

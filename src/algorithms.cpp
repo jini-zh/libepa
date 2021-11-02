@@ -22,6 +22,17 @@ const char* Function1d::OutOfBounds::what() const throw () {
   return message.c_str();
 };
 
+Function1d::Function1d(Function1d&& f): points(std::move(f.points)) {};
+
+Function1d::Function1d(std::vector<std::pair<double, double>>&& points):
+  points(points)
+{};
+
+Function1d& Function1d::operator=(Function1d&& f) {
+  points = std::move(f.points);
+  return *this;
+};
+
 double Function1d::operator()(double x) const {
   auto i = locate(x);
   auto j = i+1;
