@@ -1,0 +1,9 @@
+#!/usr/bin/perl -npi
+
+# Formats tics labels of logarithmic scale axes of plots produced by Gnuplot *tex terminals.
+# 1. Use terminal 'cairolatex' or 'epslatex' in the Gnuplot input file.
+# 2. Use the following command for the logarithmic axis (e.g., y)
+# set format y '#@%.0E'
+# 3. Pass the name of the output TeX file as an argument to this script.
+
+s/#\@(\d+(?:\.\d+)?)E\+?(-?)0*(\d+)/'$' . ($1 eq '1' ? '' : "$1 \\cdot ") . "10^{$2$3}\$"/e;

@@ -1,0 +1,89 @@
+#!/bin/bash
+
+usage() {
+  self=${0##*/}
+  cat <<END
+This program convertes the output of Gnuplot epslatex or cairolatex terminal to PDF
+Usage: $self [options] input.tex
+Allowed options:
+  -i Image file name. Default: input.(eps|pdf).
+  -k Keep the working directory
+  -o Output file name. Default: input.pdf (might overwrite image!).
+  -s Set sans serif as the main font (useful for beamer)
+  -r Use babel for Russian; input is in UTF-8
+END
+}
+
+set -e 
+
+img=
+keep=
+out=
+russian=
+sans=
+argv=(`getopt -o 'hi:ko:rs' -l help -- "$@"`) || exit $?
+eval "set -- ${argv[@]}"
+while [[ $1 != -- ]]; do
+  case $1 in
+    -h|--help) usage; exit;;
+    -i) img=$2; shift 2;;
+    -k) keep=1; shift;;
+    -o) out=$2; shift 2;;
+    -r) russian=1; shift;;
+    -s) sans=1; shift;;
+  esac
+done
+shift
+
+tex=$1
+
+if [[ -z $img ]]; then
+  img=${tex%.tex}.eps
+  if ! [[ -e "$img" ]]; then
+    img=${tex%.tex}.pdf
+    if ! [[ -e "$img" ]]; then
+      echo "Image file ${tex%.tex}.(eps|pdf) not found" >&2
+      exit 1
+    fi
+  fi
+fi
+
+if [[ -z $out ]]; then
+  out=${1%.tex}.pdf
+fi
+
+tmp=`mktemp -td epslatex2pdf.XXXXXX`
+if ((keep)); then
+  trap 'echo "Working directory was $tmp"' exit
+else
+  trap 'rm -r "$tmp"' exit
+fi
+
+cp "$img" "$tmp"
+
+in="$tmp/in.tex"
+
+{
+  echo '\documentclass{standalone}'
+  if [[ -n $russian ]]; then
+    echo '\usepackage[utf8]{inputenc}'
+    echo '\usepackage[russian]{babel}'
+  fi
+  echo '\usepackage{graphicx}'
+  echo '\usepackage{amsmath}'
+  if [[ -n $sans ]]; then
+    echo '\renewcommand{\familydefault}{\sfdefault}'
+  fi
+  echo '\begin{document}'
+  perl -npe '
+    s/#\@(\d+(?:\.\d+)?)E\+?(-?)0*(\d+)/"\$" . ($1 eq "1" ? "" : "$1 \\cdot ") . "10^{$2$3}\$"/e;
+    s,[^{]+/,, if /\\includegraphics/;
+  ' "$tex"
+  echo '\end{document}'
+} > "$in"
+
+cd "$tmp"
+pdflatex -halt-on-error -output-directory="$tmp" "$in"
+cd "$OLDPWD"
+
+mv -v "$tmp/in.pdf" "$out"
