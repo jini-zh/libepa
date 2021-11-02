@@ -382,11 +382,6 @@ $\chi^\pm$:
               {\mathrm{d} p_T}
       \, \frac{\mathrm{d} \hat L}{\mathrm{d} \sqrt{s}},
   \\
-  \frac{\mathrm{d}}{\mathrm{d} p_T} \sigma(\gamma \gamma \to \chi^+ \chi^-)
-  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
-    \cdot \frac{1 - \frac{2 (p_T^4 + m_\chi^4)}{s (p_T^2 + m_\chi^2)}}
-               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
-  \\
   \frac{\mathrm{d} \hat L}{\mathrm{d} \sqrt{s}}
   = \frac{\sqrt{s}}{2}
     \int\limits_{-\hat y}^{\hat y} \mathrm{d} y
@@ -427,18 +422,6 @@ $\chi^\pm$:
             \frac{\mathrm{d} \hat L_\perp}{\mathrm{d} \sqrt{s}}
         \right),
   \end{multlined}
-  \\
-  \frac{\mathrm{d} \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)}
-       {\mathrm{d} p_T}
-  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
-    \cdot \frac{1 - \frac{2 (p_T^4 + 2 m_\chi^4)}{s (p_T^2 + m_\chi^2)}}
-               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
-  \\
-  \frac{\mathrm{d} \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)}
-       {\mathrm{d} p_T}
-  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
-    \cdot \frac{1 - \frac{2 p_T^4}{s (p_T^2 + m_\chi^2)}}
-               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
   \\
   \frac{\mathrm{d} \hat L_\parallel}{\mathrm{d} \sqrt{s}}
   = \frac{\sqrt{s}}{2}
@@ -637,6 +620,64 @@ Photon-photon luminosity in an ultraperipheral collison of two protons:
   \end{gathered}
 \end{equation}
 where $I_0(x)$, $I_2(x)$ are the modified Bessel function of the first kind.
+
+\section{Fermion pair production}
+
+Breit-Wheeler cross sections for fermion pair production in photon-photon
+collisions:
+\begin{gather}
+    \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)
+    = \frac{4 \pi \alpha^2}{s}
+      \left[
+        \left( 1 + \frac{4 m_\chi^2}{s} - \frac{12 m_\chi^4}{s^2} \right)
+        \ln \frac{1 + \sqrt{1 - 4 m_\chi^2 / s}}
+                 {1 - \sqrt{1 - 4 m_\chi^2 / s}}
+        - \left( 1 + \frac{6 m_\chi^2}{s} \right)
+          \sqrt{1 - \frac{4 m_\chi^2}{s}}
+      \right],
+    \\
+    \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)
+    = \frac{4 \pi \alpha^2}{s}
+      \left[
+        \left( 1 + \frac{4 m_\chi^2}{s} - \frac{4 m_\chi^4}{s^2} \right)
+        \ln \frac{1 + \sqrt{1 - 4 m_\chi^2 / s}}
+                 {1 - \sqrt{1 - 4 m_\chi^2 / s}}
+        - \left( 1 + \frac{2 m_\chi^2}{s} \right)
+          \sqrt{1 - \frac{4 m_\chi^2}{s}}
+      \right],
+    \\
+    \sigma(\gamma \gamma \to \chi^+ \chi^-)
+    = \frac{4 \pi \alpha^2}{s}
+      \left[
+        \left( 1 + \frac{4 m_\chi^2}{s} - \frac{8 m_\chi^2}{s} \right)
+        \ln \frac{1 + \sqrt{1 - 4 m_\chi^2 / s}}
+                 {1 - \sqrt{1 - 4 m_\chi^2 / s}}
+        - \left( 1 + \frac{4 m_\chi^2}{s} \right)
+          \sqrt{1 - \frac{4 m_\chi^2}{s}}
+     \right].
+\end{gather}
+
+Differential cross section with respect to the transverse momentum of the
+fermions, $p_T$:
+\begin{gather}
+  \frac{\mathrm{d} \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)}
+       {\mathrm{d} p_T}
+  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
+    \cdot \frac{1 - \frac{2 (p_T^4 + 2 m_\chi^4)}{s (p_T^2 + m_\chi^2)}}
+               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
+  \\
+  \frac{\mathrm{d} \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)}
+       {\mathrm{d} p_T}
+  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
+    \cdot \frac{1 - \frac{2 p_T^4}{s (p_T^2 + m_\chi^2)}}
+               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
+  \\
+  \frac{\mathrm{d} \sigma(\gamma \gamma \to \chi^+ \chi^-)}
+       {\mathrm{d} p_T}
+  = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
+    \cdot \frac{1 - \frac{2 (p_T^4 + m_\chi^4)}{s (p_T^2 + m_\chi^2)}}
+               {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}}.
+\end{gather}
 
 \newcommand{\arxiv}[1]{\href{http://arxiv.org/abs/#1}{arXiv:\nolinebreak[3]#1}}
 \begin{thebibliography}{99}
