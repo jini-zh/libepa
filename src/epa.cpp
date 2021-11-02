@@ -537,13 +537,13 @@ spectrum_b_function1d(
 
 Luminosity_y luminosity_y(Spectrum nA, Spectrum nB) {
   return [nA = std::move(nA), nB = std::move(nB)]
-         (double s, double y) -> double {
+         (double rs, double y) -> double {
     EPA_TRY
-      s = 0.5 * sqrt(s);
-      y = exp(y);
-      return 0.25 * nA(s * y) * nB(s / y);
+      double E = 0.5 * rs;
+      double x = exp(y);
+      return E * nA(E * x) * nB(E / x);
     EPA_BACKTRACE(
-        "lambda (s, y) %e, %e\n  defined in epa::luminosity_y", s, y
+        "lambda (rs, y) %e, %e\n  defined in epa::luminosity_y", rs, y
     );
   };
 };
@@ -553,47 +553,47 @@ Luminosity_y luminosity_y(Spectrum n) {
 };
 
 Luminosity_fid luminosity_fid(Spectrum nA, Spectrum nB, Integrator integrate) {
-  auto rs = std::make_shared<double>();
+  auto E = std::make_shared<double>();
 
-  auto fx = [rs, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
+  auto fx = [E, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
     EPA_TRY
       double rx = sqrt(x);
-      return nA(*rs * rx) * nB(*rs / rx) / x;
+      return nA(*E * rx) * nB(*E / rx) / x;
     EPA_BACKTRACE("lambda (x) %e; y = %e", x, 0.5 * log(x));
   };
 
-  return [rs, fx = std::move(fx), integrate = std::move(integrate)](
-      double s, double ymin, double ymax
+  return [E, fx = std::move(fx), integrate = std::move(integrate)](
+      double rs, double ymin, double ymax
   ) -> double {
     EPA_TRY
-      *rs = 0.5 * sqrt(s);
-      return 0.125 * integrate(fx, exp(2 * ymin), exp(2 * ymax));
+      *E  = 0.5 * rs;
+      return 0.25 * rs * integrate(fx, exp(2 * ymin), exp(2 * ymax));
     EPA_BACKTRACE(
-        "lambda (s, ymin, ymax) %e, %e, %e\n  defined in epa::luminosity_fid",
-        s, ymin, ymax
+        "lambda (rs, ymin, ymax) %e, %e, %e\n  defined in epa::luminosity_fid",
+        rs, ymin, ymax
     );
   };
 };
 
 Luminosity_fid luminosity_fid(Spectrum n, Integrator integrate) {
   return [l = luminosity_fid(n, n, std::move(integrate))](
-      double s, double ymin, double ymax
+      double rs, double ymin, double ymax
   ) -> double {
-    return ymin == -ymax ? 2 * l(s, ymin, 0) : l(s, ymin, ymax);
+    return ymin == -ymax ? 2 * l(rs, ymin, 0) : l(rs, ymin, ymax);
   };
 };
 
 Luminosity luminosity(Spectrum nA, Spectrum nB, Integrator integrate) {
   return [l = luminosity_fid(nA, nB, std::move(integrate))](
-      double s
+      double rs
   ) -> double {
-    return l(s, -infinity, infinity);
+    return l(rs, -infinity, infinity);
   };
 };
 
 Luminosity luminosity(Spectrum n, Integrator integrate) {
-  return [l = luminosity_fid(n, n, std::move(integrate))](double s) -> double {
-    return 2 * l(s, -infinity, 0);
+  return [l = luminosity_fid(n, n, std::move(integrate))](double rs) -> double {
+    return 2 * l(rs, -infinity, 0);
   };
 };
 
@@ -606,7 +606,7 @@ luminosity_y_b(
     unsigned level
 ) {
   struct Env {
-    double rs;
+    double E;
     double rx;
     double b1;
     double b2;
@@ -637,8 +637,8 @@ luminosity_y_b(
     EPA_TRY
       env->b2 = b2;
       return b2
-             * nA(env->b1, env->rs * env->rx)
-             * nB(b2, env->rs / env->rx)
+             * nA(env->b1, env->E * env->rx)
+             * nB(b2, env->E / env->rx)
              * integrate(fphi, 0, 2 * pi);
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
@@ -653,17 +653,17 @@ luminosity_y_b(
   };
 
   return [env, fb1 = std::move(fb1), integrate = integrator(level)](
-      double s, double y, Polarization polarization
+      double rs, double y, Polarization polarization
   ) -> double {
     EPA_TRY
-      env->rs = 0.5 * sqrt(s);
+      env->E = 0.5 * rs;
       env->rx = exp(y);
       env->polarization = polarization;
-      return 0.25 * pi / sqr(env->rx) * integrate(fb1, 0, infinity);
+      return env->E * pi / sqr(env->rx) * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
-        "lambda (s, y, polarization) %e, %e, {%e, %e}\n"
+        "lambda (rs, y, polarization) %e, %e, {%e, %e}\n"
         "  defined in luminosity_y_b",
-        s, y, polarization.parallel, polarization.perpendicular
+        rs, y, polarization.parallel, polarization.perpendicular
     );
   };
 };
@@ -689,7 +689,7 @@ luminosity_fid_b(
   // luminosity_y_b is not used here because it would result in an unoptimal
   // order of integration
   struct Env {
-    double rs;
+    double E;
     double xmin;
     double xmax;
     double b1;
@@ -702,7 +702,7 @@ luminosity_fid_b(
   auto fx = [env, nA = std::move(nA), nB = std::move(nB)](double x) -> double {
     EPA_TRY
       double rx = sqrt(x);
-      return nA(env->b1, env->rs * rx) * nB(env->b2, env->rs / rx) / x;
+      return nA(env->b1, env->E * rx) * nB(env->b2, env->E / rx) / x;
     EPA_BACKTRACE("lambda (x) %e; y = %e", x, 0.5 * log(x));
   };
 
@@ -740,21 +740,21 @@ luminosity_fid_b(
   };
 
   return [env, fb1 = std::move(fb1), integrate = integrator(level)](
-        double s,
+        double rs,
         Polarization polarization,
         double ymin,
         double ymax
   ) -> double {
     EPA_TRY
-      env->rs            = 0.5 * sqrt(s);
+      env->E             = 0.5 * rs;
       env->xmin          = exp(2 * ymin);
       env->xmax          = exp(2 * ymax);
       env->polarization  = polarization;
-      return 0.25 * pi * integrate(fb1, 0, infinity);
+      return env->E * pi * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
-        "lambda (s, polarization, ymin, ymax) %e, {%e, %e}, %e, %e\n"
+        "lambda (rs, polarization, ymin, ymax) %e, {%e, %e}, %e, %e\n"
         "  defined in luminosity_fid_b",
-        s, polarization.parallel, polarization.perpendicular, ymin, ymax
+        rs, polarization.parallel, polarization.perpendicular, ymin, ymax
     );
   };
 };
@@ -767,14 +767,14 @@ luminosity_fid_b(
     unsigned level
 ) {
   return [l = luminosity_fid_b(n, n, std::move(upc), integrator, level)](
-      double s,
+      double rs,
       Polarization polarization,
       double ymin,
       double ymax
   ) -> double {
     return ymin == -ymax
-         ? 2 * l(s, polarization, ymin, 0)
-         : l(s, polarization, ymin, ymax);
+         ? 2 * l(rs, polarization, ymin, 0)
+         : l(rs, polarization, ymin, ymax);
   };
 };
 
@@ -794,8 +794,8 @@ luminosity_b(
             integrator,
             level
         )
-  ](double s, Polarization polarization) -> double {
-    return l(s, polarization, -infinity, infinity);
+  ](double rs, Polarization polarization) -> double {
+    return l(rs, polarization, -infinity, infinity);
   };
 };
 
@@ -807,9 +807,9 @@ luminosity_b(
     unsigned level
 ) {
   return [l = luminosity_fid_b(n, n, std::move(upc), integrator, level)](
-      double s, Polarization polarization
+      double rs, Polarization polarization
   ) -> double {
-    return 2 * l(s, polarization, -infinity, 0);
+    return 2 * l(rs, polarization, -infinity, 0);
   };
 };
 
@@ -818,8 +818,8 @@ xsection(XSection xsection, Luminosity luminosity) {
   return [
     xsection   = std::move(xsection),
     luminosity = std::move(luminosity)
-  ](double s) -> double {
-    return xsection(s) * luminosity(s);
+  ](double rs) -> double {
+    return xsection(sqr(rs)) * luminosity(rs);
   };
 };
 
@@ -831,27 +831,22 @@ xsection_b(
   return [
     xsection   = std::move(xsection),
     luminosity = std::move(luminosity)
-  ](double s) -> double {
-    return luminosity(s, xsection(s));
+  ](double rs) -> double {
+    return luminosity(rs, xsection(sqr(rs)));
   };
 };
 
 XSection
 xsection_fid_x(
     std::function<
-      double (double /* s */, double /* pT */, double /* ymax */)
+      double (double /* sqrt(s) */, double /* pT */, double /* ymax */)
     > xl, // cross section * luminosity
     double           mass,
     double           pT_min,
     double           eta_max,
     Integrator       integrate
 ) {
-  struct Env {
-    double s;
-    double rs;
-  };
-
-  auto env = std::make_shared<Env>();
+  auto E = std::make_shared<double>();
 
   double m2 = sqr(mass);
   double sinh_eta = sinh(eta_max);
@@ -862,24 +857,23 @@ xsection_fid_x(
     EPA_TRY
       double pT2 = sqr(pT);
       double p = pT2 + m2;
-      double r = 1 - 4 * p / env->s;
+      double r = 1 - p / sqr(*E);
       if (r <= 0) return infinity;
       double y = asinh(
-          pT * env->rs / p * (sinh_eta - sqrt((cosh2_eta + m2 / pT2) * r))
+          pT * *E / p * (sinh_eta - sqrt((cosh2_eta + m2 / pT2) * r))
       );
-      return xl(env->s, pT, y);
+      return xl(2 * *E, pT, y);
     EPA_BACKTRACE("lambda (pT) %e", pT);
    };
 
-  return [=, fpT = std::move(fpT)](double s) -> double {
+  return [=, fpT = std::move(fpT)](double rs) -> double {
     EPA_TRY
-      env->s = s;
-      env->rs = 0.5 * sqrt(s);
-      double v = env->rs * sqrt(1 - 4 * m2 / s);
+      *E = 0.5 * rs;
+      double v = sqrt(sqr(*E) - m2);
       double u = std::max(pT_min, v / cosh_eta);
       if (u >= v) return 0;
       return integrate(fpT, u, v);
-    EPA_BACKTRACE("lambda (s) %e\n  defined in xsection_fid_x", s);
+    EPA_BACKTRACE("lambda (rs) %e\n  defined in xsection_fid_x", rs);
   };
 };
 
@@ -894,8 +888,8 @@ xsection_fid(
 ) {
   return xsection_fid_x(
       [xsection = std::move(xsection), luminosity = std::move(luminosity)]
-      (double s, double pT, double ymax) -> double {
-        return 2 * xsection(s, pT) * luminosity(s, -ymax, 0);
+      (double rs, double pT, double ymax) -> double {
+        return 2 * xsection(sqr(rs), pT) * luminosity(rs, -ymax, 0);
       },
       mass,
       pT_min,
@@ -915,8 +909,8 @@ xsection_fid_b(
 ) {
   return xsection_fid_x(
       [xsection = std::move(xsection), luminosity = std::move(luminosity)]
-      (double s, double pT, double ymax) -> double {
-        return 2 * luminosity(s, xsection(s, pT), -ymax, 0);
+      (double rs, double pT, double ymax) -> double {
+        return 2 * luminosity(rs, xsection(sqr(rs), pT), -ymax, 0);
       },
       mass,
       pT_min,

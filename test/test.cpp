@@ -178,13 +178,13 @@ BOOST_AUTO_TEST_SUITE_END(); // fixture
 
 BOOST_AUTO_TEST_CASE(epa_luminosity) {
   BOOST_TEST(
-      luminosity_y(proton_dipole_spectrum(13e3 / 2))(1e4, 1)
-      == 2.3106823988515487e-08
+      luminosity_y(proton_dipole_spectrum(13e3 / 2))(100, 1)
+      == 4.6213647977030971e-06
   );
 
   BOOST_TEST(
-      luminosity(proton_dipole_spectrum(13e3 / 2))(1e4)
-      == 1.2549583443893129e-07
+      luminosity(proton_dipole_spectrum(13e3 / 2))(100)
+      == 2.5099166887786259e-05
   );
 };
 
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE(epa_xsection) {
         100,
         10,
         2.5
-      )(5e4) == 2.1622517276830937e-20
+      )(250) == 1.125931637782495e-17
   );
 
   {
@@ -222,9 +222,9 @@ BOOST_AUTO_TEST_CASE(proton_test, *boost::unit_test::tolerance(1e-5)) {
       proton_dipole_spectrum_b(13e3 / 2)(fm, 1e2) == 2.2984963313647681e-07
   );
 
-  BOOST_TEST(pp_luminosity(13e3)(1e4) == 1.2549583443893129e-07);
+  BOOST_TEST(pp_luminosity(13e3)(100) == 2.5099166887786259e-05);
 
-  BOOST_TEST(pp_to_ppll(13e3, 100, 10, 2.5)(5e4) == 2.1622517276830937e-20);
+  BOOST_TEST(pp_to_ppll(13e3, 100, 10, 2.5)(250) == 1.125931637782495e-17);
 };
 
 BOOST_AUTO_TEST_SUITE(expensive, *boost::unit_test::disabled())
@@ -232,13 +232,13 @@ BOOST_AUTO_TEST_SUITE(expensive, *boost::unit_test::disabled())
 BOOST_AUTO_TEST_CASE(test_luminosity_b, *boost::unit_test::tolerance(1e-5)) {
   BOOST_TEST(
       luminosity_b(proton_dipole_spectrum_b(13e3 / 2), pp_upc_probability(13e3))(
-        1e4, { 1, 1 }
-      ) == 1.1451078739844505e-07
+        100, { 1, 1 }
+      ) == 2.2902623308910459e-05
   );
 };
 
 BOOST_AUTO_TEST_CASE(test_pp_luminosity_b, *boost::unit_test::tolerance(1e-5)) {
-  BOOST_TEST(pp_luminosity_b(13e3)(1e4, { 1, 1 }) == 1.1451289852721231e-07);
+  BOOST_TEST(pp_luminosity_b(13e3)(100, { 1, 1 }) == 2.290215747968901e-05);
 };
 
 BOOST_AUTO_TEST_CASE(test_xsection_fid_b, *boost::unit_test::tolerance(1e-5)) {
@@ -250,7 +250,7 @@ BOOST_AUTO_TEST_CASE(test_xsection_fid_b, *boost::unit_test::tolerance(1e-5)) {
         10,
         2.5,
         gsl_cquad_integrator(0, 1e-2)
-      )(5e4) == 1.9075744559274611e-20
+      )(250) == 9.7800068779352812e-18
   );
 };
 
@@ -263,7 +263,7 @@ BOOST_AUTO_TEST_CASE(test_ppll_b, *boost::unit_test::tolerance(1e-5)) {
                   ? gsl_cquad_integrator(0, 1e-2)
                   : gsl_integrator(level - 1);
         }
-      )(5e4) == 1.9075744559274611e-20
+      )(250) == 9.7800054406137899e-18
   );
 };
 

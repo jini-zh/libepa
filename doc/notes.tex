@@ -196,8 +196,8 @@ Photon-photon luminosity in ultraperipheral collision of particles $A$ and $B$
 differentiated with respect to rapidity of the system $y = \tfrac12 \ln
 \tfrac{\omega_1}{\omega_2}$ with non-electromagnetic interactions neglected:
 \begin{equation}
-  \frac{\mathrm{d} L_{AB}}{\mathrm{d} s}
-  = \frac14
+  \frac{\mathrm{d} L_{AB}}{\mathrm{d} \sqrt{s}}
+  = \frac{\sqrt{s}}{2}
     \int\limits_{-\infty}^{\infty}
       n_A \left( \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
       n_B \left( \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
@@ -208,8 +208,8 @@ $B$, $s = 4 \omega_1 \omega_2$ is the invariant mass of the photons. Calculation
 convergence is better when we change the integration variable to $x =
 \frac{\omega_1}{\omega_2} = \exp{2 y}$:
 \begin{equation}
-  \frac{\mathrm{d} L_{AB}}{\mathrm{d} s}
-  = \frac18
+  \frac{\mathrm{d} L_{AB}}{\mathrm{d} \sqrt{s}}
+  = \frac{\sqrt{s}}{4}
     \int\limits_0^\infty
        n_A \left( \sqrt{\frac{sx}{4}} \right)
        n_B \left( \sqrt{\frac{s}{4x}} \right)
@@ -218,12 +218,13 @@ convergence is better when we change the integration variable to $x =
 
 Simplification when $A = B$:
 \begin{equation}
-  \frac{\mathrm {d} L}{\mathrm{d} s}
-  = 2 \int\limits_0^\infty
-        n \left( \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
-        n \left( \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
-      \mathrm{d} y
-  = \frac14
+  \frac{\mathrm {d} L}{\mathrm{d} \sqrt{s}}
+  = \sqrt{s}
+    \int\limits_0^\infty
+      n \left( \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
+      n \left( \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
+    \mathrm{d} y
+  = \frac{\sqrt{s}}{2}
     \int\limits_0^1
       n \left( \sqrt{\frac{sx}{4}} \right)
       n \left( \sqrt{\frac{s}{4x}} \right)
@@ -233,21 +234,21 @@ Simplification when $A = B$:
 Photon-photon luminosity with non-electromagnetic interactions respected:
 \begin{equation}
   \begin{aligned}
-    \frac{\mathrm{d} L_\parallel}{\mathrm{d} s}
-    &= \frac14
+    \frac{\mathrm{d} L_\parallel}{\mathrm{d} \sqrt{s}}
+    &= \frac{\sqrt{s}}{2}
        \int\limits_{-\infty}^\infty \mathrm{d} y
-       \int\limits \mathrm{d}^2 b_1
-       \int\limits \mathrm{d}^2 b_2
+       \int\limits_\mathrm{d}^2 b_1
+       \int\limits_\mathrm{d}^2 b_2
        \, n \left( b_1, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^y \right)
        \, n \left( b_2, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^{-y} \right)
        \, P(b)
        \, \cos^2 \varphi,
     \\
-    \frac{\mathrm{d} L_\perp}{\mathrm{d} s}
-    &= \frac14
+    \frac{\mathrm{d} L_\perp}{\mathrm{d} \sqrt{s}}
+    &= \frac{\sqrt{s}}{2}
        \int\limits_{-\infty}^\infty \mathrm{d} y
-       \int\limits \mathrm{d}^2 b_1
-       \int\limits \mathrm{d}^2 b_2
+       \int\limits_\mathrm{d}^2 b_1
+       \int\limits_\mathrm{d}^2 b_2
        \, n \left( b_1, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^y \right)
        \, n \left( b_2, \tfrac{\sqrt{s}}{2} \, \mathrm{e}^{-y} \right)
        \, P(b)
@@ -263,9 +264,9 @@ $b$ (the probability to avoid non-electromagnetic interactions), $b =
 rearranged as follows:
 \begin{equation}
   \begin{aligned}
-    \frac{\mathrm{d} L_\perp }{\mathrm{d} s}
+    \frac{\mathrm{d} L_\perp }{\mathrm{d} \sqrt{s}}
     &= \begin{multlined}[t]
-         \frac{\pi}{4}
+         \frac{\pi \sqrt{s}}{2}
          \int\limits_0^\infty
            b_1
            \int\limits_0^\infty
@@ -283,9 +284,9 @@ rearranged as follows:
          \, \mathrm{d} b_1,
        \end{multlined}
     \\
-    \frac{\mathrm{d} L_\parallel }{\mathrm{d} s}
+    \frac{\mathrm{d} L_\parallel }{\mathrm{d} \sqrt{s}}
     &= \begin{multlined}[t]
-         \frac{\pi}{4}
+         \frac{\pi \sqrt{s}}{2}
          \int\limits_0^\infty
            b_1
            \int\limits_0^\infty
@@ -342,8 +343,8 @@ rearranged as follows:
 Differential cross section for the process $AB \to ABX$ (see fig.~\ref{f:upc})
 with non-electromagnetic interactions neglected:
 \begin{equation}
-  \frac{\mathrm{d}}{\mathrm{d} s} \sigma(AB \to ABX)
-  = \sigma(\gamma \gamma \to X) \frac{\mathrm{d} L}{\mathrm{d} s},
+  \frac{\mathrm{d} \sigma(AB \to ABX)}{\mathrm{d} \sqrt{s}}
+  = \sigma(\gamma \gamma \to X) \, \frac{\mathrm{d} L}{\mathrm{d} \sqrt{s}},
 \end{equation}
 where $\sigma(\gamma \gamma \to X)$ is the cross section for the fusion of two
 (real) photons to a system $X$.
@@ -351,11 +352,11 @@ where $\sigma(\gamma \gamma \to X)$ is the cross section for the fusion of two
 Differential cross section for the process $AB \to ABX$ with non-electromagnetic
 interactions respected:
 \begin{equation}
-  \frac{\mathrm{d}}{\mathrm{d} s} \sigma(AB \to ABX)
+  \frac{\mathrm{d} \sigma(AB \to ABX)}{\mathrm{d} \sqrt{s}}
   = \sigma_\parallel(\gamma \gamma \to X)
-    \frac{\mathrm{d} L_\parallel}{\mathrm{d} s}
+    \, \frac{\mathrm{d} L_\parallel}{\mathrm{d} \sqrt{s}}
   + \sigma_\perp(\gamma \gamma \to X)
-    \frac{\mathrm{d} L_\perp}{\mathrm{d} s},
+    \, \frac{\mathrm{d} L_\perp}{\mathrm{d} \sqrt{s}},
 \end{equation}
 where $\sigma_{\parallel,\perp}(\gamma \gamma \to X)$ are the cross sections for
 the fusion of two photons with parallel or perpendicular polarizations,
@@ -368,7 +369,8 @@ the phase space $p_T^\pm > \hat p_T$, $\abs{\eta^\pm} < \hat \eta$, where
 $p_T^\pm$ and $\eta^\pm$ are the transverse momentum and pseudorapidity of
 $\chi^\pm$:
 \begin{gather}
-  \frac{\mathrm{d}}{\mathrm{d} s} \sigma_\text{fid.}(AB \to AB \chi^+ \chi^-)
+  \frac{\mathrm{d} \sigma_\text{fid.}(AB \to AB \chi^+ \chi^-)}
+       {\mathrm{d} \sqrt{s}}
   = \int\limits_{
       \max \left(
         \hat p_T,
@@ -376,17 +378,17 @@ $\chi^\pm$:
       \right)
     }^{\frac{\sqrt{s}}{2} \sqrt{1 - \frac{4 m_\chi^2}{s}}}
       \mathrm{d} p_T
-      \, \frac{\mathrm{d}}{\mathrm{d} p_T}
-         \sigma(\gamma \gamma \to \chi^+ \chi^-)
-      \, \frac{\mathrm{d} \hat L}{\mathrm{d} s},
+      \, \frac{\mathrm{d} \sigma(\gamma \gamma \to \chi^+ \chi^-)}
+              {\mathrm{d} p_T}
+      \, \frac{\mathrm{d} \hat L}{\mathrm{d} \sqrt{s}},
   \\
   \frac{\mathrm{d}}{\mathrm{d} p_T} \sigma(\gamma \gamma \to \chi^+ \chi^-)
   = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
     \cdot \frac{1 - \frac{2 (p_T^4 + m_\chi^4)}{s (p_T^2 + m_\chi^2)}}
                {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
   \\
-  \frac{\mathrm{d} \hat L}{\mathrm{d} s}
-  = \frac14
+  \frac{\mathrm{d} \hat L}{\mathrm{d} \sqrt{s}}
+  = \frac{\sqrt{s}}{2}
     \int\limits_{-\hat y}^{\hat y} \mathrm{d} y
     \, n \left( \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
     \, n \left( \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right),
@@ -407,7 +409,8 @@ $p_T^\pm$ and $\eta^\pm$ are the transverse momentum and pseudorapidity of
 $\chi^\pm$:
 \begin{gather}
   \begin{multlined}
-    \frac{\mathrm{d}}{\mathrm{d} s} \sigma_\text{fid.}(AB \to AB \chi^+ \chi^-)
+    \frac{\mathrm{d} \sigma_\text{fid.}(AB \to AB \chi^+ \chi^-)}
+         {\mathrm{d} \sqrt{s}}
     = \\ \int\limits_{
         \max \left(
           \hat p_T,
@@ -416,36 +419,37 @@ $\chi^\pm$:
       }^{\frac{\sqrt{s}}{2} \sqrt{1 - \frac{4 m_\chi^2}{s}}}
         \mathrm{d} p_T
         \left(
-            \frac{\mathrm{d}}{\mathrm{d} p_T}
-            \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)
-            \frac{\mathrm{d} \hat L_\parallel}{\mathrm{d} s}
-          + \frac{\mathrm{d}}{\mathrm{d} p_T}
-            \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)
-            \frac{\mathrm{d} \hat L_\perp}{\mathrm{d} s}
+            \frac{\mathrm{d} \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)}
+                 {\mathrm{d} p_T}
+            \frac{\mathrm{d} \hat L_\parallel}{\mathrm{d} \sqrt{s}}
+          + \frac{\mathrm{d} \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)}
+                 {\mathrm{d} p_T}
+            \frac{\mathrm{d} \hat L_\perp}{\mathrm{d} \sqrt{s}}
         \right),
   \end{multlined}
   \\
-  \frac{\mathrm{d}}{\mathrm{d} s}
-  \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)
+  \frac{\mathrm{d} \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)}
+       {\mathrm{d} p_T}
   = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
     \cdot \frac{1 - \frac{2 (p_T^4 + 2 m_\chi^4)}{s (p_T^2 + m_\chi^2)}}
                {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
   \\
-  \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)
+  \frac{\mathrm{d} \sigma_\perp(\gamma \gamma \to \chi^+ \chi^-)}
+       {\mathrm{d} p_T}
   = \frac{8 \pi \alpha^2 p_T}{s (p_T^2 + m_\chi^2)}
     \cdot \frac{1 - \frac{2 p_T^4}{s (p_T^2 + m_\chi^2)}}
                {\sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}},
   \\
-  \frac{\mathrm{d} \hat L_\parallel}{\mathrm{d} s}
-  = \frac14
+  \frac{\mathrm{d} \hat L_\parallel}{\mathrm{d} \sqrt{s}}
+  = \frac{\sqrt{s}}{2}
     \iint \mathrm{d}^2 b_1 \mathrm{d}^2 b_2 P(b)
     \int\limits_{-\hat y}^{\hat y} \mathrm{d} y
     \, n \left( b_1, \frac{\sqrt{s}}{2} \mathrm{e}^y    \right)
     \, n \left( b_2, \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right)
     \cos^2 \varphi
   \\
-  \frac{\mathrm{d} \hat L_\perp}{\mathrm{d} s}
-  = \frac14
+  \frac{\mathrm{d} \hat L_\perp}{\mathrm{d} \sqrt{s}}
+  = \frac{\sqrt{s}}{2}
     \iint \mathrm{d}^2 b_1 \mathrm{d}^2 b_2 P(b)
     \int\limits_{-\hat y}^{\hat y} \mathrm{d} y
     \, n \left( b_1, \frac{\sqrt{s}}{2} \mathrm{e}^y    \right)
@@ -584,8 +588,8 @@ Photon-photon luminosity in an ultraperipheral collison of two protons:
 \begin{equation}
   \begin{gathered}
     \begin{multlined}
-      \frac{\mathrm{d} L_\parallel}{\mathrm{d} s}
-      = \frac{\pi^2}{2}
+      \frac{\mathrm{d} L_\parallel}{\mathrm{d} \sqrt{s}}
+      = \pi^2 \sqrt{s}
         \int\limits_0^\infty b_1 \, \mathrm{d} b_1
         \int\limits_0^\infty b_2 \, \mathrm{d} b_2
         \int\limits_{-\infty}^\infty \mathrm{d} y
@@ -608,8 +612,8 @@ Photon-photon luminosity in an ultraperipheral collison of two protons:
     \end{multlined}
     \\
     \begin{multlined}
-      \frac{\mathrm{d} L_\perp}{\mathrm{d} s}
-      = \frac{\pi^2}{2}
+      \frac{\mathrm{d} L_\perp}{\mathrm{d} \sqrt{s}}
+      = \pi^2 \sqrt{s}
         \int\limits_0^\infty b_1 \, \mathrm{d} b_1
         \int\limits_0^\infty b_2 \, \mathrm{d} b_2
         \int\limits_{-\infty}^\infty \mathrm{d} y

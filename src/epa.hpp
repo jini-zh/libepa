@@ -247,12 +247,13 @@ spectrum_b_function1d(
 );
 
 // Photon-photon luminosity with non-electromagnetic interactions neglected
-typedef std::function<double (double /* s */)> Luminosity;
+typedef std::function<double (double /* sqrt(s) */)> Luminosity;
 // differentiated with respect to rapidity of the system
-typedef std::function<double (double /* s */, double /* y */)> Luminosity_y;
+typedef std::function<double (double /* sqrt(s) */, double /* y */)>
+        Luminosity_y;
 // for calculating fiducial cross section
 typedef std::function<double (
-    double /* s */, double /* ymin */, double /* ymax */
+    double /* sqrt(s) */, double /* ymin */, double /* ymax */
 )> Luminosity_fid;
 
 // Photon-photon luminosity in ultraperipheral collisions of particles with EPA
@@ -281,14 +282,19 @@ struct Polarization {
 // perpendicular photons polarizations. Pass parallel = 1, perpendicular = 0 to
 // compute only for parallel photon polarization, parallel = 1, perpendicular =
 // 1 to compute for the sum of polarizations.
-typedef std::function<double (double /* s */, Polarization)> Luminosity_b;
+typedef std::function<double (double /* sqrt(s) */, Polarization)> Luminosity_b;
 // differentiated with respect to rapidity of the system
 typedef std::function<
-  double (double /* s */, double /* y */, Polarization)
+  double (double /* sqrt(s) */, double /* y */, Polarization)
 > Luminosity_y_b;
 // for calculating fiducial cross section
 typedef std::function<
-  double (double /* s */, Polarization, double /* ymin */, double /* ymax */)
+  double (
+      double, // sqrt(s)
+      Polarization,
+      double, // ymin
+      double  // ymax
+  )
 > Luminosity_fid_b;
 
 // Photon-photon luminosity in ultraperipheral collisions of particles with EPA
@@ -346,14 +352,15 @@ luminosity_fid_b(
     unsigned integration_level = 0
 );
 
-// Generic differential cross section. sqrt{s} is the invariant mass of the
-// system.
-typedef std::function<double (double /* s */)> XSection;
+// Cross section differentiated with respect to invariant mass, d \sigma / d
+// \sqrt{s}. Note that cross sections which are not differentiated with respect
+// to sqrt{s}, take s as a parameter.
+typedef std::function<double (double /* sqrt(s) */)> XSection;
 
 // Photon fusion cross section taking into account photons polarization.
 // Returns two values: cross sections for the parallel and perpendicular
 // photons polarizations respectively.
-typedef std::function<Polarization (double /* s */)> XSection_b;
+typedef std::function<Polarization (double /* sqrt(s) */)> XSection_b;
 
 // Differential cross section for a process occuring in ultraperipheral
 // collisions with non-electromagnetic interactions neglected
