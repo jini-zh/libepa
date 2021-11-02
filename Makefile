@@ -36,7 +36,7 @@ test/a1.cpp: test/make-a1-form-factor test/a1.dat
 	$< test/a1.dat > $@
 
 clean:
-	rm $(objects) libepa.so
+	rm $(objects) libepa.so 2> /dev/null; true
 
 doc: doc/notes.pdf
 
