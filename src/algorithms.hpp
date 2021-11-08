@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <memory>
 #include <ostream>
 #include <stdexcept>
 #include <string>
@@ -23,9 +24,10 @@ struct Function1d {
       const char* what() const throw ();
   };
 
-  std::vector<std::pair<double, double>> points;
+  std::shared_ptr<std::vector<std::pair<double, double>>> points;
 
-  Function1d() = default;
+  Function1d();
+  Function1d(const Function1d&) = default;
   Function1d(Function1d&&);
   Function1d(std::vector<std::pair<double, double>>&& points);
 

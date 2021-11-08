@@ -29,7 +29,7 @@ test: test/test
 test/test: test/test.o libepa.so
 	$(cxx) $< -o $@ -L . -lepa `pkg-config --libs gsl` -lboost_unit_test_framework-mt
 
-test/test.o: test/test.cpp test/a1.cpp src/proton.hpp src/epa.hpp src/gsl.hpp
+test/test.o: test/test.cpp test/a1.cpp src/proton.hpp src/epa.hpp src/gsl.hpp src/algorithms.hpp
 	$(cxx) -iquote src -iquote test -c $< -o $@
 
 test/a1.cpp: test/make-a1-form-factor test/a1.dat

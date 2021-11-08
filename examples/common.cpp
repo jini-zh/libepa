@@ -32,8 +32,9 @@ epa::Function1d make_function1d(
     std::vector<std::pair<double, double>> grid
 ) {
   epa::Function1d F(std::move(grid));
-  for (size_t i = 0; i < F.points.size(); ++i)
-    F.points[i].second = f(F.points[i].first);
+  auto& points = *F.points;
+  for (size_t i = 0; i < points.size(); ++i)
+    points[i].second = f(points[i].first);
   return F;
 };
 
@@ -49,6 +50,7 @@ epa::Function1d make_function1d_async(
   size_t i = 0;
   int nprocs = get_nprocs();
   if (!verbose.empty()) std::cerr << "Using " << nprocs << " threads.\n";
+  auto& points = *F.points;
   for (int t = 0; t < nprocs; ++t)
     threads.emplace_back(
         [&]() {
@@ -59,13 +61,13 @@ epa::Function1d make_function1d_async(
               std::unique_lock lock(m_queue);
               j = i++;
             };
-            if (j >= F.points.size()) break;
-            F.points[j].second = f(F.points[j].first);
+            if (j >= points.size()) break;
+            points[j].second = f(points[j].first);
             if (!verbose.empty()) {
               std::unique_lock lock(m_output);
               std::cerr
                 << verbose
-                << F.points[j].first << " => " << F.points[j].second
+                << points[j].first << " => " << points[j].second
                 << '\n';
             };
           };

@@ -309,7 +309,7 @@ spectrum_b_function1d_x(
     std::function<double (double, double, double)>&& integral_qt_max,
     Integrator_I integrate
 ) {
-  if (!form_factor || form_factor->points.size() < 2)
+  if (!form_factor || form_factor->points->size() < 2)
     if (rest_spectrum)
       return rest_spectrum;
     else if (rest_form_factor)
@@ -334,7 +334,7 @@ spectrum_b_function1d_x(
 
   double norm;
   if (rest_form_factor) {
-    auto& last = form_factor->points.back();
+    auto& last = form_factor->points->back();
     norm = last.second / rest_form_factor(last.first);
   };
 
@@ -361,7 +361,7 @@ spectrum_b_function1d_x(
       env->b   = b;
       env->wg2 = wg2;
 
-      double qt_max = form_factor->points.back().first - wg2;
+      double qt_max = form_factor->points->back().first - wg2;
       qt_max = qt_max > 0 ? sqrt(qt_max) : 0;
 
       double I = qt_max == 0 ? 0 : integral_qt_max(b, wg2, qt_max);
@@ -473,7 +473,7 @@ spectrum_b_function1d_s(
           double I = 0;
           while (true) {
             auto right = left + 1;
-            if (right == form_factor->points.end()) break;
+            if (right == form_factor->points->end()) break;
             double end = sqrt(right->first - wg2);
             double A = (right->second - left->second)
                      / sqrt(right->first - left->first);

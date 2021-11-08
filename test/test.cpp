@@ -91,7 +91,7 @@ struct A1_fixture {
   A1_fixture() {
     size_t npoints = sizeof(A1_FORM_FACTOR) / sizeof(double) / 3;
     form_factor = std::make_shared<Function1d>();
-    form_factor->points.reserve(npoints);
+    form_factor->points->reserve(npoints);
     double m2 = sqr(2 * proton_mass);
     const double* a1 = A1_FORM_FACTOR;
     for (size_t i = 0; i < npoints; ++i) {
@@ -99,7 +99,7 @@ struct A1_fixture {
       double electric = *a1++;
       double magnetic = *a1++;
       double tau = q2 / m2;
-      form_factor->points.push_back({
+      form_factor->points->push_back({
           q2,
           (electric + tau * proton_magnetic_moment * magnetic) / (1 + tau)
       });
@@ -131,15 +131,15 @@ BOOST_AUTO_TEST_CASE(epa_spectra) {
 
   // after ~0.8 GeV^2 the error becomes too large
   size_t i = std::upper_bound(
-                 form_factor->points.begin(),
-                 form_factor->points.end(),
+                 form_factor->points->begin(),
+                 form_factor->points->end(),
                  0.8,
                  [](double x, const std::pair<double, double>& point) {
                    return x < point.first;
                  }
              )
-            - form_factor->points.begin();
-  form_factor->points.resize(i);
+            - form_factor->points->begin();
+  form_factor->points->resize(i);
 
   // This calculation has poor accuracy and depends on where the form factor is
   // cut off (the value of i above)
