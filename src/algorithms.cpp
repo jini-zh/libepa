@@ -67,11 +67,16 @@ Function1d Function1d::load(const std::filesystem::path& file) {
   };
 };
 
+void Function1d::dump(std::ostream& output) const {
+  auto precision = output.precision(12);
+  auto flags     = output.setf(std::ios_base::scientific);
+  for (auto& point: points)
+    output << point.first << ' ' << point.second << '\n';
+};
+
 void Function1d::save(const std::filesystem::path& file) const {
   std::ofstream f(file);
-  f.precision(12);
-  f.setf(std::ios_base::scientific);
-  for (auto& point: points) f << point.first << ' ' << point.second << '\n';
+  dump(f);
 };
 
 }; // namespace epa
