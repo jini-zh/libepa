@@ -48,7 +48,7 @@ epa::Function1d make_function1d_async(
   std::list<std::thread> threads;
   size_t i = 0;
   int nprocs = get_nprocs();
-  if (!verbose.empty()) std::cout << "Using " << nprocs << " threads.\n";
+  if (!verbose.empty()) std::cerr << "Using " << nprocs << " threads.\n";
   for (int t = 0; t < nprocs; ++t)
     threads.emplace_back(
         [&]() {

@@ -165,7 +165,7 @@ int main(int argc, char** argv) {
   auto grid = make_grid(from, to, npoints, log);
 
   if (verbose)
-    std::cout
+    std::cerr
       << "Calculating photon-photon luminosities in ultraperipheral collisions "
          "of protons with the energy " << collision_energy << " GeV for "
          "invariant masses from " << from << " GeV to " << to << " GeV ("
@@ -174,35 +174,35 @@ int main(int argc, char** argv) {
   epa::Function1d f_luminosity;
   if (luminosity || survival) {
     if (verbose)
-      std::cout
+      std::cerr
         << "  with non-electromagnetic interactions between protons "
            "neglected... ";
     f_luminosity = make_function1d(epa::pp_luminosity(collision_energy), grid);
-    if (verbose) std::cout << "done.";
+    if (verbose) std::cerr << "done.";
     if (luminosity) {
       f_luminosity.save(luminosity);
       if (verbose)
-        std::cout << " Result is written to `" << luminosity << "'\n";
+        std::cerr << " Result is written to `" << luminosity << "'\n";
     };
   };
 
   epa::Function1d f_luminosity_b;
   if (luminosity_b || survival) {
     if (verbose)
-      std::cout
+      std::cerr
         << "  with non-electromagnetic interactions between protons "
            "respected:\n";
     f_luminosity_b = pp_luminosity_b(
         collision_energy, {1, 1}, grid, verbose ? "luminosity_b " : nullptr
     );
-    if (verbose) std::cout << "Done.";
+    if (verbose) std::cerr << "Done.";
     f_luminosity_b.save(luminosity_b);
     if (verbose)
-      std::cout << " Result is written to `" << luminosity_b << "'\n";
+      std::cerr << " Result is written to `" << luminosity_b << "'\n";
   };
 
   if (survival) {
-    if (verbose) std::cout << "Calculating ratio... ";
+    if (verbose) std::cerr << "Calculating ratio... ";
     epa::Function1d f_survival;
     f_survival.points.resize(grid.size());
     for (size_t i = 0; i < grid.size(); ++i) {
@@ -210,27 +210,27 @@ int main(int argc, char** argv) {
       f_survival.points[i].second = f_luminosity_b.points[i].second
                                   / f_luminosity.points[i].second;
     };
-    if (verbose) std::cout << "done.";
+    if (verbose) std::cerr << "done.";
     f_survival.save(survival);
-    if (verbose) std::cout << " Result is written to `" << survival << "'\n";
+    if (verbose) std::cerr << " Result is written to `" << survival << "'\n";
   };
 
   if (parallel) {
-    if (verbose) std::cout << "  for parallel polarization:\n";
+    if (verbose) std::cerr << "  for parallel polarization:\n";
     pp_luminosity_b(
         collision_energy, {1, 0}, grid, verbose ? "parallel " : nullptr
     ).save(parallel);
     if (verbose)
-      std::cout << "Done. Result is written to `" << parallel << "'\n";
+      std::cerr << "Done. Result is written to `" << parallel << "'\n";
   };
 
   if (perpendicular) {
-    if (verbose) std::cout << "  for perpendicular polarization:\n";
+    if (verbose) std::cerr << "  for perpendicular polarization:\n";
     pp_luminosity_b(
         collision_energy, {0, 1}, grid, verbose ? "perpendicular " : nullptr
     ).save(perpendicular);
     if (verbose)
-      std::cout << "Done. Result is written to `" << perpendicular << "'\n";
+      std::cerr << "Done. Result is written to `" << perpendicular << "'\n";
   };
 
   return 0;
