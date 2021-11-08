@@ -74,15 +74,15 @@ int main(int argc, char** argv) {
         break;
 
       case 'f':
-        from = parse_energy(optarg, "beginning invariant mass (from)");
+        from = parse_energy(optarg, "beginning mass (from)");
         break;
 
       case 't':
-        to = parse_energy(optarg, "ending invariant mass (to)");
+        to = parse_energy(optarg, "ending mass (to)");
         break;
 
       case 's':
-        step = parse_energy(optarg, "invariant mass step");
+        step = parse_energy(optarg, "mass step");
         break;
 
       case 'n':
