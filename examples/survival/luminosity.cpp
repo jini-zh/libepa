@@ -40,6 +40,8 @@ epa::Function1d pp_luminosity_b(
 };
 
 int main(int argc, char** argv) {
+  gsl::init();
+
   option options[] = {
     { "help",             0, nullptr, 'h' },
     { "collision-energy", 1, nullptr, 'E' },
