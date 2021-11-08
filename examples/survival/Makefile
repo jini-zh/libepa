@@ -16,7 +16,7 @@ luminosity.txt luminosity_b.txt parallel.txt perpendicular.txt: survival
 survival.txt: luminosity.txt luminosity_b.txt
 	paste $^ | perl -ae 'die "Grid misaligned: $$F[0] != $$F[2] at line $$.\n" if $$F[0] != $$F[2]; printf "%s %19.12e\n", $$F[0], $$F[3] / $$F[1]' > $@
 
-survival: survival.cpp ../../libepa.so
+survival: survival.cpp ../common.cpp ../../libepa.so
 	$(cxx) -iquote ../../src $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
 
 clean:
