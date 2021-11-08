@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+
+sub usage {
+  print <<END
+This program calculates ratio of two functions provided as a set of (x, y) points.
+Usage: $0 numerator denominator
+END
+};
+
+if ($ARGV[0] eq '-h' || $ARGV[0] eq '--help') {
+  usage;
+  exit;
+};
+
+@ARGV == 2
+  or die "$0: exactly two arguments required: numerator and denominator\n";
+
+open my $numerator, '<', $ARGV[0] or die "$0: cannot open `$ARGV[0]': $!\n";
+open my $denominator, '<', $ARGV[1] or die "$0: cannot open `$ARGV[1]': $!\n";
+
+while (<$numerator>) {
+  !eof($denominator)
+     or die "$0: different number of points in `$ARGV[0]' and `$ARGV[1]'\n";
+
+  my @n = split;
+  my @d = split ' ', scalar <$denominator>;
+  $n[0] == $d[0] or die "$0: grid misaligned: $n[0] != $d[0] at line $.\n";
+
+  printf "%s %19.12e\n", $n[0], $n[1] / $d[1];
+};
