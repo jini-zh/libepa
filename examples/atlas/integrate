@@ -1,0 +1,39 @@
+#!/usr/bin/perl
+
+sub interpolate {
+  my ($x0, $y0, $x1, $y1, $x) = @_;
+  return ($y0 + $y1) / 2 if $x0 == $x1;
+  return $y0 + ($y1 - $y0) / ($x1 - $x0) * ($x - $x0);
+};
+
+my @bins = (12, 17, 22, 30, 70);
+
+printf "%12.5e %12.5e\n", 0, 0;
+
+my $i = 0;
+my $I = 0;
+my ($x0, $y0) = (0, 0);
+my ($x, $y);
+while (<>) {
+  ($x, $y) = split;
+
+  next if $x < $bins[$i];
+
+  if ($x >= $bins[$i+1]) {
+    my $y1 = interpolate($x0, $y0, $x, $y, $bins[$i+1]);
+    $I += ($y0 + $y1) / 2 * ($bins[$i+1] - $x0);
+    printf "%12.5e %12.5e\n", $bins[$i], $I / ($bins[$i+1] - $bins[$i]);
+    last if ++$i == $#bins;
+    $I = 0;
+    $x0 = $bins[$i];
+    $y0 = $y1;
+  };
+
+  $I += ($y0 + $y) / 2 * ($x - $x0);
+} continue {
+  $x0 = $x;
+  $y0 = $y;
+};
+
+printf "%12.5e %12.5e\n", $bins[$i], $I if $i < $#bins;
+printf "%12.5e %12.5e\n", $bins[$#bins], 0;

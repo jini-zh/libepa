@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+
+open EXPERIMENT, '<', 'experiment.txt' or die "Cannot open experiment.txt: $!\n";
+while (<EXPERIMENT>) {
+  push @experiment, (split)[1];
+};
+close EXPERIMENT;
+
+my $i = 0;
+while (<>) {
+  my @F = split;
+  if ($F[1] == 0) {
+    print;
+  } else {
+    printf "%12.5e %12.5e\n", $F[0], $F[1] / $experiment[$i++];
+  };
+};
