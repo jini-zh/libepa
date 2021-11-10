@@ -14,6 +14,12 @@ size_t default_cquad_integration_limit = 100;
 gsl::integration::QAGMethod default_integration_method
   = gsl::integration::GAUSS41;
 
+std::function<Integrator (unsigned)> default_integrator
+  = static_cast<Integrator (*)(unsigned)>(gsl_integrator);
+
+std::function<Integrator_I (unsigned)> default_integrator_i
+  = static_cast<Integrator_I (*)(unsigned)>(gsl_integrator_i);
+
 Integrator gsl_integrator(
     double absolute_error,
     double relative_error,

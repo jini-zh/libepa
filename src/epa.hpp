@@ -69,8 +69,7 @@ Integrator gsl_integrator(const gsl_integrator_keys&);
 Integrator gsl_integrator(unsigned level = 0);
 
 // Default integrator generator
-const std::function<Integrator (unsigned)> default_integrator
-  = static_cast<Integrator (*)(unsigned)>(gsl_integrator);
+extern std::function<Integrator (unsigned)> default_integrator;
 
 // GSL integrator generator with absolute_error = 0, relative_error =
 // relative_error * error_step ** level
@@ -121,8 +120,7 @@ struct gsl_integrator_i_keys {
 Integrator_I gsl_integrator_i(const gsl_integrator_keys&);
 Integrator_I gsl_integrator_i(unsigned level = 0);
 
-const std::function<Integrator_I (unsigned)> default_integrator_i
-  = static_cast<Integrator_I (*)(unsigned)>(gsl_integrator_i);
+extern std::function<Integrator_I (unsigned)> default_integrator_i;
 
 // Electromagnetic form factor of a particle. Q2 is the photon 3-momentum
 // squared
