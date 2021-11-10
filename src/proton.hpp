@@ -24,12 +24,12 @@ proton_dipole_form_factor(double lambda2 = proton_dipole_form_factor_lambda2);
 Spectrum
 proton_dipole_spectrum(
     double energy,
-    double lambda = proton_dipole_form_factor_lambda2
+    double lambda2 = proton_dipole_form_factor_lambda2
 );
 Spectrum_b
 proton_dipole_spectrum_b(
     double energy,
-    double lambda = proton_dipole_form_factor_lambda2
+    double lambda2 = proton_dipole_form_factor_lambda2
 );
 
 // The slope of the cross section for elastic scattering of two protons
@@ -102,8 +102,8 @@ Luminosity_fid_b pp_luminosity_fid_b(
 // neglected
 XSection pp_to_ppll(
     double collision_energy,
-    double mass,     // of the produced particle
-    unsigned charge, // of the produced particle
+    double mass,   // of the produced particle
+    double charge, // of the produced particle
     Integrator = default_integrator(0)
 );
 // Same for charge = 1
@@ -116,10 +116,10 @@ XSection pp_to_ppll(
 // neglected
 XSection pp_to_ppll(
     double collision_energy,
-    double mass,     // of the produced particle
-    unsigned charge, // of the produced particle
-    double pT_min,   // minimal transverse momentum of the produced particle
-    double eta_max,  // maximal pseudorapidity of the produced particle
+    double mass,    // of the produced particle
+    double charge,  // of the produced particle
+    double pT_min,  // minimal transverse momentum of the produced particle
+    double eta_max, // maximal pseudorapidity of the produced particle
     const std::function<Integrator (unsigned)>& = default_integrator,
     unsigned integration_level = 0
 );
@@ -136,8 +136,8 @@ XSection pp_to_ppll(
 // respected
 XSection pp_to_ppll_b(
     double collision_energy,
-    double mass,     // of the produced particle
-    unsigned charge, // of the produced particle
+    double mass,   // of the produced particle
+    double charge, // of the produced particle
     const std::function<Integrator (unsigned)>& = default_integrator,
     unsigned integration_level = 0
 );
@@ -156,10 +156,10 @@ pp_to_ppll_b_integrator(unsigned level = 0);
 // respected
 XSection pp_to_ppll_b(
     double collision_energy,
-    double mass,     // of the produced particle
-    unsigned charge, // of the produced particle
-    double pT_min,   // minimal transverse momentum of the produced particle
-    double eta_max,  // maximal pseudorapidity of the produced particle
+    double mass,    // of the produced particle
+    double charge,  // of the produced particle
+    double pT_min,  // minimal transverse momentum of the produced particle
+    double eta_max, // maximal pseudorapidity of the produced particle
     const std::function<Integrator (unsigned)>& = pp_to_ppll_b_integrator(0),
     unsigned integration_level = 0
 );

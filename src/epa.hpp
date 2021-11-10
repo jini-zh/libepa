@@ -418,15 +418,15 @@ xsection_fid_b(
 // collisions (the Breit-Wheeler cross section). `mass' and `charge' are the
 // fermion mass and charge.
 std::function<double (double /* s */)>
-photons_to_fermions(double mass, unsigned charge = 1);
+photons_to_fermions(double mass, double charge = 1);
 // Same differentiated with respect to pT --- fermion transverse momentum.
 std::function<double (double /* s */, double /* pT */)>
-photons_to_fermions_pT(double mass, unsigned charge = 1);
+photons_to_fermions_pT(double mass, double charge = 1);
 // Same for polarized photons
 std::function<Polarization (double /* s */)>
-photons_to_fermions_b(double mass, unsigned charge = 1);
+photons_to_fermions_b(double mass, double charge = 1);
 //
 std::function<Polarization (double /* s */, double /* pT */)>
-photons_to_fermions_pT_b(double mass, unsigned charge = 1);
+photons_to_fermions_pT_b(double mass, double charge = 1);
 
 }; // namespace epa

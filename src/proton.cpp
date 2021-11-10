@@ -317,7 +317,7 @@ Luminosity_b pp_luminosity_b(
 XSection pp_to_ppll(
     double collision_energy,
     double mass,
-    unsigned charge,
+    double charge,
     Integrator integrate
 ) {
   return xsection(
@@ -337,7 +337,7 @@ XSection pp_to_ppll(
 XSection pp_to_ppll(
     double collision_energy,
     double mass,
-    unsigned charge,
+    double charge,
     double pT_min,
     double eta_max,
     const std::function<Integrator (unsigned)>& integrator,
@@ -371,7 +371,7 @@ XSection pp_to_ppll(
 XSection pp_to_ppll_b(
     double collision_energy,
     double mass,
-    unsigned charge,
+    double charge,
     const std::function<Integrator (unsigned)>& integrator,
     unsigned level
 ) {
@@ -393,7 +393,7 @@ XSection pp_to_ppll_b(
 XSection pp_to_ppll_b(
     double collision_energy,
     double mass,
-    unsigned charge,
+    double charge,
     double pT_min,
     double eta_max,
     const std::function<Integrator (unsigned)>& integrator,

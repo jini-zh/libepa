@@ -920,7 +920,7 @@ xsection_fid_b(
 };
 
 std::function<double (double)>
-photons_to_fermions(double mass, unsigned charge) {
+photons_to_fermions(double mass, double charge) {
   double c = 4 * pi * sqr(sqr(charge) * alpha) * barn;
   double m2 = sqr(mass);
   return [=](double s) -> double {
@@ -934,7 +934,7 @@ photons_to_fermions(double mass, unsigned charge) {
 };
 
 std::function<Polarization (double)>
-photons_to_fermions_b(double mass, unsigned charge) {
+photons_to_fermions_b(double mass, double charge) {
   double c = 4 * pi * sqr(sqr(charge) * alpha) * barn;
   double m2 = sqr(mass);
   return [=](double s) -> Polarization {
@@ -953,7 +953,7 @@ photons_to_fermions_b(double mass, unsigned charge) {
 static
 std::function<double (double, double)>
 photons_to_fermions_pT_x(
-    double mass, unsigned charge, double polarization_factor
+    double mass, double charge, double polarization_factor
 ) {
   double c = 8 * pi * sqr(sqr(charge) * alpha) * barn;
   double m2 = sqr(mass);
@@ -969,12 +969,12 @@ photons_to_fermions_pT_x(
 };
 
 std::function<double (double, double)>
-photons_to_fermions_pT(double mass, unsigned charge) {
+photons_to_fermions_pT(double mass, double charge) {
   return photons_to_fermions_pT_x(mass, charge, 1);
 };
 
 std::function<Polarization (double, double)>
-photons_to_fermions_pT_b(double mass, unsigned charge) {
+photons_to_fermions_pT_b(double mass, double charge) {
   return [
     parallel      = photons_to_fermions_pT_x(mass, charge, 2),
     perpendicular = photons_to_fermions_pT_x(mass, charge, 0)
