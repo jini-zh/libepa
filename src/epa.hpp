@@ -206,7 +206,7 @@ Spectrum_b spectrum_b_dipole(unsigned Z, double gamma, double lambda2);
 //     integration is something like 1e-3 times the value of this parameter.
 Spectrum_b
 spectrum_b_function1d_g(
-    unsigned z,
+    unsigned Z,
     double gamma,
     std::shared_ptr<Function1d> form_factor,
     FormFactor rest_form_factor = FormFactor(),
@@ -223,7 +223,7 @@ spectrum_b_function1d_g(
 // See spectrum_b_function1d_g for the description of arguments.
 Spectrum_b
 spectrum_b_function1d_s(
-    unsigned z,
+    unsigned Z,
     double gamma,
     std::shared_ptr<Function1d> form_factor,
     FormFactor rest_form_factor = FormFactor(),
@@ -237,7 +237,7 @@ spectrum_b_function1d_s(
 // spectrum_b_function1d_s in the case of convergency failure.
 Spectrum_b
 spectrum_b_function1d(
-    unsigned z,
+    unsigned Z,
     double gamma,
     std::shared_ptr<Function1d> form_factor,
     FormFactor rest_form_factor = FormFactor(),
