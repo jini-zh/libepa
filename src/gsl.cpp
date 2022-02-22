@@ -1,6 +1,6 @@
 #include <gsl/gsl_errno.h>
 
-#include "gsl.hpp"
+#include <epa/gsl.hpp>
 
 namespace gsl {
 

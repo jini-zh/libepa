@@ -1,4 +1,4 @@
-#include "proton.hpp"
+#include <epa/proton.hpp>
 
 #include <iostream>
 #include <list>

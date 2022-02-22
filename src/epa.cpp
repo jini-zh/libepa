@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "epa.hpp"
+#include <epa/epa.hpp>
 
 namespace epa {
 

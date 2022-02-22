@@ -28,7 +28,7 @@ ratio_b.txt: ratio integrated_b.txt
 	./$^ > $@ || rm $@
 
 atlas: atlas.cpp ../common.cpp ../../libepa.so
-	$(cxx) -iquote ../../src $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
+	$(cxx) -I ../../include $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
 
 clean:
 	rm atlas{,.pdf} atlas-plot.{tex,pdf} {differential,integrated,ratio}{,_b}.txt 2> /dev/null; true

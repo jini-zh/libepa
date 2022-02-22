@@ -19,7 +19,7 @@ ratio.txt: ../ratio xsection.txt xsection_b.txt
 	$< xsection_b.txt xsection.txt > $@ || rm $@
 
 xsection: xsection.cpp ../common.cpp ../../libepa.so
-	$(cxx) -iquote ../../src $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
+	$(cxx) -I ../../include $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
 
 clean:
 	rm xsection{,.pdf} xsection-plot.{tex,pdf} {xsection{,_b},ratio}.txt 2> /dev/null; true

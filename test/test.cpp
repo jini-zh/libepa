@@ -5,7 +5,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "proton.hpp"
+#include <epa/proton.hpp>
 #include "a1.cpp"
 
 namespace epa {

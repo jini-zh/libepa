@@ -1,6 +1,6 @@
 #pragma once
 
-#include "epa.hpp"
+#include <epa/epa.hpp>
 
 namespace epa {
 

@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "algorithms.hpp"
-#include "gsl.hpp"
+#include <epa/algorithms.hpp>
+#include <epa/gsl.hpp>
 
 namespace epa {
 

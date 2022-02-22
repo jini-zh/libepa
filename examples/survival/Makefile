@@ -28,7 +28,7 @@ survival.txt: ../ratio luminosity.txt luminosity_b.txt
 	$< luminosity_b.txt luminosity.txt > $@
 
 luminosity: luminosity.cpp ../common.cpp ../../libepa.so
-	$(cxx) -iquote ../../src $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
+	$(cxx) -I ../../include $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
 
 clean:
 	rm luminosity survival.pdf survival-plot.{tex,pdf} {survival,luminosity{,_b},parallel,perpendicular}.txt 2>/dev/null; true

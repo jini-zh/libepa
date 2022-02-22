@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "algorithms.hpp"
+#include <epa/algorithms.hpp>
 
 namespace epa {
 
