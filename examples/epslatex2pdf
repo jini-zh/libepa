@@ -69,6 +69,7 @@ in="$tmp/in.tex"
     echo '\usepackage[utf8]{inputenc}'
     echo '\usepackage[russian]{babel}'
   fi
+  echo '\usepackage{xcolor}'
   echo '\usepackage{graphicx}'
   echo '\usepackage{amsmath}'
   if [[ -n $sans ]]; then
