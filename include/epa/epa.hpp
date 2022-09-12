@@ -10,7 +10,7 @@ namespace epa {
 const double pi              = M_PI;
 const double alpha           = 7.2973525693e-3;        // [1] (fine structure constant)
 const double planck          = 0.1973269804;           // GeV fm [1]
-const double barn            = sqr(planck) * 1e-2;     // (GeV * barn)^{-2}
+const double barn            = sqr(planck) * 1e-2;     // GeV^2 * barn
 const double fm              = 1. / (10 * sqrt(barn)); // (GeV fm)^{-1}
 const double electron_charge = 1.602176634e-19;        // C [1]
 const double light_speed     = 299792458;              // m/s [1]
