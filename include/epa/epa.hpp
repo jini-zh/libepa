@@ -29,7 +29,7 @@ extern bool print_backtrace;
 #define EPA_TRY try {
 #define EPA_BACKTRACE(message, ...) \
   } catch (std::exception&) { \
-    if (print_backtrace) fprintf(stderr, message "\n", __VA_ARGS__); \
+    if (epa::print_backtrace) fprintf(stderr, message "\n", __VA_ARGS__); \
     throw; \
   }
 
