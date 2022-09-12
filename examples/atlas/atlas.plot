@@ -45,7 +45,7 @@ set ytics 0.8, 0.1, 1.1
 set format x
 set format y '%3.1f'
 
-plot [10:] [0.8:1.2] \
+plot [10:] [0.8:1.3] \
      'experiment.txt' u 1:(1):($3/$2) w yerror notitle, \
      'ratio.txt'      u 1:2 w steps lc rgb 'red' dt (20, 5) notitle, \
      'ratio_b.txt'    u 1:2 w steps lc rgb 'black' notitle

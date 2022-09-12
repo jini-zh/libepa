@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE(epa_spectra) {
         13e3 / 2 / proton_mass,
         form_factor,
         proton_dipole_form_factor(0.67),
-        proton_dipole_spectrum_b(13e3 / 2, 0.67),
+        proton_dipole_spectrum_b_Dirac(13e3 / 2, 0.67),
         5 * proton_radius
       )(fm, 1e2) == 2.7996649347083567e-07
   );
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(epa_spectra) {
         13e3 / 2 / proton_mass,
         form_factor,
         proton_dipole_form_factor(0.67),
-        proton_dipole_spectrum_b(13e3 / 2, 0.67),
+        proton_dipole_spectrum_b_Dirac(13e3 / 2, 0.67),
         5 * proton_radius
       )(fm, 1e2) == 2.8030979763022275e-07
   );
@@ -179,11 +179,21 @@ BOOST_AUTO_TEST_SUITE_END(); // fixture
 BOOST_AUTO_TEST_CASE(epa_luminosity) {
   BOOST_TEST(
       luminosity_y(proton_dipole_spectrum(13e3 / 2))(100, 1)
+      == 4.8783899969641711e-06
+  );
+
+  BOOST_TEST(
+      luminosity_y(proton_dipole_spectrum_Dirac(13e3 / 2))(100, 1)
       == 4.6213647977030971e-06
   );
 
   BOOST_TEST(
       luminosity(proton_dipole_spectrum(13e3 / 2))(100)
+      == 2.6904531638939847e-05
+  );
+
+  BOOST_TEST(
+      luminosity(proton_dipole_spectrum_Dirac(13e3 / 2))(100)
       == 2.5099166887786259e-05
   );
 };
@@ -198,7 +208,7 @@ BOOST_AUTO_TEST_CASE(epa_xsection) {
         100,
         10,
         2.5
-      )(250) == 1.125931637782495e-17
+      )(250) == 1.2127955941113193e-17
   );
 
   {
@@ -216,22 +226,25 @@ BOOST_AUTO_TEST_CASE(proton_test, *boost::unit_test::tolerance(1e-5)) {
       proton_dipole_form_factor()(1e1) == 0.008916207850484446
   );
   BOOST_TEST(
-      proton_dipole_spectrum(13e3 / 2)(1e2) == 0.00012672479265553522
+      proton_dipole_spectrum(13e3 / 2)(1e2) == 0.00013072158743362693
   );
   BOOST_TEST(
-      proton_dipole_spectrum_b(13e3 / 2)(fm, 1e2) == 2.2984963313647681e-07
+      proton_dipole_spectrum_Dirac(13e3 / 2)(1e2) == 0.00012672479265553522
+  );
+  BOOST_TEST(
+      proton_dipole_spectrum_b_Dirac(13e3 / 2)(fm, 1e2) == 2.2984963313647681e-07
   );
 
-  BOOST_TEST(pp_luminosity(13e3)(100) == 2.5099166887786259e-05);
+  BOOST_TEST(pp_luminosity(13e3)(100) == 2.6904531638939847e-05);
 
-  BOOST_TEST(pp_to_ppll(13e3, 100, 10, 2.5)(250) == 1.125931637782495e-17);
+  BOOST_TEST(pp_to_ppll(13e3, 100, 10, 2.5)(250) == 1.2127955941113193e-17);
 };
 
 BOOST_AUTO_TEST_SUITE(expensive, *boost::unit_test::disabled())
 
 BOOST_AUTO_TEST_CASE(test_luminosity_b, *boost::unit_test::tolerance(1e-5)) {
   BOOST_TEST(
-      luminosity_b(proton_dipole_spectrum_b(13e3 / 2), pp_upc_probability(13e3))(
+      luminosity_b(proton_dipole_spectrum_b_Dirac(13e3 / 2), pp_upc_probability(13e3))(
         100, { 1, 1 }
       ) == 2.2902623308910459e-05
   );

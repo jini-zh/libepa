@@ -12,6 +12,31 @@ FormFactor proton_dipole_form_factor(double lambda2) {
 
 Spectrum
 proton_dipole_spectrum(double energy, double lambda2) {
+  const double mu2m1 = sqr(proton_magnetic_moment) - 1;
+  double b = sqr(2 * proton_mass) / lambda2;
+
+  double b1 = b - 1;
+  double x  = mu2m1 / (b1 * b1 * b1);
+
+  double l0 = 4 - mu2m1 / b;
+  double l1 = x / b1;
+  double c0 = x * (11 + b * (-7   + 2   * b)) / 6 - 17. / 6;
+  double c1 = x * (5  + b * (-4.5 + 1.5 * b)) - 7;
+  double c2 = x * (3  + b * (-3   + b)) - 4;
+
+  double lg2 = lambda2 * sqr(energy / proton_mass);
+  return [=](double w) -> double {
+    double a = sqr(w) / lg2;
+    return (alpha / pi) / w * (
+          (1 + l0 * a) * log(1 + 1. / a)
+        - l1 * (1 + a / b) * log((a + b) / (a + 1))
+        + (c0 + a * (c1 + c2 * a)) / sqr(a + 1)
+    );
+  };
+};
+
+Spectrum
+proton_dipole_spectrum_Dirac(double energy, double lambda2) {
   double c = alpha / pi;
   double b = sqr(2 * proton_mass) / lambda2;
   const double mu = proton_magnetic_moment;
@@ -46,7 +71,7 @@ proton_dipole_spectrum(double energy, double lambda2) {
 };
 
 Spectrum_b
-proton_dipole_spectrum_b(double energy, double lambda2) {
+proton_dipole_spectrum_b_Dirac(double energy, double lambda2) {
   double c = alpha / sqr(pi);
   double m2 = sqr(2 * proton_mass);
   double gamma = energy / proton_mass;
@@ -277,7 +302,7 @@ Luminosity_y_b pp_luminosity_y_b(
     unsigned level
 ) {
   return ppx_luminosity_y_b(
-      proton_dipole_spectrum_b(0.5 * collision_energy),
+      proton_dipole_spectrum_b_Dirac(0.5 * collision_energy),
       pp_elastic_slope(collision_energy),
       integrator,
       level
@@ -291,8 +316,8 @@ Luminosity_fid_b pp_luminosity_fid_b(
 ) {
   double energy = 0.5 * collision_energy;
   return ppx_luminosity_fid_b(
-      proton_dipole_spectrum(energy),
-      proton_dipole_spectrum_b(energy),
+      proton_dipole_spectrum_Dirac(energy),
+      proton_dipole_spectrum_b_Dirac(energy),
       pp_elastic_slope(collision_energy),
       integrator,
       level
@@ -306,8 +331,8 @@ Luminosity_b pp_luminosity_b(
 ) {
   double energy = 0.5 * collision_energy;
   return ppx_luminosity_b(
-      proton_dipole_spectrum(energy),
-      proton_dipole_spectrum_b(energy),
+      proton_dipole_spectrum_Dirac(energy),
+      proton_dipole_spectrum_b_Dirac(energy),
       pp_elastic_slope(collision_energy),
       integrator,
       level

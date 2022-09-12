@@ -20,14 +20,26 @@ const double proton_dipole_form_factor_lambda2
 FormFactor
 proton_dipole_form_factor(double lambda2 = proton_dipole_form_factor_lambda2);
 
-// Equivalent photon spectra for a proton of given energy (dipole approximation).
+// Equivalent photon spectrum for a proton of given energy (dipole approximation).
+// Both Dirac and Pauli current terms are taken into account (F_1(Q^2) \psi
+// \gamma^\mu \psi + F_2(Q^2) / 2 m_p * \psi \sigma^{\mu \nu} q_\nu \psi).
+// This is the correct spectrum, but it has no _b counterpart.
 Spectrum
 proton_dipole_spectrum(
     double energy,
     double lambda2 = proton_dipole_form_factor_lambda2
 );
+
+// Equivalent photon spectrum for a proton of given energy (dipole
+// approximation, only the Dirac current term (F_1(Q^2) \psi \gamma^\mu \psi)
+// is taken into account).
+Spectrum
+proton_dipole_spectrum_Dirac(
+    double energy,
+    double lambda2 = proton_dipole_form_factor_lambda2
+);
 Spectrum_b
-proton_dipole_spectrum_b(
+proton_dipole_spectrum_b_Dirac(
     double energy,
     double lambda2 = proton_dipole_form_factor_lambda2
 );
