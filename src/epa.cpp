@@ -842,6 +842,7 @@ xsection_b(
   };
 };
 
+static
 XSection
 xsection_fid_x(
     std::function<
