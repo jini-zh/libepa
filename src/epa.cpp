@@ -846,39 +846,74 @@ static
 XSection
 xsection_fid_x(
     std::function<
-      double (double /* sqrt(s) */, double /* pT */, double /* y_max */)
+      double (
+        double /* sqrt(s) */,
+        double /* pT */,
+        double /* y_min */,
+        double /* y_max */
+      )
     > xl, // cross section * luminosity
     double           mass,
     double           pT_min,
     double           eta_max,
+    double           w1_min,
+    double           w1_max,
+    double           w2_min,
+    double           w2_max,
     Integrator       integrate
 ) {
-  auto E = std::make_shared<double>();
+  struct Env {
+    double energy;
+    double y_min;
+    double y_max;
+  };
+
+  auto env = std::make_shared<Env>();
 
   double m2 = sqr(mass);
   double sinh_eta = sinh(eta_max);
   double cosh_eta = cosh(eta_max);
   double cosh2_eta = sqr(cosh_eta);
+  double E_min = sqrt(w1_min * w2_min);
+  double E_max = sqrt(w1_max * w2_max);
 
   auto fpT = [=, xl = std::move(xl)](double pT) -> double {
     EPA_TRY
       double pT2 = sqr(pT);
       double p = pT2 + m2;
-      double r = 1 - p / sqr(*E);
+      double r = 1 - p / sqr(env->energy);
       if (r <= 0) return infinity;
       double y = asinh(
-          pT * *E / p * (sinh_eta - sqrt((cosh2_eta + m2 / pT2) * r))
+          pT * env->energy / p * (sinh_eta - sqrt((cosh2_eta + m2 / pT2) * r))
       );
-      return xl(2 * *E, pT, y);
+      double y_min = std::max(-y, env->y_min);
+      double y_max = std::min( y, env->y_max);
+      if (y_min >= y_max) return 0;
+      return xl(2 * env->energy, pT, y_min, y_max);
     EPA_BACKTRACE("lambda (pT) %e", pT);
    };
 
   return [=, fpT = std::move(fpT)](double rs) -> double {
     EPA_TRY
-      *E = 0.5 * rs;
-      double v = sqrt(sqr(*E) - m2);
+      double E = 0.5 * rs;
+      if (E <= E_min || E >= E_max) return 0;
+
+      double v = sqrt(sqr(E) - m2);
       double u = std::max(pT_min, v / cosh_eta);
       if (u >= v) return 0;
+
+      env->energy = E;
+      env->y_min = log(std::max(w1_min / E, E / w2_max));
+      env->y_max = log(std::min(w1_max / E, E / w2_min));
+
+      // XXX: mass is neglected!
+      double y = std::max(env->y_min, -env->y_max);
+      if (y > 0) {
+        if (y >= eta_max) return 0;
+        u = std::max(u, E / cosh(y - eta_max));
+        if (u >= v) return 0;
+      };
+
       return integrate(fpT, u, v);
     EPA_BACKTRACE("lambda (rs) %e\n  defined in xsection_fid_x", rs);
   };
@@ -891,16 +926,25 @@ xsection_fid(
     double mass,
     double pT_min,
     double eta_max,
+    double w1_min,
+    double w1_max,
+    double w2_min,
+    double w2_max,
     Integrator integrate
 ) {
   return xsection_fid_x(
       [xsection = std::move(xsection), luminosity = std::move(luminosity)]
-      (double rs, double pT, double y_max) -> double {
-        return 2 * xsection(sqr(rs), pT) * luminosity(rs, -y_max, 0);
+      (double rs, double pT, double y_min, double y_max) -> double {
+        return xsection(sqr(rs), pT)
+             * (
+                 y_min == -y_max
+                 ? 2 * luminosity(rs, y_min, 0)
+                 : luminosity(rs, y_min, y_max)
+               );
       },
       mass,
-      pT_min,
-      eta_max,
+      pT_min, eta_max,
+      w1_min, w1_max, w2_min, w2_max,
       std::move(integrate)
   );
 };
@@ -912,16 +956,22 @@ xsection_fid_b(
     double mass,
     double pT_min,
     double eta_max,
+    double w1_min,
+    double w1_max,
+    double w2_min,
+    double w2_max,
     Integrator integrate
 ) {
   return xsection_fid_x(
       [xsection = std::move(xsection), luminosity = std::move(luminosity)]
-      (double rs, double pT, double y_max) -> double {
-        return 2 * luminosity(rs, xsection(sqr(rs), pT), -y_max, 0);
+      (double rs, double pT, double y_min, double y_max) -> double {
+        return y_min == -y_max
+             ? 2 * luminosity(rs, xsection(sqr(rs), pT), y_min, 0)
+             : luminosity(rs, xsection(sqr(rs), pT), y_min, y_max);
       },
       mass,
-      pT_min,
-      eta_max,
+      pT_min, eta_max,
+      w1_min, w1_max, w2_min, w2_max,
       std::move(integrate)
   );
 };

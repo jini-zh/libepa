@@ -365,18 +365,19 @@ polarizations.
 
 Differential fiducial cross section for the process $AB \to AB \chi^+ \chi^-$
 with the non-electromagnetic interactions neglected and with the constraints on
-the phase space $p_T^\pm > \hat p_T$, $\abs{\eta^\pm} < \hat \eta$, where
-$p_T^\pm$ and $\eta^\pm$ are the transverse momentum and pseudorapidity of
-$\chi^\pm$:
+the phase space $p_T^\pm > \hat p_T$, $\abs{\eta^\pm} < \hat \eta$, $\omega_{1,
+\text{min}} < \omega_1 < \omega_{1, \text{max}}$, $\omega_{2, \text{min}} <
+\omega_2 < \omega_{2, \text{max}}$, where $p_T^\pm$ and $\eta^\pm$ are the
+transverse momentum and pseudorapidity of $\chi^\pm$, and $\omega_{1,
+\text{min}}$, $\omega_{1, \text{max}}$, $\omega_{2, \text{min}}$, $\omega_{2,
+\text{max}}$ are the limits on the photon energies:\footnote{The third argument
+to $\max$ in~\eqref{pt-min} currently neglects the mass of $\chi$. To be
+updated.}
 \begin{gather}
   \frac{\mathrm{d} \sigma_\text{fid.}(AB \to AB \chi^+ \chi^-)}
        {\mathrm{d} \sqrt{s}}
-  = \int\limits_{
-      \max \left(
-        \hat p_T,
-        \frac{\sqrt{s}}{2 \cosh \hat \eta} \sqrt{1 - \frac{4 m_\chi^2}{s}}
-      \right)
-    }^{\frac{\sqrt{s}}{2} \sqrt{1 - \frac{4 m_\chi^2}{s}}}
+  = \int\limits_{\tilde p_T}
+               ^{\frac{\sqrt{s}}{2} \sqrt{1 - \frac{4 m_\chi^2}{s}}}
       \mathrm{d} p_T
       \, \frac{\mathrm{d} \sigma(\gamma \gamma \to \chi^+ \chi^-)}
               {\mathrm{d} p_T}
@@ -384,7 +385,7 @@ $\chi^\pm$:
   \\
   \frac{\mathrm{d} \hat L}{\mathrm{d} \sqrt{s}}
   = \frac{\sqrt{s}}{2}
-    \int\limits_{-\hat y}^{\hat y} \mathrm{d} y
+    \int\limits_{\max(-\hat y, \tilde y)}^{\min(\hat y, \tilde Y)} \mathrm{d} y
     \, n \left( \frac{\sqrt{s}}{2} \mathrm{e}^y \right)
     \, n \left( \frac{\sqrt{s}}{2} \mathrm{e}^{-y} \right),
   \\
@@ -394,7 +395,28 @@ $\chi^\pm$:
       - \sqrt{\cosh^2 \hat \eta + \frac{m_\chi^2}{p_T^2}}
         \cdot \sqrt{1 - \frac{4 (p_T^2 + m_\chi^2)}{s}}
     \right)
-  \right].
+  \right],
+  \\
+  \tilde p_T
+  = \max \left(
+      \hat p_T,
+      \frac{\sqrt{s}}{2 \cosh \hat \eta} \sqrt{1 - \frac{4 m_\chi^2}{s}},
+      \frac{\sqrt{s}}{2 \cosh(\max(\tilde y, -\tilde Y) - \hat \eta)}
+    \right),
+    \label{pt-min}
+  \\
+  \begin{aligned}
+    \\
+    \tilde y
+    &= \ln \max \left(
+         \frac{2 \omega_{1, \text{min}}}{s}, \frac{s}{2 \omega_{2, \text{max}}}
+       \right),
+    \\
+    \tilde Y
+    &= \ln \max \left(
+         \frac{2 \omega_{1, \text{max}}}{s}, \frac{s}{2 \omega_{2, \text{min}}}
+       \right).
+  \end{aligned}
 \end{gather}
 
 Differential fiducial cross section for the process $AB \to AB \chi^+ \chi^-$
@@ -406,12 +428,8 @@ $\chi^\pm$:
   \begin{multlined}
     \frac{\mathrm{d} \sigma_\text{fid.}(AB \to AB \chi^+ \chi^-)}
          {\mathrm{d} \sqrt{s}}
-    = \\ \int\limits_{
-        \max \left(
-          \hat p_T,
-          \frac{\sqrt{s}}{2 \cosh \hat \eta} \sqrt{1 - \frac{4 m_\chi^2}{s}}
-        \right)
-      }^{\frac{\sqrt{s}}{2} \sqrt{1 - \frac{4 m_\chi^2}{s}}}
+    = \\ \int\limits_{\tilde p_T}
+                    ^{\frac{\sqrt{s}}{2} \sqrt{1 - \frac{4 m_\chi^2}{s}}}
         \mathrm{d} p_T
         \left(
             \frac{\mathrm{d} \sigma_\parallel(\gamma \gamma \to \chi^+ \chi^-)}

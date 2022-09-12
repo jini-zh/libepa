@@ -374,11 +374,12 @@ xsection_b(
     Luminosity_b luminosity
 );
 
-// Fiducial cross section for the production of a pair of charged particles in
-// ultraperipheral collision with non-electromagnetic interactions neglected
-// and with the constraints on the phase space pT > pT_max, abs(eta) < eta_max,
-// where pT and eta are the transverse momentum and pseudorapidity of each
-// particle.
+// Differential fiducial cross section for the production of a pair of charged
+// particles in ultraperipheral collision with non-electromagnetic interactions
+// neglected and with the constraints on the phase space pT > pT_max, abs(eta)
+// < eta_max, w1_min < w1 < w1_max, w2_min < w2 < w2_max, where pT and eta are
+// the transverse momentum and pseudorapidity of each particle, w1, w2 are the
+// energy losses of the colliding particles (photons energies).
 XSection
 xsection_fid(
     // differential with respect to pT cross section for the pair production in
@@ -388,14 +389,56 @@ xsection_fid(
     double mass, // the mass of the charged particle
     double pT_min,
     double eta_max,
+    double w1_min, // use 0 for no limit
+    double w1_max, // use infinity for no limit
+    double w2_min, // use 0 for no limit
+    double w2_max, // use infinity for no limit
     Integrator = default_integrator(0)
 );
 
-// Fiducial cross section for the production of a pair of charged particles in
-// ultraperipheral collision with non-electromagnetic interactions respected
-// and with the constraints on the phase space pT > pT_max, abs(eta) < eta_max,
-// where pT and eta are the transverse momentum and pseudorapidity of each
-// particle.
+// same with symmetric bounds on energy losses of the colliding particles
+inline
+XSection
+xsection_fid(
+    std::function<double (double /* s */, double /* pT */)> xsection_pT,
+    Luminosity_fid luminosity,
+    double mass,
+    double pT,
+    double eta_max,
+    double w_min,
+    double w_max,
+    Integrator integrator = default_integrator(0)
+) {
+  return xsection_fid(
+      xsection_pT, luminosity,
+      mass,
+      pT, eta_max,
+      w_min, w_max, w_min, w_max,
+      integrator
+  );
+};
+
+// same with no bounds on energy losses of the colliding particles
+inline
+XSection
+xsection_fid(
+    std::function<double (double /* s */, double /* pT */)> xsection_pT,
+    Luminosity_fid luminosity,
+    double mass,
+    double pT,
+    double eta_max,
+    Integrator integrator = default_integrator(0)
+) {
+  return xsection_fid(
+      xsection_pT, luminosity,
+      mass,
+      pT, eta_max,
+      0, infinity, 0, infinity,
+      integrator
+  );
+};
+
+// same with non-electromagnetic interactions respected
 //
 // Note that the photon-photon differential cross section is usually divergent
 // at pT = 0. GSL CQUAD integration method converges better in this case than
@@ -409,8 +452,54 @@ xsection_fid_b(
     double mass, // the mass of the charged particle
     double pT_min,
     double eta_max,
+    double w1_min,
+    double w1_max,
+    double w2_min,
+    double w2_max,
     Integrator = gsl_cquad_integrator(0u)
 );
+
+// same with symmetric bounds on energy losses of the colliding particles
+inline
+XSection
+xsection_fid_b(
+    std::function<Polarization (double /* s */, double /* pT */)> xsection_pT,
+    Luminosity_fid_b luminosity,
+    double mass,
+    double pT_min,
+    double eta_max,
+    double w_min,
+    double w_max,
+    Integrator integrator = gsl_cquad_integrator(0u)
+) {
+  return xsection_fid_b(
+      xsection_pT, luminosity,
+      mass,
+      pT_min, eta_max,
+      w_min, w_max, w_min, w_max,
+      integrator
+  );
+};
+
+// same with no bounds on energy losses of the colliding particles
+inline
+XSection
+xsection_fid_b(
+    std::function<Polarization (double /* s */, double /* pT */)> xsection_pT,
+    Luminosity_fid_b luminosity,
+    double mass,
+    double pT_min,
+    double eta_max,
+    Integrator integrator = gsl_cquad_integrator(0u)
+) {
+  return xsection_fid_b(
+      xsection_pT, luminosity,
+      mass,
+      pT_min, eta_max,
+      0, infinity, 0, infinity,
+      integrator
+  );
+};
 
 // Cross section for the production of a pair of fermions in photon-photon
 // collisions (the Breit-Wheeler cross section). `mass' and `charge' are the
