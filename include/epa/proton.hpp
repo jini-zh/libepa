@@ -20,7 +20,7 @@ const double proton_dipole_form_factor_lambda2
 FormFactor
 proton_dipole_form_factor(double lambda2 = proton_dipole_form_factor_lambda2);
 
-// Equivalent photon spectra for a proton of given eneregy (dipole approximation).
+// Equivalent photon spectra for a proton of given energy (dipole approximation).
 Spectrum
 proton_dipole_spectrum(
     double energy,
