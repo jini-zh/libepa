@@ -191,8 +191,8 @@ ppx_luminosity_fid_b(
 ) {
   struct Env {
     double rs;
-    double xmin;
-    double xmax;
+    double x_min;
+    double x_max;
     double b1;
     double b2;
     double psum;
@@ -217,7 +217,7 @@ ppx_luminosity_fid_b(
   ](double b2) -> double {
     EPA_TRY
       env->b2 = b2;
-      return b2 * integrate(fx, env->xmin, env->xmax)
+      return b2 * integrate(fx, env->x_min, env->x_max)
            * ppx_luminosity_internal(
                env->b1, b2, B, env->psum, env->pdifference
              );
@@ -239,20 +239,20 @@ ppx_luminosity_fid_b(
     fb1 = std::move(fb1),
     integrate = integrator(level)
   ](
-      double rs, Polarization polarization, double ymin, double ymax
+      double rs, Polarization polarization, double y_min, double y_max
   ) -> double {
     EPA_TRY
       env->rs          = 0.5 * rs;
-      env->xmin        = exp(2 * ymin);
-      env->xmax        = exp(2 * ymax);
+      env->x_min       = exp(2 * y_min);
+      env->x_max       = exp(2 * y_max);
       env->psum        = polarization.parallel + polarization.perpendicular;
       env->pdifference = polarization.parallel - polarization.perpendicular;
-      return (l ? 0.5 * env->psum * l(rs, ymin, ymax) : 0)
+      return (l ? 0.5 * env->psum * l(rs, y_min, y_max) : 0)
              + sqr(pi) * env->rs * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
-        "lambda (rs, polarization, ymin, ymax) %e, {%e, %e}, %e, %e\n"
+        "lambda (rs, polarization, y_min, y_max) %e, {%e, %e}, %e, %e\n"
         "  defined in ppx_luminosity_fid",
-        rs, polarization.parallel, polarization.perpendicular, ymin, ymax
+        rs, polarization.parallel, polarization.perpendicular, y_min, y_max
     );
   };
 };

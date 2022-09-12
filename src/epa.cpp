@@ -569,23 +569,23 @@ Luminosity_fid luminosity_fid(Spectrum nA, Spectrum nB, Integrator integrate) {
   };
 
   return [E, fx = std::move(fx), integrate = std::move(integrate)](
-      double rs, double ymin, double ymax
+      double rs, double y_min, double y_max
   ) -> double {
     EPA_TRY
       *E  = 0.5 * rs;
-      return 0.25 * rs * integrate(fx, exp(2 * ymin), exp(2 * ymax));
+      return 0.25 * rs * integrate(fx, exp(2 * y_min), exp(2 * y_max));
     EPA_BACKTRACE(
-        "lambda (rs, ymin, ymax) %e, %e, %e\n  defined in epa::luminosity_fid",
-        rs, ymin, ymax
+        "lambda (rs, y_min, y_max) %e, %e, %e\n  defined in epa::luminosity_fid",
+        rs, y_min, y_max
     );
   };
 };
 
 Luminosity_fid luminosity_fid(Spectrum n, Integrator integrate) {
   return [l = luminosity_fid(n, n, std::move(integrate))](
-      double rs, double ymin, double ymax
+      double rs, double y_min, double y_max
   ) -> double {
-    return ymin == -ymax ? 2 * l(rs, ymin, 0) : l(rs, ymin, ymax);
+    return y_min == -y_max ? 2 * l(rs, y_min, 0) : l(rs, y_min, y_max);
   };
 };
 
@@ -696,8 +696,8 @@ luminosity_fid_b(
   // order of integration
   struct Env {
     double E;
-    double xmin;
-    double xmax;
+    double x_min;
+    double x_max;
     double b1;
     double b2;
     Polarization polarization;
@@ -732,7 +732,7 @@ luminosity_fid_b(
   ](double b2) -> double {
     EPA_TRY
       env->b2 = b2;
-      return b2 * integrate(fx, env->xmin, env->xmax) * integrate(fphi, 0, 2 * pi);
+      return b2 * integrate(fx, env->x_min, env->x_max) * integrate(fphi, 0, 2 * pi);
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
 
@@ -748,19 +748,19 @@ luminosity_fid_b(
   return [env, fb1 = std::move(fb1), integrate = integrator(level)](
         double rs,
         Polarization polarization,
-        double ymin,
-        double ymax
+        double y_min,
+        double y_max
   ) -> double {
     EPA_TRY
       env->E             = 0.5 * rs;
-      env->xmin          = exp(2 * ymin);
-      env->xmax          = exp(2 * ymax);
+      env->x_min         = exp(2 * y_min);
+      env->x_max         = exp(2 * y_max);
       env->polarization  = polarization;
       return env->E * pi * integrate(fb1, 0, infinity);
     EPA_BACKTRACE(
-        "lambda (rs, polarization, ymin, ymax) %e, {%e, %e}, %e, %e\n"
+        "lambda (rs, polarization, y_min, y_max) %e, {%e, %e}, %e, %e\n"
         "  defined in luminosity_fid_b",
-        rs, polarization.parallel, polarization.perpendicular, ymin, ymax
+        rs, polarization.parallel, polarization.perpendicular, y_min, y_max
     );
   };
 };
@@ -775,12 +775,12 @@ luminosity_fid_b(
   return [l = luminosity_fid_b(n, n, std::move(upc), integrator, level)](
       double rs,
       Polarization polarization,
-      double ymin,
-      double ymax
+      double y_min,
+      double y_max
   ) -> double {
-    return ymin == -ymax
-         ? 2 * l(rs, polarization, ymin, 0)
-         : l(rs, polarization, ymin, ymax);
+    return y_min == -y_max
+         ? 2 * l(rs, polarization, y_min, 0)
+         : l(rs, polarization, y_min, y_max);
   };
 };
 
@@ -845,7 +845,7 @@ xsection_b(
 XSection
 xsection_fid_x(
     std::function<
-      double (double /* sqrt(s) */, double /* pT */, double /* ymax */)
+      double (double /* sqrt(s) */, double /* pT */, double /* y_max */)
     > xl, // cross section * luminosity
     double           mass,
     double           pT_min,
@@ -894,8 +894,8 @@ xsection_fid(
 ) {
   return xsection_fid_x(
       [xsection = std::move(xsection), luminosity = std::move(luminosity)]
-      (double rs, double pT, double ymax) -> double {
-        return 2 * xsection(sqr(rs), pT) * luminosity(rs, -ymax, 0);
+      (double rs, double pT, double y_max) -> double {
+        return 2 * xsection(sqr(rs), pT) * luminosity(rs, -y_max, 0);
       },
       mass,
       pT_min,
@@ -915,8 +915,8 @@ xsection_fid_b(
 ) {
   return xsection_fid_x(
       [xsection = std::move(xsection), luminosity = std::move(luminosity)]
-      (double rs, double pT, double ymax) -> double {
-        return 2 * luminosity(rs, xsection(sqr(rs), pT), -ymax, 0);
+      (double rs, double pT, double y_max) -> double {
+        return 2 * luminosity(rs, xsection(sqr(rs), pT), -y_max, 0);
       },
       mass,
       pT_min,

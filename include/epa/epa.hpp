@@ -251,7 +251,7 @@ typedef std::function<double (double /* sqrt(s) */, double /* y */)>
         Luminosity_y;
 // for calculating fiducial cross section
 typedef std::function<double (
-    double /* sqrt(s) */, double /* ymin */, double /* ymax */
+    double /* sqrt(s) */, double /* y_min */, double /* y_max */
 )> Luminosity_fid;
 
 // Photon-photon luminosity in ultraperipheral collisions of particles with EPA
@@ -290,8 +290,8 @@ typedef std::function<
   double (
       double, // sqrt(s)
       Polarization,
-      double, // ymin
-      double  // ymax
+      double, // y_min
+      double  // y_max
   )
 > Luminosity_fid_b;
 
