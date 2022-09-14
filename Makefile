@@ -2,12 +2,12 @@ CXXFLAGS ?= -O2 -pipe -march=native -fno-stack-protector
 
 cxx = $(CXX) $(CXXFLAGS) -std=gnu++17 -I include
 
-.PHONY: clean test all test_all
+.PHONY: clean test all test_all doc
 
 objects := gsl algorithms epa proton
 objects := $(foreach object,$(objects),src/$(object).o)
 
-all: libepa.so
+all: libepa.so doc
 
 libepa.so: $(objects)
 	$(cxx) -shared $^ -o $@
@@ -37,5 +37,11 @@ test/test.o: test/test.cpp test/a1.cpp include/epa/proton.hpp \
 test/a1.cpp: test/make-a1-form-factor test/a1.dat
 	$< test/a1.dat > $@
 
+doc: doc/notes.pdf
+
+doc/notes.pdf: doc/notes.tex
+	make -C doc
+
 clean:
 	rm $(objects) libepa.so 2> /dev/null; true
+	make -C doc clean
