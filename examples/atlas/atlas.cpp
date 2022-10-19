@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 
   if (npoints != 0 && step != 0) {
     std::cerr << "--npoints and --step parameters are incompatible\n";
-    return 0;
+    return 1;
   };
 
   if (npoints == 0) npoints = step == 0 ? 100 : (70. - 30.) / step;
