@@ -16,7 +16,7 @@ void usage(const char* argv0) {
        "  -n or --npoints:          number of points in the mass range\n"
        "  -s or --step:             points step in the mass range (GeV)\n"
        "  -l or --log:              assume logarithmic scale in the mass range (no argument)\n"
-    << "  -v or --verbose:          be verbose while calculating\n"
+       "  -v or --verbose:          be verbose while calculating\n"
        "  -S or --survival:         account for non-electromagnetic interactions\n"
        "  --rs-max:                 cut off integration over invariant mass (sqrt{s}) at this value (GeV)\n"
   ;
