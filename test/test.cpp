@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(epa_spectra, *boost::unit_test::tolerance(1e-5)) {
         82,
         5.02e3 / 2 / amu,
         [](double) -> double { return 1; },
-        gsl_integrator({ .relative_error = 1e-5 })
+        qag_integrator({ .relative_error = 1e-5 })
       )(1e2)
       == 111.73111054940296
   );
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(epa_spectra, *boost::unit_test::tolerance(1e-5)) {
         82,
         5.02e3 / 2 / amu,
         form_factor_monopole(sqr(80e-3)),
-        gsl_integrator({ .relative_error = 1e-3 })
+        qag_integrator({ .relative_error = 1e-3 })
       )(1e1 * fm, 1e2),
       1.4675442690292509e-06,
       1e-3
@@ -262,7 +262,7 @@ BOOST_AUTO_TEST_CASE(test_xsection_fid_b, *boost::unit_test::tolerance(1e-5)) {
         100,
         10,
         2.5,
-        gsl_cquad_integrator(0, 1e-2)
+        cquad_integrator(0, 1e-2)
       )(250) == 9.7800068779352812e-18
   );
 };
@@ -273,8 +273,8 @@ BOOST_AUTO_TEST_CASE(test_ppll_b, *boost::unit_test::tolerance(1e-5)) {
         13e3, 100, 10, 2.5,
         [](unsigned level) -> Integrator {
            return level == 0
-                  ? gsl_cquad_integrator(0, 1e-2)
-                  : gsl_integrator(level - 1);
+                  ? cquad_integrator(0, 1e-2)
+                  : qag_integrator(level - 1);
         }
       )(250) == 9.7800054406137899e-18
   );

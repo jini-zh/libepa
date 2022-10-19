@@ -161,7 +161,7 @@ XSection pp_to_ppll_b(
     unsigned integration_level = 0
 );
 // Default integrator for the following function.
-// Returns gsl_cquad_integrator for level `level'
+// Returns cquad_integrator for level `level'
 std::function<Integrator (unsigned)>
 pp_to_ppll_b_integrator(unsigned level = 0);
 // Fiducial cross section with non-electromagnetic interactions between protons

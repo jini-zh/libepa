@@ -129,7 +129,7 @@ int main(int argc, char** argv) {
   xsection.dump(std::cout);
 
   if (verbose) {
-    auto integrate = epa::gsl_integrator(0, 1e-2);
+    auto integrate = epa::qag_integrator(0, 1e-2);
     std::cerr
       << "Integrated cross section: "
       << (  integrate(xsection, grid.front().first, 30)

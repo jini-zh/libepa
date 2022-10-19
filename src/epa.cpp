@@ -15,12 +15,12 @@ gsl::integration::QAGMethod default_integration_method
   = gsl::integration::GAUSS41;
 
 std::function<Integrator (unsigned)> default_integrator
-  = static_cast<Integrator (*)(unsigned)>(gsl_integrator);
+  = static_cast<Integrator (*)(unsigned)>(qag_integrator);
 
 std::function<Integrator_I (unsigned)> default_integrator_i
-  = static_cast<Integrator_I (*)(unsigned)>(gsl_integrator_i);
+  = static_cast<Integrator_I (*)(unsigned)>(qag_integrator_i);
 
-Integrator gsl_integrator(
+Integrator qag_integrator(
     double absolute_error,
     double relative_error,
     gsl::integration::QAGMethod method,
@@ -45,8 +45,8 @@ Integrator gsl_integrator(
   };
 };
 
-Integrator gsl_integrator(const gsl_integrator_keys& keys) {
-  return gsl_integrator(
+Integrator qag_integrator(const qag_integrator_keys& keys) {
+  return qag_integrator(
       keys.absolute_error,
       keys.relative_error,
       keys.method,
@@ -54,21 +54,21 @@ Integrator gsl_integrator(const gsl_integrator_keys& keys) {
   );
 };
 
-Integrator gsl_integrator(unsigned level) {
-  return gsl_integrator(
+Integrator qag_integrator(unsigned level) {
+  return qag_integrator(
       default_absolute_error,
       default_relative_error * pow(default_error_step, level)
   );
 };
 
 std::function<Integrator (unsigned)>
-gsl_integrator_generator(double relative_error, double error_step) {
+qag_integrator_generator(double relative_error, double error_step) {
   return [=](unsigned level) -> Integrator {
-    return gsl_integrator(0, relative_error * pow(error_step, level));
+    return qag_integrator(0, relative_error * pow(error_step, level));
   };
 };
 
-Integrator gsl_cquad_integrator(
+Integrator cquad_integrator(
     double absolute_error,
     double relative_error,
     std::shared_ptr<gsl::integration::CQuadWorkspace> workspace
@@ -91,22 +91,22 @@ Integrator gsl_cquad_integrator(
   };
 };
 
-Integrator gsl_cquad_integrator(const gsl_cquad_integrator_keys& keys) {
-  return gsl_cquad_integrator(
+Integrator cquad_integrator(const cquad_integrator_keys& keys) {
+  return cquad_integrator(
       keys.absolute_error,
       keys.relative_error,
       keys.workspace
   );
 };
 
-Integrator gsl_cquad_integrator(unsigned level) {
-  return gsl_cquad_integrator(
+Integrator cquad_integrator(unsigned level) {
+  return cquad_integrator(
       default_absolute_error,
       default_relative_error * pow(default_error_step, level)
   );
 };
 
-Integrator_I gsl_integrator_i(
+Integrator_I qag_integrator_i(
     double relative_error,
     gsl::integration::QAGMethod method,
     std::shared_ptr<gsl::integration::QAGWorkspace> workspace
@@ -131,16 +131,16 @@ Integrator_I gsl_integrator_i(
   };
 };
 
-Integrator_I gsl_integrator_i(const gsl_integrator_keys& keys) {
-  return gsl_integrator_i(
+Integrator_I qag_integrator_i(const qag_integrator_keys& keys) {
+  return qag_integrator_i(
       keys.relative_error,
       keys.method,
       keys.workspace
   );
 };
 
-Integrator_I gsl_integrator_i(unsigned level) {
-  return gsl_integrator_i(default_relative_error * pow(default_error_step, level));
+Integrator_I qag_integrator_i(unsigned level) {
+  return qag_integrator_i(default_relative_error * pow(default_error_step, level));
 };
 
 FormFactor form_factor_monopole(double lambda2) {
@@ -794,11 +794,7 @@ luminosity_b(
 ) {
   return [
     l = luminosity_fid_b(
-            std::move(nA),
-            std::move(nB),
-            std::move(upc),
-            integrator,
-            level
+            std::move(nA), std::move(nB), std::move(upc), integrator, level
         )
   ](double rs, Polarization polarization) -> double {
     return l(rs, polarization, -infinity, infinity);

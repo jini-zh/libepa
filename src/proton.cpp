@@ -455,7 +455,7 @@ XSection pp_to_ppll_b(
 
 std::function<Integrator (unsigned)> pp_to_ppll_b_integrator(unsigned level) {
   return [=](unsigned l) -> Integrator {
-    return l == level ? gsl_cquad_integrator(level) : gsl_integrator(l);
+    return l == level ? cquad_integrator(level) : qag_integrator(l);
   };
 };
 

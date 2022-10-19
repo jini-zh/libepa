@@ -47,14 +47,14 @@ typedef std::function<
         > Integrator;
 
 // GSL quadratic adaptive integrator with default initialization
-Integrator gsl_integrator(
+Integrator qag_integrator(
     double absolute_error = default_absolute_error,
     double relative_error = default_relative_error,
     gsl::integration::QAGMethod = gsl::integration::GAUSS41,
     std::shared_ptr<gsl::integration::QAGWorkspace> = nullptr
 );
 
-struct gsl_integrator_keys {
+struct qag_integrator_keys {
   double absolute_error = default_absolute_error;
   double relative_error = default_relative_error;
   gsl::integration::QAGMethod method = gsl::integration::GAUSS41;
@@ -62,11 +62,11 @@ struct gsl_integrator_keys {
 };
 
 // Helper function --- with keyword parameters
-Integrator gsl_integrator(const gsl_integrator_keys&);
+Integrator qag_integrator(const qag_integrator_keys&);
 
 // GSL integrator with relative_error = default_relative_error *
 // default_error_step ** level
-Integrator gsl_integrator(unsigned level = 0);
+Integrator qag_integrator(unsigned level);
 
 // Default integrator generator
 extern std::function<Integrator (unsigned)> default_integrator;
@@ -74,27 +74,27 @@ extern std::function<Integrator (unsigned)> default_integrator;
 // GSL integrator generator with absolute_error = 0, relative_error =
 // relative_error * error_step ** level
 std::function<Integrator (unsigned)>
-gsl_integrator_generator(
+qag_integrator_generator(
     double relative_error = default_relative_error,
     double error_step     = default_error_step
 );
 
 // GSL CQUAD integrator with default initialization
-Integrator gsl_cquad_integrator(
+Integrator cquad_integrator(
     double absolute_error = default_absolute_error,
     double relative_error = default_relative_error,
     std::shared_ptr<gsl::integration::CQuadWorkspace> = nullptr
 );
 
-struct gsl_cquad_integrator_keys {
+struct cquad_integrator_keys {
   double absolute_error = default_absolute_error;
   double relative_error = default_relative_error;
   std::shared_ptr<gsl::integration::CQuadWorkspace> workspace;
 };
 
-Integrator gsl_cquad_integrator(const gsl_cquad_integrator_keys&);
+Integrator cquad_integrator(const cquad_integrator_keys&);
 
-Integrator gsl_cquad_integrator(unsigned level = 0);
+Integrator cquad_integrator(unsigned level = 0);
 
 // Integrator that takes one extra parameter: the value of the integral
 // calculated so far. It can be used to avoid extra work in calculations that
@@ -105,20 +105,20 @@ typedef std::function<
           double (const std::function<double (double)>&, double, double, double)
         > Integrator_I;
 
-Integrator_I gsl_integrator_i(
+Integrator_I qag_integrator_i(
     double relative_error = default_relative_error,
     gsl::integration::QAGMethod = gsl::integration::GAUSS41,
     std::shared_ptr<gsl::integration::QAGWorkspace> = nullptr
 );
 
-struct gsl_integrator_i_keys {
+struct qag_integrator_i_keys {
   double relative_error = default_relative_error;
   gsl::integration::QAGMethod method = gsl::integration::GAUSS41;
   std::shared_ptr<gsl::integration::QAGWorkspace> workspace;
 };
 
-Integrator_I gsl_integrator_i(const gsl_integrator_keys&);
-Integrator_I gsl_integrator_i(unsigned level = 0);
+Integrator_I qag_integrator_i(const qag_integrator_keys&);
+Integrator_I qag_integrator_i(unsigned level = 0);
 
 extern std::function<Integrator_I (unsigned)> default_integrator_i;
 
@@ -460,7 +460,7 @@ xsection_fid_b(
     double w1_max,
     double w2_min,
     double w2_max,
-    Integrator = gsl_cquad_integrator(0u)
+    Integrator = cquad_integrator(0u)
 );
 
 // same with symmetric bounds on energy losses of the colliding particles
@@ -474,7 +474,7 @@ xsection_fid_b(
     double eta_max,
     double w_min,
     double w_max,
-    Integrator integrator = gsl_cquad_integrator(0u)
+    Integrator integrator = cquad_integrator(0u)
 ) {
   return xsection_fid_b(
       xsection_pT, luminosity,
@@ -494,7 +494,7 @@ xsection_fid_b(
     double mass,
     double pT_min,
     double eta_max,
-    Integrator integrator = gsl_cquad_integrator(0u)
+    Integrator integrator = cquad_integrator(0u)
 ) {
   return xsection_fid_b(
       xsection_pT, luminosity,
