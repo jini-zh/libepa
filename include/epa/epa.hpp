@@ -307,6 +307,7 @@ luminosity_b(
     unsigned integration_level = 0
 );
 
+// when nA == nB
 Luminosity_b
 luminosity_b(
     Spectrum_b,
@@ -325,6 +326,7 @@ luminosity_y_b(
     unsigned integration_level = 0
 );
 
+// when nA == nB
 Luminosity_y_b
 luminosity_y_b(
     Spectrum_b,
@@ -342,6 +344,8 @@ luminosity_fid_b(
     const std::function<Integrator (unsigned)>& = default_integrator,
     unsigned integration_level = 0
 );
+
+// when nA == nB
 Luminosity_fid_b
 luminosity_fid_b(
     Spectrum_b,
