@@ -30,7 +30,7 @@ some of the plots published in [2] can be found in the `examples/` directory
 (actual values can be slightly different because libepa uses more recent
 values of physical constants, in particular the proton charge radius).
 
-A Python API is planned but not implemented yet.
+A Python API is available.
 
 # Installation
 

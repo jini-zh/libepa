@@ -1,15 +1,18 @@
 CXXFLAGS ?= -O2 -pipe -march=native -fno-stack-protector
 
-cxx = $(CXX) $(CXXFLAGS) -std=gnu++17 -I include
+cxx = $(CXX) $(CXXFLAGS) -std=gnu++20 -I include
 
-.PHONY: clean test all test_all doc
+.PHONY: clean test all test_all doc ffi
 
 objects := gsl algorithms epa proton
 objects := $(foreach object,$(objects),src/$(object).o)
 
-all: libepa.so doc
+ffi := ffi epa proton
+ffi := $(foreach object,$(ffi),ffi/c/$(object).o)
 
-libepa.so: $(objects)
+all: libepa.so doc ffi
+
+libepa.so: $(objects) $(ffi)
 	$(cxx) -shared $^ -o $@
 
 src/gsl.o: include/epa/gsl.hpp
@@ -17,6 +20,17 @@ src/epa.o: include/epa/epa.hpp include/epa/gsl.hpp include/epa/algorithms.hpp
 src/proton.o: include/epa/proton.hpp include/epa/epa.hpp include/epa/gsl.hpp \
 	include/epa/algorithms.hpp
 src/algorithms.o: include/epa/algorithms.hpp
+
+ffi: $(ffi) ffi/python/epa/_epa_cffi.so
+
+ffi/c/epa.o: ffi/c/epa.cpp ffi/c/epa.h ffi/c/epa_vars.h ffi/c/ffi.hpp ffi/c/ffi.h
+ffi/c/proton.o: ffi/c/proton.cpp ffi/c/ffi.hpp ffi/c/ffi.h
+ffi/c/ffi.o: ffi/c/ffi.cpp ffi/c/ffi.hpp ffi/c/ffi.h
+
+ffi/python/epa/_epa_cffi.so: ffi/python/build.py ffi/c/ffi.h ffi/c/epa.h \
+	ffi/c/epa_vars.h ffi/c/proton.h | libepa.so
+	cd ffi/python && LD_LIBRARY_PATH=../.. ./build.py
+	mv -v ffi/python/epa/_epa_cffi.cpython-*.so ffi/python/epa/_epa_cffi.so
 
 %.o: %.cpp
 	$(cxx) -fPIC -c $< -o $@
@@ -43,5 +57,6 @@ doc/notes.pdf: doc/notes.tex
 	make -C doc
 
 clean:
-	rm $(objects) libepa.so 2> /dev/null; true
+	rm $(objects) libepa.so $(ffi) ffi/python/epa/{_epa_cffi.*,_epa_functions.py,_epa_vars.py} 2> /dev/null; true
+	rm -r ffi/python/epa/__pycache__ 2> /dev/null; true
 	make -C doc clean
