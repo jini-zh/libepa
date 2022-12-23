@@ -22,8 +22,9 @@ photon-photon cross section provided by the user. By default, the integration
 is performed with the help of GNU Scientific Library [(GSL)][GSL]. The user can
 supply their own integration routines.
 
-The documentation is under development. Currently the main formulas are
-collected in [doc/notes.pdf][notes]. An overview of the theory of EPA and UPC
+The documentation is available as
+[doc/libepa.html](https://jini-zh.org/libepa/libepa.html). The main formulas are
+also collected in [doc/notes.pdf][notes]. An overview of the theory of EPA and UPC
 can be found in papers [[1,2]](#references). libepa is based on the code
 developed to perform calculations in these papers. Sample code that calculates
 some of the plots published in [2] can be found in the `examples/` directory
