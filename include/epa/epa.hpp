@@ -46,18 +46,21 @@ typedef std::function<
           double (const std::function<double (double)>&, double, double)
         > Integrator;
 
+// Default integrator generator
+extern std::function<Integrator (unsigned)> default_integrator;
+
 // GSL quadratic adaptive integrator with default initialization
 Integrator qag_integrator(
     double absolute_error = default_absolute_error,
     double relative_error = default_relative_error,
-    gsl::integration::QAGMethod = gsl::integration::GAUSS41,
+    gsl::integration::QAGMethod = default_integration_method,
     std::shared_ptr<gsl::integration::QAGWorkspace> = nullptr
 );
 
 struct qag_integrator_keys {
   double absolute_error = default_absolute_error;
   double relative_error = default_relative_error;
-  gsl::integration::QAGMethod method = gsl::integration::GAUSS41;
+  gsl::integration::QAGMethod method = default_integration_method;
   std::shared_ptr<gsl::integration::QAGWorkspace> workspace;
 };
 
@@ -67,9 +70,6 @@ Integrator qag_integrator(const qag_integrator_keys&);
 // GSL integrator with relative_error = default_relative_error *
 // default_error_step ** level
 Integrator qag_integrator(unsigned level);
-
-// Default integrator generator
-extern std::function<Integrator (unsigned)> default_integrator;
 
 // GSL integrator generator with absolute_error = 0, relative_error =
 // relative_error * error_step ** level
