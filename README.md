@@ -39,16 +39,24 @@ Requirements:
 * A C++ compiler from the GNU Compiler Collection (GCC) supporting the C++17 standard.
 * GNU Make.
 * GNU Scientific Library.
+* Python module [cffi](https://pypi.org/project/cffi/) for the Python interface.
 * TeX Live for the documentation (should be possible to compile manually with
   any other TeX distribution).
 * TeX Live, Perl and Gnuplot for the plots in examples.
 
-To compile, simply execute `make` in the project directory. To build and run an
-example, execute `make` in its directory. Note that calculation of most examples
-takes time and will use the number of threads equal to the number of logical
-CPU cores at the system.
+To compile, simply execute `make` in the project directory. To compile just the
+library (no Python API), execute `make libepa.so`. To build and run an example,
+execute `make` in its directory. Note that calculation of most examples takes
+time and will use the number of threads equal to the number of logical CPU
+cores at the system.
 
-The `make install` target is not implemented yet.
+To install, execute `make install`. Standard GNU Make conventions such as
+[prefix](https://www.gnu.org/prep/standards/html_node/Directory-Variables.html)
+and [DESTDIR](https://www.gnu.org/prep/standards/html_node/DESTDIR.html) are
+supported. Note that Python modules are installed via simple file copying. If you
+want to have them installed under `pip`, you can use `ffi/python/setup.py`.
+
+To uninstall, execute `make uninstall`.
 
 # Acknowledgements
 
