@@ -1,5 +1,7 @@
 #include "../common.cpp"
 
+#include <limits>
+
 #include <getopt.h>
 
 // TODO
@@ -84,7 +86,7 @@ int main(int argc, char** argv) {
     return 1;
   };
 
-  if (npoints == 0) npoints = step == 0 ? 100 : (70. - 30.) / step;
+  if (npoints == 0) npoints = step == 0 ? 200 : (70. - 30.) / step;
 
   auto grid = make_grid(12, 70, npoints);
   {
@@ -96,7 +98,11 @@ int main(int argc, char** argv) {
           return point.first < x;
         }
     );
-    if (i->first != 30) grid.insert(i, { 30, 0 });
+    auto delta = 10 * std::numeric_limits<double>().epsilon();
+    if ((--i)->first < 30 * (1 - 10 * delta))
+      i = grid.insert(++i, { 30 * (1 - delta), 0 });
+    if ((++i)->first > 30 * (1 + 10 * delta))
+      grid.insert(i, { 30 * (1 + delta), 0 });
   };
 
   const double muon_mass = 105.6583745e-3;

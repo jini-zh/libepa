@@ -129,7 +129,7 @@ if args.npoints is not None and args.step is not None:
 
 if args.npoints is None:
     if args.step is None:
-        args.npoints = 100
+        args.npoints = 200
     else:
         args.npoints = (70 - 30) / step
 
