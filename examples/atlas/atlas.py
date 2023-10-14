@@ -151,9 +151,8 @@ else:
 
 xsection.dump()
 
+integrate = epa.qag_integrator(relative_error = 1e-2)
+integrated = integrate(xsection, x[0], 30) + integrate(xsection, 30, x[-1])
+print('# Integrated cross section:', integrated, 'b')
 if args.verbose:
-    integrate = epa.qag_integrator(relative_error = 1e-2)
-    print(
-            'Integrated cross section:',
-            integrate(xsection, x[0], 30) + integrate(xsection, 30, x[-1])
-    )
+    print('Integrated cross section:', integrated, 'b', file = sys.stderr)

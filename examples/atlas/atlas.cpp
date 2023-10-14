@@ -128,14 +128,12 @@ int main(int argc, char** argv) {
                   );
   xsection.dump(std::cout);
 
-  if (verbose) {
-    auto integrate = epa::qag_integrator(0, 1e-2);
-    std::cerr
-      << "Integrated cross section: "
-      << (  integrate(xsection, grid.front().first, 30)
-          + integrate(xsection, 30, grid.back().first))
-      << " b\n";
-  };
+  auto integrate = epa::qag_integrator(0, 1e-2);
+  auto integrated = integrate(xsection, grid.front().first, 30)
+                  + integrate(xsection, 30, grid.back().first);
+  std::cout << "# Integrated cross section: " << integrated << " b\n";
+  if (verbose)
+    std::cerr << "Integrated cross section: " << integrated << " b\n";
 
   return 0;
 };
