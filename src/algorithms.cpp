@@ -76,6 +76,8 @@ void Function1d::dump(std::ostream& output) const {
   auto flags     = output.setf(std::ios_base::scientific);
   for (auto& point: *points)
     output << point.first << ' ' << point.second << '\n';
+  output.flags(flags);
+  output.precision(precision);
 };
 
 void Function1d::save(const std::filesystem::path& file) const {
