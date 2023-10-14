@@ -12,6 +12,8 @@ proton_mass                       = lib.epa_proton_mass()
 proton_magnetic_moment            = lib.epa_proton_magnetic_moment()
 proton_dipole_form_factor_lambda2 = lib.epa_proton_dipole_form_factor_lambda2()
 
+pp_elastic_slope                  = lib.epa_pp_elastic_slope
+
 class Error(Exception):
     def __init__(self, message):
         super(Exception, self).__init__(message)
