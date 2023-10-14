@@ -15,10 +15,18 @@ std::vector<std::pair<double, double>> make_grid(
     unsigned n,
     bool     log = false
 ) {
+  std::vector<std::pair<double, double>> grid(n);
+
+  if (n == 0) return grid;
+
+  if (n == 1) {
+    grid[0].first = from;
+    return grid;
+  };
+
+  --n;
   double x = from;
   double step = log ? pow(to / from, 1. / n) : (to - from) / n;
-  std::vector<std::pair<double, double>> grid(n);
-  --n;
   for (size_t i = 0; i < n; ++i) {
     grid[i].first = x;
     x = log ? x * step : x + step;
