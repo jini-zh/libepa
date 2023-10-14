@@ -2686,7 +2686,13 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       <mrow>
         <munderover>
           <mo>&int;</mo>
-          <msub> <mover> <mi>p</mi> <mi>~</mi> </mover> <mi>T</mi> </msub>
+          <mrow>
+            <mtext>max</mtext>
+            <mo>(</mo>
+            <msub> <mover> <mi>p</mi> <mi>^</mi> </mover> <mi>T</mi> </msub>
+            <msub> <mover> <mi>p</mi> <mi>~</mi> </mover> <mi>T</mi> </msub>
+            <mo>)</mo>
+          </mrow>
           <mrow>
             <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
             <msqrt>
@@ -2764,114 +2770,226 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
     <math display="block">
       <msub> <mover> <mi>p</mi> <mi>~</mi> </mover> <mi>T</mi> </msub>
       <mo>=</mo>
-      <mtext>max</mtext>
       <mrow>
-        <mo>(</mo>
-        <msub> <mover> <mi>p</mi> <mi>^</mi> </mover> <mi>T</mi> </msub>
-        <mo>,</mo>
-        <mfrac>
-          <msqrt> <mi>s</mi> </msqrt>
-          <mrow>
-            <mn>2</mn>
-            <mtext>cosh</mtext>
-            <mover> <mi>η</mi> <mi>^</mi> </mover>
-          </mrow>
-        </mfrac>
-        <msqrt>
-          <mrow>
-            <mn>1</mn>
-            <mo>-</mo>
-            <mfrac>
-              <mrow>
-                <mn>4</mn> <msubsup> <mi>m</mi> <mi>χ</mi> <mn>2</mn> </msubsup>
-              </mrow>
-              <mi>s</mi>
-            </mfrac>
-          </mrow>
-        </msqrt>
-        <mo>,</mo>
-        <mfrac>
-          <msqrt> <mi>s</mi> </msqrt>
-          <mrow>
-            <mn>2</mn>
-            <mtext>cosh</mtext>
-            <mrow>
-              <mo>(</mo>
+        <mo>{</mo>
+        <mtable>
+          <mtr>
+            <mtd>
               <mtext>max</mtext>
               <mrow>
                 <mo>(</mo>
-                <mover> <mi>y</mi> <mi>~</mi> </mover>
+                <msub> <mi>P</mi> <mi>T</mi> </msub>
+                <mrow> <mo>(</mo> <mn>0</mn> <mo>)</mo> </mrow>
                 <mo>,</mo>
-                <mo>-</mo>
-                <mover> <mi>Y</mi> <mi>~</mi> </mover>
+                <msub> <mi>P</mi> <mi>T</mi> </msub>
+                <mrow>
+                  <mo>(</mo>
+                  <mtext>max</mtext>
+                  <mrow>
+                    <mo>(</mo>
+                    <mover> <mi>y</mi> <mi>~</mi> </mover>
+                    <mo>,</mo>
+                    <mo>-</mo>
+                    <mover> <mi>Y</mi> <mi>~</mi> </mover>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
                 <mo>)</mo>
               </mrow>
-              <mo>-</mo>
-              <mover> <mi>η</mi> <mi>^</mi> </mover>
+              <mspace width="1ex"/> <mtext> if </mtext> <mspace width="1ex"/>
+              <mfrac>
+                <mrow>
+                  <mn>4</mn>
+                  <msubsup> <mi>m</mi> <mi>χ</mi> <mn>2</mn> </msubsup>
+                </mrow>
+                <mi>s</mi>
+              </mfrac>
+              <mrow>
+                <mo>(</mo>
+                <mn>1</mn>
+                <mo>+</mo>
+                <mfrac>
+                  <mrow>
+                    <msup> <mtext>sinh</mtext> <mn>2</mn> </msup>
+                    <mo>(</mo>
+                    <mtext>max</mtext>
+                    <mo>(</mo>
+                    <mover> <mi>y</mi> <mi>~</mi> </mover>
+                    <mo>,</mo>
+                    <mo>-</mo>
+                    <mover> <mi>Y</mi> <mi>~</mi> </mover>
+                    <mo>)</mo>
+                    <mo>)</mo>
+                  </mrow>
+                  <mrow>
+                    <msup> <mtext>cosh</mtext> <mn>2</mn> </msup>
+                    <mover> <mi>η</mi> <mi>^</mi> </mover>
+                  </mrow>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+              <mo>&lt;</mo>
+              <mn>1</mn>,
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd>
+              <msub> <mi>P</mi> <mi>T</mi> </msub>
+              <mo>(</mo>
+              <mn>0</mn>
               <mo>)</mo>
-            </mrow>
-          </mrow>
-        </mfrac>
-        <mo>)</mo>
-      </mrow>,
+              <mspace width="1ex"/> <mtext>otherwise,</mtext>
+            </mtd>
+          </mtr>
+        </mtable>
+      </mrow>
     </math>
     <math display="block">
-      <mover> <mi>y</mi> <mi>~</mi> </mover>
+      <msub> <mi>P</mi> <mi>T</mi> </msub>
+      <mrow>
+        <mo>(</mo>
+        <mi>Y</mi>
+        <mo>)</mo>
+      </mrow>
       <mo>=</mo>
-      arcsinh
+      <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>4</mn> </mfrac>
       <mrow>
         <mo>[</mo>
         <mfrac>
           <mrow>
-            <msub> <mi>p</mi> <mi>T</mi> </msub>
-            <msqrt> <mi>s</mi> </msqrt>
-          </mrow>
-          <mrow>
-            <mn>2</mn>
-            <mo>(</mo>
-            <msubsup> <mi>p</mi> <mi>T</mi> <mn>2</mn> </msubsup>
+            <mn>1</mn>
             <mo>+</mo>
-            <msubsup> <mi>m</mi> <mi>χ</mi> <mn>2</mn> </msubsup>
-            <mo>)</mo>
-          </mrow>
-        </mfrac>
-        <mrow>
-          <mo>(</mo>
-          sinh
-          <mover> <mi>η</mi> <mi>^</mi> </mover>
-          <mo>-</mo>
-          <msqrt>
-            <mrow>
-              <msup> <mtext>cosh</mtext> <mn>2</mn> </msup>
-              <mover> <mi>η</mi> <mi>^</mi> </mover>
-              <mo>+</mo>
-              <mfrac>
-                <msubsup> <mi>m</mi> <mi>χ</mi> <mn>2</mn> </msubsup>
-                <msubsup> <mi>p</mi> <mi>T</mi> <mn>2</mn> </msubsup>
-              </mfrac>
-            </mrow>
-          </msqrt>
-          <mo>&middot;</mo>
-          <msqrt>
-            <mrow>
+            <msqrt>
               <mn>1</mn>
               <mo>-</mo>
               <mfrac>
                 <mrow>
                   <mn>4</mn>
-                  <mo>(</mo>
-                  <msubsup> <mi>p</mi> <mi>T</mi> <mn>2</mn> </msubsup>
                   <msubsup> <mi>m</mi> <mi>χ</mi> <mn>2</mn> </msubsup>
-                  <mo>)</mo>
                 </mrow>
                 <mi>s</mi>
               </mfrac>
-            </mrow>
-          </msqrt>
-          <mo>)</mo>
-        </mrow>
-        <mo>]</mo>
-      </mrow>,
+              <mrow>
+                <mo>(</mo>
+                <mn>1</mn>
+                <mo>+</mo>
+                <mfrac>
+                  <mrow>
+                    <msup> <mtext>sinh</mtext> <mn>2</mn> </msup>
+                    <mi>Y</mi>
+                  </mrow>
+                  <mrow>
+                    <msup> <mtext>cosh</mtext> <mn>2</mn> </msup>
+                    <mover> <mi>η</mi> <mi>^</mi> </mover>
+                  </mrow>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+            </msqrt>
+          </mrow>
+          <mrow>
+            <mtext>cosh</mtext>
+            <mo>(</mo>
+            <mi>Y</mi>
+            <mo>-</mo>
+            <mover> <mi>η</mi> <mi>^</mi> </mover>
+            <mo>)</mo>
+          </mrow>
+        </mfrac>
+        <mo>-</mo>
+        <mfrac>
+          <mrow>
+            <mn>1</mn>
+            <mo>-</mo>
+            <msqrt>
+              <mn>1</mn>
+              <mo>-</mo>
+              <mfrac>
+                <mrow>
+                  <mn>4</mn>
+                  <msubsup> <mi>m</mi> <mi>χ</mi> <mn>2</mn> </msubsup>
+                </mrow>
+                <mi>s</mi>
+              </mfrac>
+              <mrow>
+                <mo>(</mo>
+                <mn>1</mn>
+                <mo>+</mo>
+                <mfrac>
+                  <mrow>
+                    <msup> <mtext>sinh</mtext> <mn>2</mn> </msup>
+                    <mi>Y</mi>
+                  </mrow>
+                  <mrow>
+                    <msup> <mtext>cosh</mtext> <mn>2</mn> </msup>
+                    <mover> <mi>η</mi> <mi>^</mi> </mover>
+                  </mrow>
+                </mfrac>
+                <mo>)</mo>
+              </mrow>
+            </msqrt>
+          </mrow>
+          <mrow>
+            <mtext>cosh</mtext>
+            <mo>(</mo>
+            <mi>Y</mi>
+            <mo>+</mo>
+            <mover> <mi>η</mi> <mi>^</mi> </mover>
+            <mo>)</mo>
+          </mrow>
+        </mfrac>
+        <mo>]</mo>,
+      </mrow>
+    </math>
+    <math display="block">
+      <mover> <mi>y</mi> <mi>^</mi> </mover>
+      <mo>=</mo>
+      <mtext>ln</mtext>
+      <mrow>
+        <mo>(</mo>
+        <mfrac>
+          <mrow>
+            <mn>2</mn>
+            <msub> <mi>p</mi> <mi>T</mi> </msub>
+          </mrow>
+          <msqrt> <mi>s</mi> </msqrt>
+        </mfrac>
+        <mo>·</mo>
+        <mfrac>
+          <mrow>
+            <mtext>sinh</mtext>
+            <mover> <mi>η</mi> <mi>^</mi> </mover>
+            <mo>+</mo>
+            <msqrt>
+              <msup> <mtext>cosh</mtext> <mn>2</mn> </msup>
+              <mover> <mi>η</mi> <mi>^</mi> </mover>
+              <mo>+</mo>
+              <mfrac>
+                <msubsup> <mi>m</mi> <mi>χ</mi> <mn>2</mn> </msubsup>
+                <msubsup> <mi>p</mi> <mi>T</mi> <mn>2</mn> </nsubsup>
+              </mfrac>
+            </msqrt>
+          </mrow>
+          <mrow>
+            <mn>1</mn>
+            <mo>+</mo>
+            <msqrt>
+              <mn>1</mn>
+              <mo>-</mo>
+              <mfrac>
+                <mrow>
+                  <msubsup> <mi>p</mi> <mi>T</mi> <mn>2</mn> </msubsup>
+                  <mo>+</mo>
+                  <msubsup> <mi>m</mi> <mi>χ</mi> <mn>2</mn> </msubsup>
+                </mrow>
+                <mrow> <mi>s</mi> <mo>/</mo> <mn>4</mn> </mrow>
+              </mfrac>
+            </msqrt>
+          </mrow>
+        </mfrac>
+        <mo>)</mo>,
+      </mrow>
     </math>
     <math display="block">
       <mover> <mi>y</mi> <mi>~</mi> </mover>
@@ -3078,7 +3196,16 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       <mrow>
         <munderover>
           <mo>&int;</mo>
-          <msub> <mover> <mi>p</mi> <mi>~</mi> </mover> <mi>T</mi> </msub>
+          <mrow>
+            <mtext>max</mtext>
+            <mrow>
+              <mo>(</mo>
+              <msub> <mover> <mi>p</mi> <mi>^</mi> </mover> <mi>T</mi> </msub>
+              <mo>,</mo>
+              <msub> <mover> <mi>p</mi> <mi>~</mi> </mover> <mi>T</mi> </msub>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
           <mrow>
             <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
             <msqrt>

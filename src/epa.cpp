@@ -894,7 +894,10 @@ xsection_fid_x(
       double E = 0.5 * rs;
       if (E <= E_min || E >= E_max) return 0;
 
+      // Transverse momentum integration limits (u <= pT <= v)
       double v = sqrt(sqr(E) - m2);
+      // when pT < v / cosh_eta, the integration limit y computed in fpT above
+      // is negative, and the integration domain is empty
       double u = std::max(pT_min, v / cosh_eta);
       if (u >= v) return 0;
 
@@ -902,13 +905,25 @@ xsection_fid_x(
       env->y_min = log(std::max(w1_min / E, E / w2_max));
       env->y_max = log(std::min(w1_max / E, E / w2_min));
 
-      // XXX: mass is neglected!
       double y = std::max(env->y_min, -env->y_max);
       if (y > 0) {
+        // when y > eta_max, the integration limit y computed in fpT above is
+        // negative, and the integration domain is empty
         if (y >= eta_max) return 0;
-        u = std::max(u, E / cosh(y - eta_max));
-        if (u >= v) return 0;
+
+        double r = 1 - m2 / sqr(E) * (1 + sqr(sinh(y) / cosh_eta));
+        if (r > 0) {
+          r = sqrt(r);
+          double u1 = 0.5 * E * (
+              (1 + r) / cosh(y - eta_max) - (1 - r) / cosh(y + eta_max)
+          );
+          if (u1 > u) {
+            u = u1;
+            if (u >= v) return 0;
+          };
+        };
       };
+      // when y < 0, u1 < E / cosh(eta_max) <= u
 
       return integrate(fpT, u, v);
     EPA_BACKTRACE("lambda (rs) %e\n  defined in xsection_fid_x", rs);
