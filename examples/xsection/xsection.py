@@ -19,9 +19,9 @@ Allowed options:
   -t or --to:               ending of the mass range (GeV)
   -n or --npoints:          points step in the mass range (GeV)
   -l or --log:              assume logarithmic scale in the mass range (no argument)
-  -v or --verbose:          be verbose while calculating"
+  -v or --verbose:          be verbose while calculating
   -S or --survival:         account for non-electromagnetic interactions
-  --rs-max:                 cut off integration over invariant mass (sqrt{s}) at this value (GeV)''')
+  --rs-max:                 cut off integration over invariant mass (sqrt(s)) at this value (GeV)''')
 
 def die(message):
     print(message, file = sys.stderr)
@@ -121,6 +121,10 @@ argparser.add_argument('-v', '--verbose',  action = 'store_true')
 argparser.add_argument('-S', '--survival', action = 'store_true')
 argparser.add_argument('--rs-max',                 type = float)
 args = argparser.parse_args(sys.argv[1:])
+
+if args.help:
+    usage()
+    sys.exit(0)
 
 args.start = getattr(args, 'from')
 args.end   = args.to
