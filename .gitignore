@@ -1,0 +1,16 @@
+.*.sw?
+*.aux
+*.log
+*.o
+*.out
+*.pdf
+*.so
+*.txt
+
+examples/atlas/atlas
+examples/survival/luminosity
+examples/xsection/xsection
+ffi/python/epa/_epa_*
+ffi/python/epa/__pycache__
+test/a1.cpp
+test/test
