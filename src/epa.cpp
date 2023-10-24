@@ -821,7 +821,7 @@ xsection(XSection xsection, Luminosity luminosity) {
     xsection   = std::move(xsection),
     luminosity = std::move(luminosity)
   ](double rs) -> double {
-    return xsection(sqr(rs)) * luminosity(rs);
+    return xsection(rs) * luminosity(rs);
   };
 };
 
@@ -834,7 +834,7 @@ xsection_b(
     xsection   = std::move(xsection),
     luminosity = std::move(luminosity)
   ](double rs) -> double {
-    return luminosity(rs, xsection(sqr(rs)));
+    return luminosity(rs, xsection(rs));
   };
 };
 
@@ -946,7 +946,7 @@ xsection_fid(
   return xsection_fid_x(
       [xsection = std::move(xsection), luminosity = std::move(luminosity)]
       (double rs, double pT, double y_min, double y_max) -> double {
-        return xsection(sqr(rs), pT)
+        return xsection(rs, pT)
              * (
                  y_min == -y_max
                  ? 2 * luminosity(rs, y_min, 0)
@@ -977,8 +977,8 @@ xsection_fid_b(
       [xsection = std::move(xsection), luminosity = std::move(luminosity)]
       (double rs, double pT, double y_min, double y_max) -> double {
         return y_min == -y_max
-             ? 2 * luminosity(rs, xsection(sqr(rs), pT), y_min, 0)
-             : luminosity(rs, xsection(sqr(rs), pT), y_min, y_max);
+             ? 2 * luminosity(rs, xsection(rs, pT), y_min, 0)
+             : luminosity(rs, xsection(rs, pT), y_min, y_max);
       },
       mass,
       pT_min, eta_max,
@@ -991,7 +991,8 @@ std::function<double (double)>
 photons_to_fermions(double mass, double charge) {
   double c = 4 * pi * sqr(sqr(charge) * alpha) * barn;
   double m2 = sqr(mass);
-  return [=](double s) -> double {
+  return [=](double rs) -> double {
+    double s = sqr(rs);
     double x  = m2 / s;
     double x2 = sqr(x);
     double r  = sqrt(1 - 4 * x);
@@ -1005,7 +1006,8 @@ std::function<Polarization (double)>
 photons_to_fermions_b(double mass, double charge) {
   double c = 4 * pi * sqr(sqr(charge) * alpha) * barn;
   double m2 = sqr(mass);
-  return [=](double s) -> Polarization {
+  return [=](double rs) -> Polarization {
+    double s = sqr(rs);
     double x  = m2 / s;
     double x2 = sqr(x);
     double r  = sqrt(1 - 4 * x);
@@ -1026,7 +1028,8 @@ photons_to_fermions_pT_x(
   double c = 8 * pi * sqr(sqr(charge) * alpha) * barn;
   double m2 = sqr(mass);
   double m4 = sqr(m2);
-  return [=](double s, double pT) -> double {
+  return [=](double rs, double pT) -> double {
+    double s = sqr(rs);
     double pT2 = sqr(pT);
     double z = pT2 + m2;
     double sz = s * z;
@@ -1046,8 +1049,8 @@ photons_to_fermions_pT_b(double mass, double charge) {
   return [
     parallel      = photons_to_fermions_pT_x(mass, charge, 2),
     perpendicular = photons_to_fermions_pT_x(mass, charge, 0)
-  ](double s, double pT) -> Polarization {
-    return { parallel(s, pT), perpendicular(s, pT) };
+  ](double rs, double pT) -> Polarization {
+    return { parallel(rs, pT), perpendicular(rs, pT) };
   };
 };
 

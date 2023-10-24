@@ -388,7 +388,7 @@ XSection
 xsection_fid(
     // differential with respect to pT cross section for the pair production in
     // fusion of real photons
-    std::function<double (double /* s */, double /* pT */)> xsection_pT,
+    std::function<double (double /* sqrt(s) */, double /* pT */)> xsection_pT,
     Luminosity_fid,
     double mass, // the mass of the charged particle
     double pT_min,
@@ -404,7 +404,7 @@ xsection_fid(
 inline
 XSection
 xsection_fid(
-    std::function<double (double /* s */, double /* pT */)> xsection_pT,
+    std::function<double (double /* sqrt(s) */, double /* pT */)> xsection_pT,
     Luminosity_fid luminosity,
     double mass,
     double pT,
@@ -426,7 +426,7 @@ xsection_fid(
 inline
 XSection
 xsection_fid(
-    std::function<double (double /* s */, double /* pT */)> xsection_pT,
+    std::function<double (double /* sqrt(s) */, double /* pT */)> xsection_pT,
     Luminosity_fid luminosity,
     double mass,
     double pT,
@@ -451,7 +451,7 @@ XSection
 xsection_fid_b(
     // differential with respect to pT cross section for the pair production in
     // fusion of real photons
-    std::function<Polarization (double /* s */, double /* pT */)> xsection_pT,
+    std::function<Polarization (double /* sqrt(s) */, double /* pT */)> xsection_pT,
     Luminosity_fid_b,
     double mass, // the mass of the charged particle
     double pT_min,
@@ -467,7 +467,7 @@ xsection_fid_b(
 inline
 XSection
 xsection_fid_b(
-    std::function<Polarization (double /* s */, double /* pT */)> xsection_pT,
+    std::function<Polarization (double /* sqrt(s) */, double /* pT */)> xsection_pT,
     Luminosity_fid_b luminosity,
     double mass,
     double pT_min,
@@ -489,7 +489,7 @@ xsection_fid_b(
 inline
 XSection
 xsection_fid_b(
-    std::function<Polarization (double /* s */, double /* pT */)> xsection_pT,
+    std::function<Polarization (double /* sqrt(s) */, double /* pT */)> xsection_pT,
     Luminosity_fid_b luminosity,
     double mass,
     double pT_min,
@@ -508,16 +508,16 @@ xsection_fid_b(
 // Cross section for the production of a pair of fermions in photon-photon
 // collisions (the Breit-Wheeler cross section). `mass' and `charge' are the
 // fermion mass and charge.
-std::function<double (double /* s */)>
+std::function<double (double /* sqrt(s) */)>
 photons_to_fermions(double mass, double charge = 1);
 // Same differentiated with respect to pT --- fermion transverse momentum.
-std::function<double (double /* s */, double /* pT */)>
+std::function<double (double /* sqrt(s) */, double /* pT */)>
 photons_to_fermions_pT(double mass, double charge = 1);
 // Same for polarized photons
-std::function<Polarization (double /* s */)>
+std::function<Polarization (double /* sqrt(s) */)>
 photons_to_fermions_b(double mass, double charge = 1);
 //
-std::function<Polarization (double /* s */, double /* pT */)>
+std::function<Polarization (double /* sqrt(s) */, double /* pT */)>
 photons_to_fermions_pT_b(double mass, double charge = 1);
 
 }; // namespace epa

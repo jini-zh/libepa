@@ -199,7 +199,7 @@ BOOST_AUTO_TEST_CASE(epa_luminosity) {
 };
 
 BOOST_AUTO_TEST_CASE(epa_xsection) {
-  BOOST_TEST(photons_to_fermions_pT(100)(5e4, 15) == 2.1812248796062277e-14);
+  BOOST_TEST(photons_to_fermions_pT(100)(250, 15) == 1.4291814382449728e-14);
 
   BOOST_TEST(
       xsection_fid(
@@ -212,9 +212,9 @@ BOOST_AUTO_TEST_CASE(epa_xsection) {
   );
 
   {
-    auto x = photons_to_fermions_pT_b(100)(5e4, 15);
-    BOOST_TEST(x.parallel      == 7.7917850814805701e-15);
-    BOOST_TEST(x.perpendicular == 3.5832712510643985e-14);
+    auto x = photons_to_fermions_pT_b(100)(250, 15);
+    BOOST_TEST(x.parallel      == 7.7801624393910958e-15);
+    BOOST_TEST(x.perpendicular == 2.0803466325508358e-14);
   };
 };
 

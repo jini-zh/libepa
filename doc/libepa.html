@@ -2508,7 +2508,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="XSection" class="def">
   <span class="def"><code>XSection</code></span>
   <pre>
-    <span class="type">typedef</span> std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>)&gt; XSection;
+    <span class="type">typedef</span> std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>)&gt; XSection;
   </pre>
   Cross section for the invariant mass <math><msqrt><mi>s</mi></msqrt></math>
   (<math><mi>s</mi></math> is the Mandelstam parameter).
@@ -2526,7 +2526,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="XSection_b" class="def">
   <span class="def"><code>XSection_b</code></span>
   <pre>
-    <span class="type">typedef</span> std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* s */</span>)&gt; XSection_b;
+    <span class="type">typedef</span> std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>)&gt; XSection_b;
   </pre>
   Photon fusion cross section taking into account photons polarization. Returns
   two values: cross sections for the parallel and perpendicular photons
@@ -2599,7 +2599,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid(
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* s */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a>,
       <span class="type">double</span> mass,   <span class="comment">// of the produced particle</span>
       <span class="type">double</span> pT_min,
@@ -2731,7 +2731,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
         </mfrac>
         <mrow>
           <mo>(</mo>
-          <mi>s</mi>
+          <msqrt> <mi>s</mi> </msqrt>
           <mo>,</mo>
           <msub> <mi>p</mi> <mi>T</mi> </msub>
           <mo>)</mo>
@@ -3067,7 +3067,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid(
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* s */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a> luminosity,
       <span class="type">double</span> mass,
       <span class="type">double</span> pT_min,
@@ -3085,7 +3085,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid(
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* s */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a> luminosity,
       <span class="type">double</span> mass,
       <span class="type">double</span> pT_min,
@@ -3104,7 +3104,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid_b(
-      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* s */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid_b">Luminosity_fid_b</a>,
       <span class="type">double</span> mass,   <span class="comment">// of the produced particle</span>
       <span class="type">double</span> pT_min,
@@ -3257,7 +3257,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
                 <msub> <mi>p</mi> <mi>T</mi> </msub>
               </mrow>
             </mfrac>
-            <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+            <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
             <mo>,</mo>
             <mfrac>
               <mrow>
@@ -3279,7 +3279,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
                 <msub> <mi>p</mi> <mi>T</mi> </msub>
               </mrow>
             </mfrac>
-            <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+            <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
             <mo>}</mo>
           </mrow>
           <mo>,</mo>
@@ -3324,7 +3324,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
         </mrow>
         <mrow> <mtext>d</mtext> <msub> <mi>p</mi> <mi>T</mi> </msub> </mrow>
       </mfrac>
-      <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+      <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
     </math>
     and
     <math>
@@ -3345,7 +3345,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
         </mrow>
         <mrow> <mtext>d</mtext> <msub> <mi>p</mi> <mi>T</mi> </msub> </mrow>
       </mfrac>
-      <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+      <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
     </math>
     are the cross sections for the fusion of photons with parallel and
     perpendicular polarizations respectively provided by the function
@@ -3362,7 +3362,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid_b(
-      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* s */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a> luminosity,
       <span class="type">double</span> mass,
       <span class="type">double</span> pT_min,
@@ -3380,7 +3380,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid_b(
-      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* s */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a> luminosity,
       <span class="type">double</span> mass,
       <span class="type">double</span> pT_min,
@@ -3399,7 +3399,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="photons_to_fermions" class="def">
   <span class="def"><code>photons_to_fermions</code></span>
   <pre>
-    std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* s */</span>)&gt; photons_to_fermions(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
+    std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>)&gt; photons_to_fermions(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
   </pre>
   Cross section for the reaction
   <math>
@@ -3420,7 +3420,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
         <msup> <mi>χ</mi> <mo>-</mo> </msup>
       </mrow>
     </msub>
-    <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+    <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
     <mo>=</mo>
     <mfrac>
       <mrow>
@@ -3520,7 +3520,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="photons_to_fermions_pT" class="def">
   <span class="def"><code>photons_to_fermions_pT</code></span>
   <pre>
-    std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* s */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; photons_to_fermions_pT(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
+    std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; photons_to_fermions_pT(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
   </pre>
   Differential cross section
   <math display="block">
@@ -3542,7 +3542,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
     </mfrac>
     <mrow>
       <mo>(</mo>
-      <mi>s</mi>
+      <msqrt> <mi>s</mi> </msqrt>
       <mo>,</mo>
       <msub> <mi>p</mi> <mi>T</mi> </msub>
       <mo>)</mo>
@@ -3619,7 +3619,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="photons_to_fermions_b" class="def">
   <span class="def"><code>photons_to_fermions_b</code></span>
   <pre>
-    std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* s */</span>)&gt; photons_to_fermions_b(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
+    std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>)&gt; photons_to_fermions_b(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
   </pre>
   Cross section for the reaction
   <math>
@@ -3642,7 +3642,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       </mrow>
       <mo>&parallel;</mo>
     </msubsup>
-    <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+    <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
     <mo>=</mo>
     <mfrac>
       <mrow>
@@ -3745,7 +3745,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       </mrow>
       <mo>&perp;</mo>
     </msubsup>
-    <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+    <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
     <mo>=</mo>
     <mfrac>
       <mrow>
@@ -3849,7 +3849,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       </mrow>
       <mo>&parallel;</mo>
     </msubsup>
-    <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+    <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
   </math>
   is the cross section for the photons with parallel polarization,
   <math>
@@ -3864,7 +3864,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       </mrow>
       <mo>&perp;</mo>
     </msubsup>
-    <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+    <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
   </math>
   is the cross section for the photons with perpendicular polarization, <math>
   <msup> <mi>χ</mi> <mn>±</mn> </msup> </math> is a fermion with the mass
@@ -3876,7 +3876,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="photons_to_fermions_pT_b" class="def">
   <span class="def"><code>photons_to_fermions_pT_b</code></span>
   <pre>
-    std::function&lt;Polarization (<span class="type">double</span> <span class="comment">/* s */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; photons_to_fermions_pT_b(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
+    std::function&lt;Polarization (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; photons_to_fermions_pT_b(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
   </pre>
   Differential cross section returning two values:
   <math display="block">
@@ -3899,7 +3899,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
     </mfrac>
     <mrow>
       <mo>(</mo>
-      <mi>s</mi>
+      <msqrt> <mi>s</mi> </msqrt>
       <mo>,</mo>
       <msub> <mi>p</mi> <mi>T</mi> </msub>
       <mo>)</mo>
@@ -3986,7 +3986,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
     </mfrac>
     <mrow>
       <mo>(</mo>
-      <mi>s</mi>
+      <msqrt> <mi>s</mi> </msqrt>
       <mo>,</mo>
       <msub> <mi>p</mi> <mi>T</mi> </msub>
       <mo>)</mo>
@@ -4061,7 +4061,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       </mrow>
       <mo>&parallel;</mo>
     </msubsup>
-    <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+    <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
   </math>
   is the cross section for the photons with parallel polarization,
   <math>
@@ -4076,7 +4076,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       </mrow>
       <mo>&perp;</mo>
     </msubsup>
-    <mrow> <mo>(</mo> <mi>s</mi> <mo>)</mo> </mrow>
+    <mrow> <mo>(</mo> <msqrt> <mi>s</mi> </msqrt> <mo>)</mo> </mrow>
   </math>
   is the cross section for the photons with perpendicular polarization, <math>
   <msup> <mi>χ</mi> <mn>±</mn> </msup> </math> is a fermion with the mass
