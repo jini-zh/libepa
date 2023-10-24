@@ -876,11 +876,11 @@ xsection_fid_x(
   auto fpT = [=, xl = std::move(xl)](double pT) -> double {
     EPA_TRY
       double pT2 = sqr(pT);
-      double p = pT2 + m2;
-      double r = 1 - p / sqr(env->energy);
+      double r = 1 - (pT2 + m2) / sqr(env->energy);
       if (r <= 0) return infinity;
-      double y = asinh(
-          pT * env->energy / p * (sinh_eta - sqrt((cosh2_eta + m2 / pT2) * r))
+      double y = log(
+            pT / env->energy
+          * (sinh_eta + sqrt(cosh2_eta + m2 / pT2)) / (1 + sqrt(r))
       );
       double y_min = std::max(-y, env->y_min);
       double y_max = std::min( y, env->y_max);
