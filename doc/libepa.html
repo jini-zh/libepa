@@ -275,9 +275,9 @@ math {
 <ul>
   <li>
     Equivalent photon approximation works. This requires that the colliding
-    particle are ultrarelativistic
+    particles are ultrarelativistic
     (<math><mi>γ</mi> <mo>&#8811;</mo> <mn>1</mn></math>, where
-    <math><mi>γ</mi></math> is the Lorentz factor). 
+    <math><mi>γ</mi></math> is the Lorentz factor).
   </li>
   <li>
     No rescattering: produced particles do not interact with the source
@@ -478,12 +478,12 @@ math {
 </p>
 
 <p>
-  Many functions calculate manifold numerical integrals. For example,
-  calculation of differential fiducial cross section taking into account the
-  probability of strong interaction between the colliding particles (the
-  survival probability also known as the survival factor) provided by the
+  Many functions calculate multiple integrals. For example, calculation of
+  the differential fiducial cross section taking into account the probability
+  of strong interaction between the colliding particles (the survival
+  probability also known as the survival factor) provided by the
   function <code><a href="#xsection_fid_b">xsection_fid_b</a></code> requires
-  calculation of five-fold integrals of the phase space parameters, assuming
+  calculation of quintuple integrals of the phase space parameters, assuming
   that the photon spectra are known analytically. Add an extra level of
   integration if the integrated cross section is desired. In this case, to
   avoid accumulation of numerical errors, each inner integral has to be
@@ -519,8 +519,8 @@ the integral with respect to <math><mi>dx</mi></math> is of integration level
 0, and the integral with respect to <math><mi>dy</mi></math> is of
 integration level 1. <em>Integrator generator</em> is a function producing
 integrators for different integration levels. The difference between these
-integrators is in their captured <code>relative_error</code> parameter with
-is calculated as follows:
+integrators when the default GSL-based algorithms are used is in their captured
+<code>relative_error</code> parameter which is calculated as follows:
 <div class="equation">
   <code>relative_error</code>
   = <code>default_relative_error</code>
@@ -564,7 +564,8 @@ Available integrator generators based on GSL routines are
   integration errors, these are exceptions of class <code>gsl::Error</code>.
   Standard exceptions might be thrown by the functions from the standard
   library.  To help with debugging, the variable
-  <a id="print_backtrace"></a><code>bool print_backtrace</code> can be set to
+  <a id="print_backtrace"></a>
+  <code><span class="type">bool</span> print_backtrace</code> can be set to
   <code><span class="literal">true</span></code>. In this case
   <code>libepa</code> will print to the standard error output the backtrace of
   the calculation.
@@ -669,7 +670,7 @@ only used to define other constants):
           <mi>e</mi>
           <mo>)</mo>
           <mo>&times;</mo>
-          <msup> <mn>10</mn> <mn>9</mn> </msup>
+          <msup> <mn>10</mn> <mn>-9</mn> </msup>
         </math>
       </td>
       <td>GeV</td>
@@ -768,10 +769,10 @@ Parameters governing GSL integration routines:
   <code>epsrel</code> respectively. In the following routines
   <code>epsabs</code> is referred to as <code>absolute_error</code> and
   <code>epsrel</code> is referred to as <code>relative_error</code>.
-  Default values of these parameters are provided by 
+  Default values of these parameters are provided by
   <code>default_absolute_error</code> and <code>default_relative_error</code>.
   Correct application of <code>absolute_error</code> requires estimation of the
-  order of magnitude of the integral, so its usage is discouraged and its
+  order of the magnitude of the integral, so its usage is discouraged and its
   default value is set to zero.
 </p>
 
@@ -803,7 +804,7 @@ Parameters governing GSL integration routines:
   routine divides the integration region into subintervals by calculating the
   function value at <math><mi>n</mi></math> points, where
   <math><mi>n</mi></math> is defined by the <code>integration_method</code>
-  parameter. Supported values are those defined in 
+  parameter. Supported values are those defined in
   <code><span class="type">enum</span> gsl::integration::QAGMethod</code>:
   <code>GAUSS15</code>, <code>GAUSS21</code>, <code>GAUSS31</code>,
   <code>GAUSS41</code>, <code>GAUSS51</code>, <code>GAUSS61</code>.
@@ -1557,8 +1558,8 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   </pre>
   Luminosity <math><mi>L</mi></math> is the number of photons coming from both
   of the colliding particles during the collision. <code>Luminosity</code> is
-  differentiated with respect to the invariant mass <math><msqrt> <mi>s</mi>
-  </msqrt></math> of the photon-photon system
+  the luminosity differentiated with respect to the invariant mass
+  <math><msqrt> <mi>s</mi> </msqrt></math> of the photon-photon system
   <math>
     <mo>(</mo>
     <mtext>d</mtext>
@@ -1597,9 +1598,9 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <pre>
     <span class="type">typedef</span> std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* ymin */</span>, <span class="type">double</span> <span class="comment">/* ymax */</span>)&gt; Luminosity_fid;
   </pre>
-  <code>Luminosity_fid</code> is used to calculate fiducial cross section. It is
-  differentiated with respect to invariant mass
-  <math><msqrt><mi>s</mi></msqrt></math> of the photon-photon system 
+  <code>Luminosity_fid</code> is used to calculate fiducial cross section. It
+  is the luminosity differentiated with respect to invariant mass
+  <math><msqrt><mi>s</mi></msqrt></math> of the photon-photon system
   <math>
     <mo>(</mo>
     <mtext>d</mtext>
@@ -1821,7 +1822,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
     <pre>
     Luminosity_fid luminosity_fid(<a href="#Spectrum">Spectrum</a>, <a href="#Integrator">Integrator</a> = <a href="#default_integrator">default_integrator</a>(<span class="literal">0</span>));
     </pre>
-    Convenience function for the collision of identical particles. In the case when
+    Convenience function for the collision of identical particles. When
     <math>
       <msub> <mi>y</mi> <mtext>min</mtext> </msub>
       <mo>=</mo>
@@ -1875,632 +1876,779 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 
 <div id="luminosity_b" class="def">
   <span class="def"><code>luminosity_b</code></span>
-  <pre>
-    Luminosity_b luminosity_b(
-      <a href="#Spectrum_b">Spectrum_b</a> nA,
-      <a href="#Spectrum_b">Spectrum_b</a> nB,
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
-      <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
-      <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
-    );
-  </pre>
-  Photon-photon luminosity in ultraperipheral collisions of particles
-  <math><mi>A</mi></math> and <math><mi>B</mi></math> differentiated with
-  respect to the invariant mass <math><msqrt><mi>s</mi></msqrt></math> of the
-  photon-photon system:
-  <math display="block">
-    <mfrac>
+  <div class="def">
+    <pre>
+      Luminosity_b luminosity_b(
+        <a href="#Spectrum_b">Spectrum_b</a> nA,
+        <a href="#Spectrum_b">Spectrum_b</a> nB,
+        std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
+        <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
+        <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
+      );
+    </pre>
+    Photon-photon luminosity in ultraperipheral collisions of particles
+    <math><mi>A</mi></math> and <math><mi>B</mi></math> differentiated with
+    respect to the invariant mass <math><msqrt><mi>s</mi></msqrt></math> of the
+    photon-photon system:
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext>
+          <msub> <mi>L</mi> <mrow> <mi>A</mi> <mi>B</mi> </mrow> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
       <mrow>
-        <mtext>d</mtext>
-        <msub> <mi>L</mi> <mrow> <mi>A</mi> <mi>B</mi> </mrow> </msub>
+        <mo>(</mo>
+        <msqrt> <mi>s</mi> </msqrt>
+        <mo>,</mo>
+        <mrow>
+          <mo>{</mo>
+          <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
+          <mo>,</mo>
+          <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
+          <mo>}</mo>
+        </mrow>
+        <mo>)</mo>
       </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow>
-      <mo>(</mo>
-      <msqrt> <mi>s</mi> </msqrt>
+      <mo>=</mo>
+      <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
+      <mo>+</mo>
+      <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
       <mo>,</mo>
+    </math>
+    where
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
+      <mo>=</mo>
+      <mfrac>
+        <msqrt> <mi>s</mi> </msqrt>
+        <mn>2</mn>
+      </mfrac>
       <mrow>
-        <mo>{</mo>
-        <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
-        <mo>,</mo>
-        <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
-        <mo>}</mo>
-      </mrow>
-      <mo>)</mo>
-    </mrow>
-    <mo>=</mo>
-    <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-      </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
-    <mo>+</mo>
-    <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
-      </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
-    <mo>,</mo>
-  </math>
-  where
-  <math display="block">
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-      </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
-    <mo>=</mo>
-    <mfrac>
-      <msqrt> <mi>s</mi> </msqrt>
-      <mn>2</mn>
-    </mfrac>
-    <mrow>
-      <msubsup>
+        <msubsup>
+          <mo>&int;</mo>
+          <mrow> <mo>-</mo> <mn>∞</mn> </mrow>
+          <mn>∞</mn>
+        </msubsup>
+        <mtext>d</mtext> <mi>y</mi>
         <mo>&int;</mo>
-        <mrow> <mo>-</mo> <mn>∞</mn> </mrow>
-        <mn>∞</mn>
-      </msubsup>
-      <mtext>d</mtext> <mi>y</mi>
-      <mo>&int;</mo>
-      <msup>
-        <mtext>d</mtext> <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>1</mn>
-      </msub>
-      <mo>&int;</mo>
-      <msup>
-        <mtext>d</mtext> <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>2</mn>
-      </msub>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>A</mi> </msub>
-      <mrow>
-        <mo>(</mo>
-        <msub> <mi>b</mi> <mn>1</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mi>y</mi> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>B</mi> </msub>
-      <mrow>
-        <mo>(</mo>
-        <msub> <mi>b</mi> <mn>2</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
-      <mspace width="3pt"/>
-      <msup> <mtext>cos</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
-    </mrow>
-  </math>
-  <math display="block">
-    <mfrac>
-      <mrow> <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub> </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
-    <mo>=</mo>
-    <mfrac>
-      <msqrt> <mi>s</mi> </msqrt>
-      <mn>2</mn>
-    </mfrac>
-    <mrow>
-      <msubsup>
+        <msup>
+          <mtext>d</mtext> <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>1</mn>
+        </msub>
         <mo>&int;</mo>
-        <mrow> <mo>-</mo> <mn>∞</mn> </mrow>
-        <mn>∞</mn>
-      </msubsup>
-      <mtext>d</mtext> <mi>y</mi>
-      <mo>&int;</mo>
-      <msup>
-        <mtext>d</mtext>
-        <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>1</mn>
-      </msub>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn> </msup>
-      <msub> <mi>b</mi> <mn>2</mn> </msub>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>A</mi> </msub>
-      <mrow>
-        <mo>(</mo>
-        <msub> <mi>b</mi> <mn>1</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mi>y</mi> </msup>
-        <mo>)</mo>
+        <msup>
+          <mtext>d</mtext> <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>2</mn>
+        </msub>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>A</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>1</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mi>y</mi> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>B</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>2</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
+        <mspace width="3pt"/>
+        <msup> <mtext>cos</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
       </mrow>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>B</mi> </msub>
+    </math>
+    <math display="block">
+      <mfrac>
+        <mrow> <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub> </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
+      <mo>=</mo>
+      <mfrac>
+        <msqrt> <mi>s</mi> </msqrt>
+        <mn>2</mn>
+      </mfrac>
       <mrow>
-        <mo>(</mo>
+        <msubsup>
+          <mo>&int;</mo>
+          <mrow> <mo>-</mo> <mn>∞</mn> </mrow>
+          <mn>∞</mn>
+        </msubsup>
+        <mtext>d</mtext> <mi>y</mi>
+        <mo>&int;</mo>
+        <msup>
+          <mtext>d</mtext>
+          <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>1</mn>
+        </msub>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
         <msub> <mi>b</mi> <mn>2</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
-        <mo>)</mo>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>A</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>1</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mi>y</mi> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>B</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>2</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
+        <mspace width="3pt"/>
+        <msup> <mtext>sin</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
       </mrow>
-      <mspace width="3pt"/>
-      <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
-      <mspace width="3pt"/>
-      <msup> <mtext>sin</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
-    </mrow>
-  </math>
-  <math>
-    <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-    <mo>/</mo>
-    <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
-  </math>
-  is the luminosity of photons with parallel polarizations, 
-  <math>
-    <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
-    <mo>/</mo>
-    <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
-  </math>
-  is the luminosity of photons with perpendicular polarizations,
-  <math> <mi>P</mi> <mo>(</mo> <mi>b</mi> <mo>)</mo> </math>
-  is <code>upc_probability</code>, the probability for the particles to survive
-  in an ultraperipheral collision with the impact parameter
-  <math><mi>b</mi></math> (the probability to avoid electromagnetic
-  interactions),
-  <math>
-    <mi>b</mi>
-    <mo>=</mo>
-    <mo>|</mo>
-    <mover accent="true">
-      <msub> <mi>b</mi> <mn>1</mn> </msub>
-      <mo>&rarr;</mo>
-    </mover>
-    <mo>-</mo>
-    <mover accent="true">
-      <msub> <mi>b</mi> <mn>2</mn> </msub>
-      <mo>&rarr;</mo>
-    </mover>
-    <mo>|</mo>.
-  </math>
-  <code>integration_level</code>  is the integration level of the outermost
-  integral to be calculated by the returned function.
+    </math>
+    <math>
+      <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+      <mo>/</mo>
+      <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+    </math>
+    is the luminosity of photons with parallel polarizations,
+    <math>
+      <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
+      <mo>/</mo>
+      <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+    </math>
+    is the luminosity of photons with perpendicular polarizations,
+    <math> <mi>P</mi> <mo>(</mo> <mi>b</mi> <mo>)</mo> </math>
+    is <code>upc_probability</code>, the probability for the particles to survive
+    in an ultraperipheral collision with the impact parameter
+    <math><mi>b</mi></math> (the probability to avoid electromagnetic
+    interactions),
+    <math>
+      <mi>b</mi>
+      <mo>=</mo>
+      <mo>|</mo>
+      <mover accent="true">
+        <msub> <mi>b</mi> <mn>1</mn> </msub>
+        <mo>&rarr;</mo>
+      </mover>
+      <mo>-</mo>
+      <mover accent="true">
+        <msub> <mi>b</mi> <mn>2</mn> </msub>
+        <mo>&rarr;</mo>
+      </mover>
+      <mo>|</mo>.
+    </math>
+    <code>integration_level</code>  is the integration level of the outermost
+    integral to be calculated by the returned function.
+  </div>
+  <div class="def">
+    <pre>
+      Luminosity_b luminosity_b(
+        <a href="#Spectrum_b">Spectrum_b</a> n,
+        std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
+        <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
+        <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
+      );
+    </pre>
+    Convenience function for the collision of identical particles. It takes into account the symmetry of the integrands, improving on convergence and calculation time:
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
+      <mo>=</mo>
+      <msqrt> <mi>s</mi> </msqrt>
+      <mrow>
+        <msubsup>
+          <mo>&int;</mo>
+          <mn>0</mn>
+          <mn>∞</mn>
+        </msubsup>
+        <mtext>d</mtext> <mi>y</mi>
+        <mo>&int;</mo>
+        <msup>
+          <mtext>d</mtext> <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>1</mn>
+        </msub>
+        <mo>&int;</mo>
+        <msup>
+          <mtext>d</mtext> <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>2</mn>
+        </msub>
+        <mspace width="3pt"/>
+        <mi>n</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>1</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mi>y</mi> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>n</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>2</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
+        <mspace width="3pt"/>
+        <msup> <mtext>cos</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
+      </mrow>
+    </math>
+    <math display="block">
+      <mfrac>
+        <mrow> <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub> </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
+      <mo>=</mo>
+      <msqrt> <mi>s</mi> </msqrt>
+      <mrow>
+        <msubsup>
+          <mo>&int;</mo>
+          <mn>0</mn>
+          <mn>∞</mn>
+        </msubsup>
+        <mtext>d</mtext> <mi>y</mi>
+        <mo>&int;</mo>
+        <msup>
+          <mtext>d</mtext>
+          <mn>2</mn> </msup> <msub> <mi>b</mi> <mn>1</mn>
+        </msub>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
+        <msub> <mi>b</mi> <mn>2</mn> </msub>
+        <mspace width="3pt"/>
+        <mi>n</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>1</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mi>y</mi> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>n</mi>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>2</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
+        <mspace width="3pt"/>
+        <msup> <mtext>sin</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
+      </mrow>
+    </math>
+  </div>
 </div>
 
 <div id="luminosity_y_b" class="def">
   <span class="def"><code>luminosity_y_b</code></span>
-  <pre>
-    Luminosity_y_b luminosity_y_b(
-      <a href="#Spectrum_b">Spectrum_b</a> nA,
-      <a href="#Spectrum_b">Spectrum_b</a> nB,
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
-      <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
-      <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
-    );
-  </pre>
-  Photon-photon luminosity in ultraperipheral collisions of particles
-  <math><mi>A</mi></math> and <math><mi>B</mi></math> differentiated with
-  respect to the photons invariant mass <math><msqrt><mi>s</mi></msqrt></math>
-  and rapidity <math><mi>y</mi></math>:
-  <math display="block">
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext>
-        <msub> <mi>L</mi> <mrow> <mi>A</mi> <mi>B</mi> </mrow> </msub>
-      </mrow>
-      <mrow>
-        <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
-        <mspace width="3pt"/>
-        <mtext>d</mtext> <mi>y</mi>
-      </mrow>
-    </mfrac>
-    <mrow>
-      <mo>(</mo>
-      <msqrt> <mi>s</mi> </msqrt>
-      <mo>,</mo>
-      <mi>y</mi>
-      <mo>,</mo>
-      <mrow>
-        <mo>{</mo>
-        <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
-        <mo>,</mo>
-        <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
-        <mo>}</mo>
-      </mrow>
-      <mo>)</mo>
-    </mrow>
-    <mo>=</mo>
-    <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext>
-        <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-      </mrow>
-      <mrow>
-        <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> 
-        <mspace width="3pt"/>
-        <mtext>d</mtext> <mi>y</mi>
-      </mrow>
-    </mfrac>
-    <mrow>
-      <mo>(</mo>
-      <msqrt><mi>s</mi></msqrt>
-      <mo>,</mo>
-      <mi>y</mi>
-      <mo>)</mo>
-    </mrow>
-    <mo>+</mo>
-    <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
-    <mfrac>
-      <mrow> <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub> </mrow>
-      <mrow>
-        <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> 
-        <mspace width="3pt"/>
-        <mtext>d</mtext> <mi>y</mi>
-      </mrow>
-    </mfrac>
-    <mrow>
-      <mo>(</mo>
-      <msqrt><mi>s</mi></msqrt>
-      <mo>,</mo>
-      <mi>y</mi>
-      <mo>)</mo>
-    </mrow>
-  </math>
-  where
-  <math display="block">
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext>
-        <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-      </mrow>
-      <mrow>
-        <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
-        <mspace width="3pt"/>
-        <mtext>d</mtext> <mi>y</mi>
-      </mrow>
-    </mfrac>
-    <mrow>
-      <mo>(</mo>
-      <msqrt><mi>s</mi></msqrt>
-      <mo>,</mo>
-      <mi>y</mi>
-      <mo>)</mo>
-    </mrow>
-    <mo>=</mo>
-    <mfrac>
-      <msqrt> <mi>s</mi> </msqrt>
-      <mn>2</mn>
-    </mfrac>
-    <mrow>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn> </msup>
-      <msub> <mi>b</mi> <mn>1</mn> </msub>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn> </msup>
-      <msub> <mi>b</mi> <mn>2</mn> </msub>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>A</mi> </msub>
+  <div class="def">
+    <pre>
+      Luminosity_y_b luminosity_y_b(
+        <a href="#Spectrum_b">Spectrum_b</a> nA,
+        <a href="#Spectrum_b">Spectrum_b</a> nB,
+        std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
+        <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
+        <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
+      );
+    </pre>
+    Photon-photon luminosity in ultraperipheral collisions of particles
+    <math><mi>A</mi></math> and <math><mi>B</mi></math> differentiated with
+    respect to the photons invariant mass <math><msqrt><mi>s</mi></msqrt></math>
+    and rapidity <math><mi>y</mi></math>:
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext>
+          <msub> <mi>L</mi> <mrow> <mi>A</mi> <mi>B</mi> </mrow> </msub>
+        </mrow>
+        <mrow>
+          <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+          <mspace width="3pt"/>
+          <mtext>d</mtext> <mi>y</mi>
+        </mrow>
+      </mfrac>
       <mrow>
         <mo>(</mo>
+        <msqrt> <mi>s</mi> </msqrt>
+        <mo>,</mo>
+        <mi>y</mi>
+        <mo>,</mo>
+        <mrow>
+          <mo>{</mo>
+          <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
+          <mo>,</mo>
+          <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
+          <mo>}</mo>
+        </mrow>
+        <mo>)</mo>
+      </mrow>
+      <mo>=</mo>
+      <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext>
+          <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+        </mrow>
+        <mrow>
+          <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+          <mspace width="3pt"/>
+          <mtext>d</mtext> <mi>y</mi>
+        </mrow>
+      </mfrac>
+      <mrow>
+        <mo>(</mo>
+        <msqrt><mi>s</mi></msqrt>
+        <mo>,</mo>
+        <mi>y</mi>
+        <mo>)</mo>
+      </mrow>
+      <mo>+</mo>
+      <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
+      <mfrac>
+        <mrow> <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub> </mrow>
+        <mrow>
+          <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+          <mspace width="3pt"/>
+          <mtext>d</mtext> <mi>y</mi>
+        </mrow>
+      </mfrac>
+      <mrow>
+        <mo>(</mo>
+        <msqrt><mi>s</mi></msqrt>
+        <mo>,</mo>
+        <mi>y</mi>
+        <mo>)</mo>
+      </mrow>
+    </math>
+    where
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext>
+          <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+        </mrow>
+        <mrow>
+          <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+          <mspace width="3pt"/>
+          <mtext>d</mtext> <mi>y</mi>
+        </mrow>
+      </mfrac>
+      <mrow>
+        <mo>(</mo>
+        <msqrt><mi>s</mi></msqrt>
+        <mo>,</mo>
+        <mi>y</mi>
+        <mo>)</mo>
+      </mrow>
+      <mo>=</mo>
+      <mfrac>
+        <msqrt> <mi>s</mi> </msqrt>
+        <mn>2</mn>
+      </mfrac>
+      <mrow>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
         <msub> <mi>b</mi> <mn>1</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mi>y</mi> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>B</mi> </msub>
-      <mrow>
-        <mo>(</mo>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
         <msub> <mi>b</mi> <mn>2</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
-      <mspace width="3pt"/>
-      <msup> <mtext>cos</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
-    </mrow>
-  </math>
-  <math display="block">
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
-      </mrow>
-      <mrow>
-        <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
         <mspace width="3pt"/>
-        <mtext>d</mtext> <mi>y</mi>
+        <msub> <mi>n</mi> <mi>A</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>1</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mi>y</mi> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>B</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>2</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
+        <mspace width="3pt"/>
+        <msup> <mtext>cos</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
       </mrow>
-    </mfrac>
-    <mrow>
-      <mo>(</mo>
-      <msqrt><mi>s</mi></msqrt>
-      <mo>,</mo>
-      <mi>y</mi>
-      <mo>)</mo>
-    </mrow>
-    <mo>=</mo>
-    <mfrac>
-      <msqrt> <mi>s</mi> </msqrt>
-      <mn>2</mn>
-    </mfrac>
-    <mrow>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn> </msup>
-      <msub> <mi>b</mi> <mn>1</mn> </msub>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn> </msup>
-      <msub> <mi>b</mi> <mn>2</mn> </msub>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>A</mi> </msub>
+    </math>
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
+        </mrow>
+        <mrow>
+          <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+          <mspace width="3pt"/>
+          <mtext>d</mtext> <mi>y</mi>
+        </mrow>
+      </mfrac>
       <mrow>
         <mo>(</mo>
+        <msqrt><mi>s</mi></msqrt>
+        <mo>,</mo>
+        <mi>y</mi>
+        <mo>)</mo>
+      </mrow>
+      <mo>=</mo>
+      <mfrac>
+        <msqrt> <mi>s</mi> </msqrt>
+        <mn>2</mn>
+      </mfrac>
+      <mrow>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
         <msub> <mi>b</mi> <mn>1</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mi>y</mi> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>B</mi> </msub>
-      <mrow>
-        <mo>(</mo>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
         <msub> <mi>b</mi> <mn>2</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
-        <mo>)</mo>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>A</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>1</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mi>y</mi> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>B</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>2</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
+        <mspace width="3pt"/>
+        <msup> <mtext>sin</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
       </mrow>
-      <mspace width="3pt"/>
-      <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
-      <mspace width="3pt"/>
-      <msup> <mtext>sin</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
-    </mrow>
-  </math>
-  <math>
-    <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-    <mo>/</mo>
-    <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
-  </math>
-  is the luminosity of photons with parallel polarizations, 
-  <math>
-    <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
-    <mo>/</mo>
-    <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
-  </math>
-  is the luminosity of photons with perpendicular polarizations,
-  <math> <mi>P</mi> <mo>(</mo> <mi>b</mi> <mo>)</mo> </math>
-  is <code>upc_probability</code>, the probability for the particles to survive
-  in an ultraperipheral collision with the impact parameter
-  <math><mi>b</mi></math> (the probability to avoid electromagnetic
-  interactions),
-  <math>
-    <mi>b</mi>
-    <mo>=</mo>
-    <mo>|</mo>
-    <mover accent="true">
-      <msub> <mi>b</mi> <mn>1</mn> </msub>
-      <mo>&rarr;</mo>
-    </mover>
-    <mo>-</mo>
-    <mover accent="true">
-      <msub> <mi>b</mi> <mn>2</mn> </msub>
-      <mo>&rarr;</mo>
-    </mover>
-    <mo>|</mo>.
-  </math>
-  <code>integration_level</code>  is the integration level of the outermost
-  integral to be calculated by the returned function.
+    </math>
+    <math>
+      <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+      <mo>/</mo>
+      <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+    </math>
+    is the luminosity of photons with parallel polarizations,
+    <math>
+      <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
+      <mo>/</mo>
+      <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+    </math>
+    is the luminosity of photons with perpendicular polarizations,
+    <math> <mi>P</mi> <mo>(</mo> <mi>b</mi> <mo>)</mo> </math>
+    is <code>upc_probability</code>, the probability for the particles to survive
+    in an ultraperipheral collision with the impact parameter
+    <math><mi>b</mi></math> (the probability to avoid electromagnetic
+    interactions),
+    <math>
+      <mi>b</mi>
+      <mo>=</mo>
+      <mo>|</mo>
+      <mover accent="true">
+        <msub> <mi>b</mi> <mn>1</mn> </msub>
+        <mo>&rarr;</mo>
+      </mover>
+      <mo>-</mo>
+      <mover accent="true">
+        <msub> <mi>b</mi> <mn>2</mn> </msub>
+        <mo>&rarr;</mo>
+      </mover>
+      <mo>|</mo>.
+    </math>
+    <code>integration_level</code>  is the integration level of the outermost
+    integral to be calculated by the returned function.
+  </div>
+  <div class="def">
+    <pre>
+      Luminosity_y_b luminosity_y_b(
+        <a href="#Spectrum_b">Spectrum_b</a>,
+        std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
+        <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
+        <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
+      );
+    </pre>
+    Convenience function for the collision of identical particles.
+  </div>
 </div>
 
 <div id="luminosity_fid_b" class="def">
   <span class="def"><code>luminosity_fid_b</code></span>
-  <pre>
-    Luminosity_fid_b luminosity_fid_b(
-      <a href="#Spectrum_b">Spectrum_b</a> nA,
-      <a href="#Spectrum_b">Spectrum_b</a> nB,
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
-      <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
-      <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
-    );
-  </pre>
-  Photon-photon luminosity in ultraperipheral collisions of particles
-  <math><mi>A</mi></math> and <math><mi>B</mi></math> differentiated with
-  respect to the photons invariant mass <math><msqrt><mi>s</mi></msqrt></math>
-  with parameterized bounds on the rapidity integral:
-  <math display="block">
-    <mfrac>
+  <div class="def">
+    <pre>
+      Luminosity_fid_b luminosity_fid_b(
+        <a href="#Spectrum_b">Spectrum_b</a> nA,
+        <a href="#Spectrum_b">Spectrum_b</a> nB,
+        std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
+        <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
+        <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
+      );
+    </pre>
+    Photon-photon luminosity in ultraperipheral collisions of particles
+    <math><mi>A</mi></math> and <math><mi>B</mi></math> differentiated with
+    respect to the photons invariant mass <math><msqrt><mi>s</mi></msqrt></math>
+    with parameterized bounds on the rapidity integral:
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext>
+          <msub> <mi>L</mi> <mrow> <mi>A</mi> <mi>B</mi> </mrow> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
       <mrow>
-        <mtext>d</mtext>
-        <msub> <mi>L</mi> <mrow> <mi>A</mi> <mi>B</mi> </mrow> </msub>
-      </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow>
-      <mo>(</mo>
-      <msqrt> <mi>s</mi> </msqrt>
-      <mo>,</mo>
-      <mrow>
-        <mo>{</mo>
-        <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
+        <mo>(</mo>
+        <msqrt> <mi>s</mi> </msqrt>
         <mo>,</mo>
-        <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
-        <mo>}</mo>
+        <mrow>
+          <mo>{</mo>
+          <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
+          <mo>,</mo>
+          <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
+          <mo>}</mo>
+        </mrow>
+        <mo>,</mo>
+        <msub> <mi>y</mi> <mtext>min</mtext> </msub>
+        <mo>,</mo>
+        <msub> <mi>y</mi> <mtext>max</mtext> </msub>
+        <mo>)</mo>
       </mrow>
-      <mo>,</mo>
+      <mo>=</mo>
+      <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext>
+          <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
+      <mo>+</mo>
+      <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
+      <mfrac>
+        <mrow> <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub> </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>,
+    </math>
+    where
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext>
+          <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
+      <mo>=</mo>
+      <mfrac>
+        <msqrt> <mi>s</mi> </msqrt>
+        <mn>2</mn>
+      </mfrac>
+      <mrow>
+        <msubsup>
+          <mo>&int;</mo>
+          <msub> <mi>y</mi> <mtext>min</mtext> </msub>
+          <msub> <mi>y</mi> <mtext>max</mtext> </msub>
+        </msubsup>
+        <mtext>d</mtext> <mi>y</mi>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn>
+        </msup> <msub> <mi>b</mi> <mn>1</mn> </msub>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
+        <msub> <mi>b</mi> <mn>2</mn> </msub>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>A</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>1</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mi>y</mi> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>B</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>2</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
+        <mspace width="3pt"/>
+        <msup> <mtext>cos</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
+      </mrow>
+    </math>
+    <math display="block">
+      <mfrac>
+        <mrow>
+          <mtext>d</mtext>
+          <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
+        </mrow>
+        <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
+      </mfrac>
+      <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
+      <mo>=</mo>
+      <mfrac>
+        <msqrt> <mi>s</mi> </msqrt>
+        <mn>2</mn>
+      </mfrac>
+      <mrow>
+        <msubsup>
+          <mo>&int;</mo>
+          <msub> <mi>y</mi> <mtext>min</mtext> </msub>
+          <msub> <mi>y</mi> <mtext>max</mtext> </msub>
+        </msubsup>
+        <mtext>d</mtext> <mi>y</mi>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
+        <msub> <mi>b</mi> <mn>1</mn> </msub>
+        <mo>&int;</mo>
+        <msup> <mtext>d</mtext> <mn>2</mn> </msup>
+        <msub> <mi>b</mi> <mn>2</mn> </msub>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>A</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>1</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mi>y</mi> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <msub> <mi>n</mi> <mi>B</mi> </msub>
+        <mrow>
+          <mo>(</mo>
+          <msub> <mi>b</mi> <mn>2</mn> </msub>
+          <mo>,</mo>
+          <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
+          <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
+          <mo>)</mo>
+        </mrow>
+        <mspace width="3pt"/>
+        <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
+        <mspace width="3pt"/>
+        <msup> <mtext>sin</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
+      </mrow>
+    </math>
+    <math>
+      <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
+      <mo>/</mo>
+      <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+    </math>
+    is the luminosity of photons with parallel polarizations,
+    <math>
+      <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
+      <mo>/</mo>
+      <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
+    </math>
+    is the luminosity of photons with perpendicular polarizations,
+    <math> <mi>P</mi> <mo>(</mo> <mi>b</mi> <mo>)</mo> </math>
+    is <code>upc_probability</code>, the probability for the particles to survive
+    in an ultraperipheral collision with the impact parameter
+    <math><mi>b</mi></math> (the probability to avoid electromagnetic
+    interactions),
+    <math>
+      <mi>b</mi>
+      <mo>=</mo>
+      <mo>|</mo>
+      <mover accent="true">
+        <msub> <mi>b</mi> <mn>1</mn> </msub>
+        <mo>&rarr;</mo>
+      </mover>
+      <mo>-</mo>
+      <mover accent="true">
+        <msub> <mi>b</mi> <mn>2</mn> </msub>
+        <mo>&rarr;</mo>
+      </mover>
+      <mo>|</mo>.
+    </math>
+    <code>integration_level</code>  is the integration level of the outermost
+    integral to be calculated by the returned function.
+  </div>
+  <div class="def">
+    <pre>
+      Luminosity_fid_b luminosity_fid_b(
+        <a href="#Spectrum_b">Spectrum_b</a>,
+        std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* b */</span>)&gt; upc_probability,
+        <span class="type">const</span> std::function&lt;<a href="#Integrator">Integrator</a> (<span class="type">unsigned</span>)&gt;&amp; = <a href="#default_integrator">default_integrator</a>,
+        <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
+      );
+    </pre>
+    Convenience function for the collision of identical particles. When
+    <math>
       <msub> <mi>y</mi> <mtext>min</mtext> </msub>
-      <mo>,</mo>
-      <msub> <mi>y</mi> <mtext>max</mtext> </msub>
-      <mo>)</mo>
-    </mrow>
-    <mo>=</mo>
-    <msub> <mi>p</mi> <mo>&parallel;</mo> </msub>
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext>
-        <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-      </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
-    <mo>+</mo>
-    <msub> <mi>p</mi> <mo>&perp;</mo> </msub>
-    <mfrac>
-      <mrow> <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub> </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>,
-  </math>
-  where
-  <math display="block">
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext>
-        <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-      </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
-    <mo>=</mo>
-    <mfrac>
-      <msqrt> <mi>s</mi> </msqrt>
-      <mn>2</mn>
-    </mfrac>
-    <mrow>
-      <msubsup>
-        <mo>&int;</mo>
-        <msub> <mi>y</mi> <mtext>min</mtext> </msub>
-        <msub> <mi>y</mi> <mtext>max</mtext> </msub>
-      </msubsup>
-      <mtext>d</mtext> <mi>y</mi>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn>
-      </msup> <msub> <mi>b</mi> <mn>1</mn> </msub>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn> </msup>
-      <msub> <mi>b</mi> <mn>2</mn> </msub>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>A</mi> </msub>
-      <mrow>
-        <mo>(</mo>
-        <msub> <mi>b</mi> <mn>1</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mi>y</mi> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>B</mi> </msub>
-      <mrow>
-        <mo>(</mo>
-        <msub> <mi>b</mi> <mn>2</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
-      <mspace width="3pt"/>
-      <msup> <mtext>cos</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
-    </mrow>
-  </math>
-  <math display="block">
-    <mfrac>
-      <mrow>
-        <mtext>d</mtext>
-        <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
-      </mrow>
-      <mrow> <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt> </mrow>
-    </mfrac>
-    <mrow> <mo>(</mo> <msqrt><mi>s</mi></msqrt> <mo>)</mo> </mrow>
-    <mo>=</mo>
-    <mfrac>
-      <msqrt> <mi>s</mi> </msqrt>
-      <mn>2</mn>
-    </mfrac>
-    <mrow>
-      <msubsup>
-        <mo>&int;</mo>
-        <msub> <mi>y</mi> <mtext>min</mtext> </msub>
-        <msub> <mi>y</mi> <mtext>max</mtext> </msub>
-      </msubsup>
-      <mtext>d</mtext> <mi>y</mi>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn> </msup>
-      <msub> <mi>b</mi> <mn>1</mn> </msub>
-      <mo>&int;</mo>
-      <msup> <mtext>d</mtext> <mn>2</mn> </msup>
-      <msub> <mi>b</mi> <mn>2</mn> </msub>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>A</mi> </msub>
-      <mrow>
-        <mo>(</mo>
-        <msub> <mi>b</mi> <mn>1</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mi>y</mi> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <msub> <mi>n</mi> <mi>B</mi> </msub>
-      <mrow>
-        <mo>(</mo>
-        <msub> <mi>b</mi> <mn>2</mn> </msub>
-        <mo>,</mo>
-        <mfrac> <msqrt> <mi>s</mi> </msqrt> <mn>2</mn> </mfrac>
-        <msup> <mn>e</mn> <mrow> <mo>-</mo> <mi>y</mi> </mrow> </msup>
-        <mo>)</mo>
-      </mrow>
-      <mspace width="3pt"/>
-      <mi>P</mi> <mrow> <mo>(</mo> <mi>b</mi> <mo>)</mo> </mrow>
-      <mspace width="3pt"/>
-      <msup> <mtext>sin</mtext> <mn>2</mn> </msup> <mi>φ</mi>,
-    </mrow>
-  </math>
-  <math>
-    <mtext>d</mtext> <msub> <mi>L</mi> <mo>&parallel;</mo> </msub>
-    <mo>/</mo>
-    <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
-  </math>
-  is the luminosity of photons with parallel polarizations, 
-  <math>
-    <mtext>d</mtext> <msub> <mi>L</mi> <mo>&perp;</mo> </msub>
-    <mo>/</mo>
-    <mtext>d</mtext> <msqrt> <mi>s</mi> </msqrt>
-  </math>
-  is the luminosity of photons with perpendicular polarizations,
-  <math> <mi>P</mi> <mo>(</mo> <mi>b</mi> <mo>)</mo> </math>
-  is <code>upc_probability</code>, the probability for the particles to survive
-  in an ultraperipheral collision with the impact parameter
-  <math><mi>b</mi></math> (the probability to avoid electromagnetic
-  interactions),
-  <math>
-    <mi>b</mi>
-    <mo>=</mo>
-    <mo>|</mo>
-    <mover accent="true">
-      <msub> <mi>b</mi> <mn>1</mn> </msub>
-      <mo>&rarr;</mo>
-    </mover>
-    <mo>-</mo>
-    <mover accent="true">
-      <msub> <mi>b</mi> <mn>2</mn> </msub>
-      <mo>&rarr;</mo>
-    </mover>
-    <mo>|</mo>.
-  </math>
-  <code>integration_level</code>  is the integration level of the outermost
-  integral to be calculated by the returned function.
+      <mo>=</mo>
+      <mo>-</mo>
+      <msub> <mi>y</mi> <mtext>max</mtext> </msub>,
+    </math>
+    it takes into account the symmetry of the integrand, improving on
+    convergence and calculation time.
+  </div>
 </div>
 
 <h5 id="epa-xsections">Cross sections of ultraperipheral collisions</h5>
@@ -2508,7 +2656,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="XSection" class="def">
   <span class="def"><code>XSection</code></span>
   <pre>
-    <span class="type">typedef</span> std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>)&gt; XSection;
+    <span class="type">typedef</span> std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>)&gt; XSection;
   </pre>
   Cross section for the invariant mass <math><msqrt><mi>s</mi></msqrt></math>
   (<math><mi>s</mi></math> is the Mandelstam parameter).
@@ -2526,7 +2674,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="XSection_b" class="def">
   <span class="def"><code>XSection_b</code></span>
   <pre>
-    <span class="type">typedef</span> std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>)&gt; XSection_b;
+    <span class="type">typedef</span> std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>)&gt; XSection_b;
   </pre>
   Photon fusion cross section taking into account photons polarization. Returns
   two values: cross sections for the parallel and perpendicular photons
@@ -2536,7 +2684,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="xsection" class="def">
   <span class="def"><code>xsection</code></span>
   <pre>
-    XSection xsection(XSection <span class="comment">/* photon_photon */</span>, <a href="#Luminosity">Luminosity</a>);
+    XSection xsection(XSection <span class="comment">/* photon_photon */</span>, <a href="#Luminosity">Luminosity</a>  <span class="comment">/* L */</span>);
   </pre>
   Differential cross section for the production of system
   <math><mi>X</mi></math> in ultraperipheral collisions with photon-photon
@@ -2599,7 +2747,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid(
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a>,
       <span class="type">double</span> mass,   <span class="comment">// of the produced particle</span>
       <span class="type">double</span> pT_min,
@@ -2621,7 +2769,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       <mo>(</mo>
       <mi>A</mi> <mi>B</mi>
       <mo>&rarr;</mo>
-      <mi>A</mi> <mi>B</mi> 
+      <mi>A</mi> <mi>B</mi>
       <msup> <mi>χ</mi> <mo>+</mo> </msup> <msup> <mi>χ</mi> <mo>-</mo> </msup>
       <mo>)</mo>
     </math>
@@ -2655,13 +2803,16 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       <msub> <mi>ω</mi> <mrow> <mn>2</mn>, <mtext>max</mtext> </mrow> </msub>
     </math>,
     where
+    <math> <msub> <mover> <mi>p</mi> <mi>^</mi> </mover> <mi>T</mi> </msub> </math>
+    is <code>pT_min</code>,
+    <math> <mover> <mi>η</mi> <mi>^</mi> </math> is <code>eta_max</code>,
     <math> <msubsup> <mi>p</mi> <mi>T</mi> <mn>±</mn> </msubsup> </math>
     and
     <math> <msup> <mi>η</mi> <mn>±</mn> </msup> </math>
     are the transverse momentum and pseudorapidity of
     <math> <msup> <mi>χ</mi> <mn>±</mn> </msup> </math>,
+    <math> <msub> <mi>ω</mi> <mn>1</mn> </msub> </math>
     and
-    <math> <msub> <mi>ω</mi> <mn>1</mn> </msub> </math>,
     <math> <msub> <mi>ω</mi> <mn>2</mn> </msub> </math>
     are the photons energies:
     <math display="block">
@@ -3009,11 +3160,11 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
               <mrow> <mn>1</mn> <mo>,</mo> <mtext>min</mtext> </mrow>
             </msub>
           </mrow>
-          <mi>s</mi>
+          <msqrt> <mi>s</mi> </msqrt>
         </mfrac>
         <mo>,</mo>
         <mfrac>
-          <mi>s</mi>
+          <msqrt> <mi>s</mi> </msqrt>
           <mrow>
             <mn>2</mn>
             <msub>
@@ -3030,7 +3181,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       <mo>=</mo>
       <mtext>ln</mtext>
       <mspace width="3pt"/>
-      <mtext>max</mtext>
+      <mtext>min</mtext>
       <mrow>
         <mo>(</mo>
         <mfrac>
@@ -3041,11 +3192,11 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
               <mrow> <mn>1</mn> <mo>,</mo> <mtext>max</mtext> </mrow>
             </msub>
           </mrow>
-          <mi>s</mi>
+          <msqrt> <mi>s</mi> </msqrt>
         </mfrac>
         <mo>,</mo>
         <mfrac>
-          <mi>s</mi>
+          <msqrt> <mi>s</mi> </msqrt>
           <mrow>
             <mn>2</mn>
             <msub>
@@ -3057,17 +3208,12 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
         <mo>)</mo>
       </mrow>.
     </math>
-    <b>
-      The third argument to max in the expression for
-      <math> <msub> <mover> <mi>p</mi> <mi>~</mi> </mover> <mi>T</mi> </msub> </math>
-      currently neglects the mass of <math> <mi>χ</mi> </math>. To be updated.
-    </b>
   </div>
 
   <div class="def">
     <pre>
     XSection xsection_fid(
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a> luminosity,
       <span class="type">double</span> mass,
       <span class="type">double</span> pT_min,
@@ -3078,14 +3224,14 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
     )
     </pre>
     Convenience function for the case of symmetric bounds on energy losses of
-    the colliding particles. Equivalent to 
+    the colliding particles. Equivalent to
     <code>xsection_fid(xsection_pT, luminosity, mass, pT_min, eta_max, ω_min, ω_max, ω_min, ω_max, integrator)</code>.
   </div>
 
   <div class="def">
     <pre>
     XSection xsection_fid(
-      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a> luminosity,
       <span class="type">double</span> mass,
       <span class="type">double</span> pT_min,
@@ -3095,7 +3241,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
     </pre>
     Convenience function for no bounds on the energy losses of the colliding
     particles. Equivalent to
-    <code>xsection_fid(xsection_pT, luminosity, mass, pT_min, eta_max, <span class="literal">0</span>, infinity, <span class="literal">0</span>, integrator)</code>.
+    <code>xsection_fid(xsection_pT, luminosity, mass, pT_min, eta_max, <span class="literal">0</span>, infinity, <span class="literal">0</span>, infinity, integrator)</code>.
   </div>
 </div>
 
@@ -3104,7 +3250,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid_b(
-      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid_b">Luminosity_fid_b</a>,
       <span class="type">double</span> mass,   <span class="comment">// of the produced particle</span>
       <span class="type">double</span> pT_min,
@@ -3126,7 +3272,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       <mo>(</mo>
       <mi>A</mi> <mi>B</mi>
       <mo>&rarr;</mo>
-      <mi>A</mi> <mi>B</mi> 
+      <mi>A</mi> <mi>B</mi>
       <msup> <mi>χ</mi> <mo>+</mo> </msup> <msup> <mi>χ</mi> <mo>-</mo> </msup>
       <mo>)</mo>
     </math>
@@ -3161,12 +3307,16 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       <msub> <mi>ω</mi> <mrow> <mn>2</mn>, <mtext>max</mtext> </mrow> </msub>
     </math>,
     where
+    <math> <msub> <mover> <mi>p</mi> <mi>^</mi> </mover> <mi>T</mi> </msub> </math>
+    is <code>pT_min</code>,
+    <math> <mover> <mi>η</mi> <mi>^</mi> </math> is <code>eta_max</code>,
     <math> <msubsup> <mi>p</mi> <mi>T</mi> <mn>±</mn> </msubsup> </math>
     and
     <math> <msup> <mi>η</mi> <mn>±</mn> </msup> </math>
     are the transverse momentum and pseudorapidity of
-    <math> <msup> <mi>χ</mi> <mn>±</mn> </msup> </math>, and
-    <math> <msub> <mi>ω</mi> <mn>1</mn> </msub> </math>,
+    <math> <msup> <mi>χ</mi> <mn>±</mn> </msup> </math>,
+    <math> <msub> <mi>ω</mi> <mn>1</mn> </msub> </math>
+    and
     <math> <msub> <mi>ω</mi> <mn>2</mn> </msub> </math>
     are the photons energies:
     <math display="block">
@@ -3362,7 +3512,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid_b(
-      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a> luminosity,
       <span class="type">double</span> mass,
       <span class="type">double</span> pT_min,
@@ -3380,7 +3530,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
   <div class="def">
     <pre>
     XSection xsection_fid_b(
-      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
+      std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; xsection_pT,
       <a href="#Luminosity_fid">Luminosity_fid</a> luminosity,
       <span class="type">double</span> mass,
       <span class="type">double</span> pT_min,
@@ -3399,7 +3549,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="photons_to_fermions" class="def">
   <span class="def"><code>photons_to_fermions</code></span>
   <pre>
-    std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>)&gt; photons_to_fermions(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
+    std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>)&gt; photons_to_fermions(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
   </pre>
   Cross section for the reaction
   <math>
@@ -3520,7 +3670,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="photons_to_fermions_pT" class="def">
   <span class="def"><code>photons_to_fermions_pT</code></span>
   <pre>
-    std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; photons_to_fermions_pT(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
+    std::function&lt;<span class="type">double</span> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; photons_to_fermions_pT(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
   </pre>
   Differential cross section
   <math display="block">
@@ -3619,7 +3769,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="photons_to_fermions_b" class="def">
   <span class="def"><code>photons_to_fermions_b</code></span>
   <pre>
-    std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>)&gt; photons_to_fermions_b(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
+    std::function&lt;<a href="#Polarization">Polarization</a> (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>)&gt; photons_to_fermions_b(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
   </pre>
   Cross section for the reaction
   <math>
@@ -3836,7 +3986,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       <mo>]</mo>.
     </mrow>
   </math>
-  Here 
+  Here
   <math>
     <msubsup>
       <mi>σ</mi>
@@ -3876,7 +4026,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
 <div id="photons_to_fermions_pT_b" class="def">
   <span class="def"><code>photons_to_fermions_pT_b</code></span>
   <pre>
-    std::function&lt;Polarization (<span class="type">double</span> <span class="comment">/* sqrt(s) */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; photons_to_fermions_pT_b(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
+    std::function&lt;Polarization (<span class="type">double</span> <span class="comment">/* <math><msqrt><mi>s</mi></msqrt></math> */</span>, <span class="type">double</span> <span class="comment">/* pT */</span>)&gt; photons_to_fermions_pT_b(<span class="type">double</span> mass, <span class="type">double</span> charge = <span class="literal">1</span>);
   </pre>
   Differential cross section returning two values:
   <math display="block">
@@ -4048,7 +4198,7 @@ Note that the equivalent photon spectrum of a pointlike particle is divergent.
       </msqrt>
     </mfrac>,
   </math>
-  Here 
+  Here
   <math>
     <msubsup>
       <mi>σ</mi>
@@ -4136,7 +4286,7 @@ collisions. They are defined in the <code>epa</code> namespace as well.
         <a id="proton_dipole_form_factor_lambda2"></a>
         <code>proton_dipole_form_factor_lambda2</code>
       </td>
-      <td><span class="literal">12.0</span> / (proton_radius * proton_radius)</td>
+      <td><span class="literal">12.0</span> / proton_radius<sup>2</sup></td>
       <td>GeV<sup>2</sup></td>
       <td>
         The <math><msup> <mn>Λ</mn> <mn>2</mn> </msup></math> parameter of the
@@ -4225,9 +4375,8 @@ constants: 2018</i>,
   <pre>
     <a href="#Spectrum">Spectrum</a> proton_dipole_spectrum(<span class="type">double</span> energy, <span class="type">double</span> lambda2 = proton_dipole_form_factor_lambda2);
   </pre>
-  Equivalent photon spectrum for a proton of given energy with the form factor
-  taken in dipole approximation and both Dirac and Pauli current terms taken
-  into account:
+  Equivalent photon spectrum for a proton of given energy with both Dirac and
+  Pauli form factors taken in the dipole approximation:
   <math display="block">
     <msub>
       <mi>n</mi>
@@ -4422,9 +4571,12 @@ constants: 2018</i>,
         <mo>)</mo>
       </mrow>
       <mn>2</mn>
-    </msup>.
+    </msup>,
   </math>
-  This spectrum is obtained by integrating the function
+  <math> <msub> <mi>m</mi> <mi>p</mi> </msub> </math> is the proton mass,
+  <math> <msub> <mi>μ</mi> <mi>p</mi> </msub> </math> is the proton magnetic
+  moment, <math> <msup> Λ <mn>2</mn> </msup> </math> is
+  <code>lambda2</code>. This spectrum was obtained by integrating the function
   <math display="block">
     <msub> <mi>n</mi> <mi>p</mi> </msub>
     <mrow> <mo>(</mo> <mi>ω</mi> <mo>)</mo> </mrow>
@@ -4541,8 +4693,7 @@ constants: 2018</i>,
       <mo>)</mo>
     </mrow>
   </math>
-  are the Sachs electric and magnetic form factors taken in the dipole
-  approximation:
+  are the Sachs electric and magnetic form factors:
   <math display="block">
     <msub> <mi>G</mi> <mi>E</mi> </msub>
     <mrow>
@@ -4602,9 +4753,8 @@ constants: 2018</i>,
   <pre>
     <a href="#Spectrum">Spectrum</a> proton_dipole_spectrum_Dirac(<span class="type">double</span> energy, <span class="type">double</span> lambda2 = proton_dipole_form_factor_lambda2);
   </pre>
-  Equivalent photon spectrum for a proton of given energy with the form factor
-  taken in dipole approximation and only the Dirac current term taken into
-  account:
+  Equivalent photon spectrum for a proton of given energy with the Dirac form
+  factor taken in dipole approximation and the Pauli form factor neglected:
   <math display="block">
     <msub>
      <mi>n</mi>
@@ -5246,9 +5396,10 @@ constants: 2018</i>,
       <mn>2</mn>
     </msup>,
   </math>
-  <math> <msub> <mi>μ</mi> <mi>p</mi> </msub> </math> is the
-  <a href="#proton_magnetic_moment">proton magnetic moment</a>,
-  <math> <msup> <mn>Λ</mn> <mn>2</mn> </msup> </math> is <code>lambda2</code>.
+  <math> <msub> <mi>m</mi> <mi>p</mi> </msub> </math> is the proton mass,
+  <math> <msub> <mi>μ</mi> <mi>p</mi> </msub> </math> is the proton magnetic
+  moment, <math> <msup> <mn>Λ</mn> <mn>2</mn> </msup> </math> is
+  <code>lambda2</code>.
 </div>
 
 <div id="proton_dipole_spectrum_b_Dirac" class="def">
@@ -5259,13 +5410,12 @@ constants: 2018</i>,
       <span class="type">double</span> lambda2 = proton_dipole_form_factor_lambda2
     )
   </pre>
-  Equivalent photon spectrum for a proton of given energy with the form factor
-  taken in dipole approximation and only the Dirac current term taken into
-  account:
+  Equivalent photon spectrum for a proton of given energy with the Dirac form
+  factor taken in dipole approximation and the Pauli form factor neglected:
   <math display="block">
     <msub>
       <mi>n</mi>
-      <mrow> <mi>p</mi> <mtext>Dirac</mtext> </mrow>
+      <mrow> <mi>p</mi> <mo>,</mo> <mtext>Dirac</mtext> </mrow>
     </msub>
     <mrow>
       <mo>(</mo>
@@ -5484,9 +5634,9 @@ constants: 2018</i>,
       <mn>2</mn>
     </msup>.
   </math>
-  Here 
-  <math> <msub> <mi>μ</mi> <mi>p</mi> </msub> </math> is the
-  <a href="#proton_magnetic_moment">proton magnetic moment</a>,
+  Here
+  <math> <msub> <mi>m</mi> <mi>p</mi> </msub> </math> is the proton mass,
+  <math> <msub> <mi>μ</mi> <mi>p</mi> </msub> </math> is the proton magnetic moment,
   <math> <msup> <mn>Λ</mn> <mn>2</mn> </msup> </math> is <code>lambda2</code>.
 </div>
 
@@ -5497,7 +5647,7 @@ constants: 2018</i>,
   <pre>
     <span class="type">double</span> pp_elastic_slope(<span class="type">double</span> collision_energy);
   </pre>
-  The slope of the cross section for elastic scattering of two protons. This is the parameter <math><mi>B</mi></math> used in arXiv:<a href="https://arxiv.org/abs/1112.3243">1112.3243</a>: 
+  The slope of the cross section for elastic scattering of two protons. This is the parameter <math><mi>B</mi></math> used in arXiv:<a href="https://arxiv.org/abs/1112.3243">1112.3243</a>:
   <math display="block">
     <mi>B</mi>
     <mo>=</mo>
@@ -5556,7 +5706,7 @@ constants: 2018</i>,
   <math>
     <msub> <mi>E</mi> <mn>0</mn> </msub>
     <mo>=</mo>
-    <mn>1</mn> 
+    <mn>1</mn>
     <mspace width="1ex"/>
     <mtext>GeV</mtext>.
   </math>
@@ -6371,7 +6521,7 @@ constants: 2018</i>,
   Here <code>B</code> is the elastic slope of the cross section. See
   <code><a href="#pp_elastic_slope">pp_elastic_slope</a></code>.
 </div>
- 
+
 <div id="ppx_luminosity_fid_b" class="def">
   <span class="def"><code>ppx_luminosity_fid_b</code></span>
   <pre>
@@ -6474,7 +6624,7 @@ constants: 2018</i>,
       <mtext>d</mtext> <msub> <mi>b</mi> <mn>2</mn> </msub>
       <msubsup>
         <mo>&int;</mo>
-        <mrow> <mo>-</mo> <msub> <mi>y</mi> <mtext>min</mtext> </msub> </mrow> 
+        <mrow> <mo>-</mo> <msub> <mi>y</mi> <mtext>min</mtext> </msub> </mrow>
         <msub> <mi>y</mi> <mtext>max</mtext> </msub>
       </msubsup>
       <mtext>d</mtext> <mi>y</mi>
@@ -6759,7 +6909,7 @@ constants: 2018</i>,
   </pre>
   Photon-photon luminosity in ultraperipheral collisions of two protons. This
   function calls <code><a href="#ppx_luminosity_b">ppx_luminosity_b</a></code>
-  passing it the results of 
+  passing it the results of
   <code><a href="#proton_dipole_spectrum_Dirac">proton_dipole_spectrum_Dirac</a></code>
   and
   <code><a href="#proton_dipole_spectrum_b_Dirac">proton_dipole_spectrum_b_Dirac</a></code>.
@@ -6777,7 +6927,7 @@ constants: 2018</i>,
   Photon-photon luminosity differentiated with respect to the system rapidity
   <math><mi>y</mi></math> in ultraperipheral collisions of two protons. This
   function calls <code><a href="#ppx_luminosity_b">ppx_luminosity_y_b</a></code>
-  passing it the results of 
+  passing it the results of
   <code><a href="#proton_dipole_spectrum_Dirac">proton_dipole_spectrum_Dirac</a></code>
   and
   <code><a href="#proton_dipole_spectrum_b_Dirac">proton_dipole_spectrum_b_Dirac</a></code>.
@@ -6795,7 +6945,7 @@ constants: 2018</i>,
   Photon-photon luminosity with parameterized bounds of the rapidity integral
   in ultraperipheral collisions of two protons. This function calls
   <code><a href="#ppx_luminosity_fid_b">ppx_luminosity_fid_b</a></code>
-  passing it the results of 
+  passing it the results of
   <code><a href="#proton_dipole_spectrum_Dirac">proton_dipole_spectrum_Dirac</a></code>
   and
   <code><a href="#proton_dipole_spectrum_b_Dirac">proton_dipole_spectrum_b_Dirac</a></code>.
@@ -6841,7 +6991,7 @@ the name.
       <a href="#Integrator">Integrator</a> = <a href="#default_integrator">default_integrator</a>(<span class="literal">0</span>)
     )
     </pre>
-    Equivalent to above with <code>charge = 1</code>.
+    Equivalent to the above with <code>charge = 1</code>.
   </div>
 
   <div class="def">
@@ -6865,7 +7015,7 @@ the name.
       <msqrt> <mi>s</mi> </msqrt>
     </math>
     for the production of a fermion pair in ultraperipheral collisions of
-    protons with the constraints 
+    protons with the constraints
     <math>
       <msub> <mi>p</mi> <mi>T</mi> </msub> <mo>&gt;</mo>
       <msub> <mi>p</mi> <mrow> <mi>T</mi> <mtext>min</mtext> </mrow> </msub>,
@@ -6891,7 +7041,7 @@ the name.
       <span class="type">unsigned</span> integration_level
     )
     </pre>
-    Equivalent to above with <code>charge = 1</code>.
+    Equivalent to the above with <code>charge = 1</code>.
   </div>
 </div>
 
@@ -6927,7 +7077,7 @@ the name.
       <a href="#Integrator">Integrator</a> = <a href="#default_integrator">default_integrator</a>(<span class="literal">0</span>)
     )
     </pre>
-    Equivalent to above with <code>charge = 1</code>.
+    Equivalent to the above with <code>charge = 1</code>.
   </div>
 
   <div class="def">
@@ -6966,7 +7116,7 @@ the name.
       <span class="type">unsigned</span> integration_level = <span class="literal">0</span>
     )
     </pre>
-    Equivalent to above with <code>charge = 1</code>.
+    Equivalent to the above with <code>charge = 1</code>.
   </div>
 </div>
 
