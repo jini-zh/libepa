@@ -58,22 +58,24 @@ def bisect(array, value):
     return left
 
 def grid(start, end, n, log = False):
-    x = start
+    if n < 2:
+        if n == 1:
+            yield start
+        return
 
-    if n<2:
-        yield x
+    n -= 1
+    x = start
+    if log:
+        step = (end / start) ** (1 / n)
+        for i in range(n):
+            yield x
+            x *= step
     else:
-        if log:
-            step = (end / start) ** (1 / (n - 1))
-            for i in range(n-1):
-                yield x
-                x *= step
-        else:
-            step = (end - start) / (n - 1)
-            for i in range(n-1):
-                yield x
-                x += step
-        yield end
+        step = (end - start) / n
+        for i in range(n):
+            yield x
+            x += step
+    yield end
 
 def make_function1d(f, x):
     return Function1d(x, list(map(f, x)))

@@ -54,6 +54,11 @@ def bisect(array, value):
     return left
 
 def grid(start, end, n, log = False):
+    if n < 2:
+        if n == 1:
+            yield start
+        return
+
     n -= 1
     x = start
     if log:
