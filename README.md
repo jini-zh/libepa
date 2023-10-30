@@ -45,16 +45,19 @@ Requirements:
 * TeX Live, Perl and Gnuplot for the plots in examples.
 
 To compile, simply execute `make` in the project directory. To compile just the
-library (no Python API), execute `make libepa.so`. To build and run an example,
-execute `make` in its directory. Note that calculation of most examples takes
-time and will use the number of threads equal to the number of logical CPU
-cores at the system.
+library (no Python API), execute `make libepa.so`. To build
+and run an example, execute `make` in its directory. Note that calculation of
+most examples takes time and will use the number of threads equal to the number
+of logical CPU cores at the system.
 
 To install, execute `make install`. Standard GNU Make conventions such as
 [prefix](https://www.gnu.org/prep/standards/html_node/Directory-Variables.html)
 and [DESTDIR](https://www.gnu.org/prep/standards/html_node/DESTDIR.html) are
-supported. Note that Python modules are installed via simple file copying. If you
-want to have them installed under `pip`, you can use `ffi/python/setup.py`.
+supported. When installing system-wide, do remember to execute `ldconfig` as
+root; the target directory (`/usr/local/lib` by default) should be included in
+`/etc/ld.so.conf`. Note that Python modules are installed via simple file
+copying. If you want to have them installed under `pip`, you can use
+`ffi/python/setup.py`.
 
 To uninstall, execute `make uninstall`.
 
