@@ -126,9 +126,9 @@ int main(int argc, char** argv) {
       integrate_y = epa::default_integrator(1),
       integrate_z = epa::default_integrator(2)
     ](double a) -> double {
-      return (15 / a) * integrate_x([=](double x) -> double {
-        return x * integrate_y([=](double y) -> double {
-          return y * integrate_z([=](double z) -> double {
+      return (15 / a) * integrate_x([&](double x) -> double {
+        return x * integrate_y([&](double y) -> double {
+          return y * integrate_z([&](double z) -> double {
             return z / sqrt(x*x + y*y + z*z);},
             0, sqrt(1 - pow(x/a, 2) - y*y));},
           0, sqrt(1 - pow(x/a, 2)));},
