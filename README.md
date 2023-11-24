@@ -23,13 +23,11 @@ is performed with the help of GNU Scientific Library [(GSL)][GSL]. The user can
 supply their own integration routines.
 
 The documentation is available as
-[doc/libepa.html](https://jini-zh.org/libepa/libepa.html). The main formulas are
-also collected in [doc/notes.pdf][notes]. An overview of the theory of EPA and UPC
-can be found in papers [[1,2]](#references). libepa is based on the code
-developed to perform calculations in these papers. Sample code that calculates
-some of the plots published in [2] can be found in the `examples/` directory
-(actual values can be slightly different because libepa uses more recent
-values of physical constants, in particular the proton charge radius).
+[doc/libepa.html](https://jini-zh.org/libepa/libepa.html). An overview of the
+theory of EPA and UPC can be found in papers[[1-3]](#references). Paper [3] in
+particular is devoted to the libepa approach and discusses the examples that can
+be found in the `examples` directory. Cite paper [3] if you want to make a
+reference to libepa.
 
 A Python API is available.
 
@@ -75,6 +73,9 @@ libepa development was supported by the Russian Science Foundation grant No 19-1
    Production of heavy charged particles in proton-proton ultraperipheral collisions at the Large Hadron Collider: survival factor.
    [Journal of High Energy Physics 2021, 234 (2021)](https://doi.org/10.1007/JHEP10%282021%29234);
    [arXiv:2106.14842](https://arxiv.org/abs/2106.14842).
+3. E. V. Zhemchugov, S. I. Godunov, E. K. Karkaryan, V. A. Novikov, A. N. Rozanov, M. I. Vysotsky.
+   libepa &mdash; a C++/Python library for calculations of cross sections of ultraperipheral collisions.
+   [arxiv:2311.01353](https://arxiv.org/abs/2311.01353).
 
 [GSL]: https://www.gnu.org/software/gsl
 [notes]: https://jini-zh.org/libepa/notes.pdf
