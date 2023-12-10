@@ -14,6 +14,8 @@ libdir      = $(exec_prefix)/lib
 objects := gsl algorithms epa proton
 objects := $(foreach object,$(objects),src/$(object).o)
 
+headers := $(addsuffix .hpp,algorithms gsl epa proton)
+
 ffi := ffi epa proton
 ffi := $(foreach object,$(ffi),ffi/c/$(object).o)
 
@@ -64,18 +66,17 @@ doc/notes.pdf: doc/notes.tex
 	make -C doc
 
 clean:
-	rm $(objects) libepa.so $(ffi) ffi/python/epa/{_epa_cffi.*,_epa_functions.py,_epa_vars.py} 2> /dev/null; true
-	rm -r ffi/python/epa/__pycache__ 2> /dev/null; true
+	rm -rvf $(objects) libepa.so $(ffi) $(addprefix ffi/python/epa/,_epa_cffi.* _epa_function.py epa_epa_vars.py __pycache__)
 	make -C doc clean
 
 install: all
 	install -v -D libepa.so $(DESTDIR)$(libdir)/libepa-$(version).so
-	install -vm 644 -Dt $(DESTDIR)$(includedir)/epa/ include/epa/{algorithms,gsl,epa,proton}.hpp
+	install -vm 644 -Dt $(DESTDIR)$(includedir)/epa/ $(addprefix include/epa/,$(headers))
 	ln -sf libepa-$(version).so $(DESTDIR)$(libdir)/libepa.so
 	python ffi/python/install.py i $(DESTDIR)$(prefix)
 
 uninstall:
-	rm -v $(DESTDIR)$(libdir)/libepa-$(version).so $(DESTDIR)$(libdir)/libepa.so 2> /dev/null; true
-	rm -v $(DESTDIR)$(includedir)/epa/{algorithms,gsl,epa,proton}.hpp 2> /dev/null; true
+	rm -vf $(DESTDIR)$(libdir)/libepa-$(version).so $(DESTDIR)$(libdir)/libepa.so
+	rm -vf $(addprefix $(DESTDIR)$(includedir)/epa/,$(headers))
 	rmdir $(DESTDIR)$(includedir)/epa 2> /dev/null; true
 	python ffi/python/install.py u $(DESTDIR)$(prefix)
