@@ -238,13 +238,15 @@ ppx_luminosity_fid_b(
     B,
     fx        = std::move(fx),
     integrate = integrator(level + 2),
-    one       = n ? 1 : 0
+    one       = n ? 0 : 1
   ](double b2) -> double {
     EPA_TRY
       env->b2 = b2;
       return b2 * integrate(fx, env->x_min, env->x_max)
-           * ppx_luminosity_internal(
-               env->b1, b2, B, env->psum, env->pdifference
+           * (one * env->psum
+              + ppx_luminosity_internal(
+                 env->b1, b2, B, env->psum, env->pdifference
+                )
              );
     EPA_BACKTRACE("lambda (b2) %e", b2);
   };
