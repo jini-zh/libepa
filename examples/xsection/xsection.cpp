@@ -4,8 +4,8 @@
 
 void usage(const char* argv0) {
   std::cout
-    << "This program plots the cross section for the production of a pair of"
-       "fermions in ultraperipheral proton-proton collisions with respect to"
+    << "This program plots the cross section for the production of a pair of "
+       "fermions in ultraperipheral proton-proton collisions with respect to "
        "the fermion mass\n"
        "Usage: " << argv0 << " options...\n"
        "Allowed options:\n"
