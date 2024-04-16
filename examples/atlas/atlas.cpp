@@ -18,22 +18,22 @@ void usage(const char* argv0) {
        "experiment for the paper 1708.04053.\n"
        "Usage: " << argv0 << " options...\n"
        "Allowed options:\n"
-       "  -h or --help:     print this message\n"
-       "  -n or --npoints:  number of points in the invariant mass range\n"
-       "  -s or --step:     points step in the invariant mass range (GeV)\n"
-       "  -v or --verbose:  be verbose while calculating\n"
-       "  -S or --survival: account for non-electromagnetic interactions\n"
+       "  -h or --help:      print this message\n"
+       "  -n or --nsegments: number of segments in the invariant mass range\n"
+       "  -s or --step:      points step in the invariant mass range (GeV)\n"
+       "  -v or --verbose:   be verbose while calculating\n"
+       "  -S or --survival:  account for non-electromagnetic interactions\n"
   ;
 };
 
 int main(int argc, char** argv) {
   option options[] = {
-    { "help",     0, nullptr, 'h' },
-    { "npoints",  1, nullptr, 'n' },
-    { "step",     1, nullptr, 's' },
-    { "verbose",  0, nullptr, 'v' },
-    { "survival", 0, nullptr, 'S' },
-    { nullptr,    0, nullptr, 0   }
+    { "help",      0, nullptr, 'h' },
+    { "nsegments", 1, nullptr, 'n' },
+    { "step",      1, nullptr, 's' },
+    { "verbose",   0, nullptr, 'v' },
+    { "survival",  0, nullptr, 'S' },
+    { nullptr,     0, nullptr, 0   }
   };
 
   std::string optstring;

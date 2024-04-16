@@ -17,11 +17,11 @@ abs(eta) < 2.4.
 Parameters of this calculation are the same as were set in the ATLAS experiment for the paper 1708.04053.
 Usage: {:s} options...
 Allowed options:
-  -h or --help:     print this message
-  -n or --npoints:  number of points in the invariant mass range
-  -s or --step:     points step in the invariant mass range (GeV)
-  -v or --verbose:  be verbose while calculating
-  -S or --survival: account for non-electromagnetic interactions
+  -h or --help:      print this message
+  -n or --nsegments: number of points in the invariant mass range
+  -s or --step:      points step in the invariant mass range (GeV)
+  -v or --verbose:   be verbose while calculating
+  -S or --survival:  account for non-electromagnetic interactions
 '''.format(sys.argv[0])
 )
 
@@ -116,11 +116,11 @@ def atlas_xsection(epa_xsection):
     return lambda rs: x0(rs) if rs < 30 else x1(rs)
 
 argparser = argparse.ArgumentParser(add_help = False)
-argparser.add_argument('-h', '--help',     action = 'store_true')
-argparser.add_argument('-n', '--npoints',  type = int)
-argparser.add_argument('-s', '--step',     type = float)
-argparser.add_argument('-v', '--verbose',  action = 'store_true')
-argparser.add_argument('-S', '--survival', action = 'store_true')
+argparser.add_argument('-h', '--help',      action = 'store_true')
+argparser.add_argument('-n', '--nsegments', type = int)
+argparser.add_argument('-s', '--step',      type = float)
+argparser.add_argument('-v', '--verbose',   action = 'store_true')
+argparser.add_argument('-S', '--survival',  action = 'store_true')
 
 args = argparser.parse_args(sys.argv[1:])
 
@@ -128,17 +128,17 @@ if args.help:
     usage()
     sys.exit(0)
 
-if args.npoints is not None and args.step is not None:
-    print('--npoints and --step parameters are incompatible', file = sys.stderr)
+if args.nsegments is not None and args.step is not None:
+    print('--nsegments and --step parameters are incompatible', file = sys.stderr)
     sys.exit(1)
 
-if args.npoints is None:
+if args.nsegments is None:
     if args.step is None:
-        args.npoints = 200
+        args.nsegments = 200
     else:
-        args.npoints = (70 - 30) / step
+        args.nsegments = (70 - 30) / step
 
-x = list(grid(12, 70, args.npoints))
+x = list(grid(12, 70, args.nsegments))
 i = bisect(x, 30)
 if x[i] != 30:
     x.insert(i + 1, 30)
