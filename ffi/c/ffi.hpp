@@ -192,7 +192,7 @@ struct lower_<Result (Args...)> {
   lower_(Function* f): f(f) {};
 
   operator std::function<Result (Args...)>() const {
-    if (reinterpret_cast<T>(f->function) == trampoline<Result, Args...>)
+    if (reinterpret_cast<T>(f->function) == &trampoline<Result, Args...>)
       return *reinterpret_cast<F*>(f->data);
     return [f = f](Args... args) -> Result {
       lower_t<Result> result = reinterpret_cast<T>(f->function)(
