@@ -47,9 +47,21 @@ struct is_std_function_<std::function<Signature>> {
   static const bool value = true;
 };
 
+#ifndef __cpp_lib_remove_cvref
+template <typename T>
+struct remove_cvref {
+  using type = std::remove_cv_t<std::remove_reference_t<T>>;
+};
+
+template <typename T>
+using remove_cvref_t = typename remove_cvref<T>::type;
+#else
+using std::remove_cvref_t;
+#endif
+
 template <typename T>
 inline constexpr bool is_std_function
-  = is_std_function_<std::remove_cvref_t<T>>::value;
+  = is_std_function_<remove_cvref_t<T>>::value;
 
 template <typename>
 struct is_function_ {
@@ -62,7 +74,7 @@ struct is_function_<Result (Args...)> {
 };
 
 template <typename T>
-inline constexpr bool is_function = is_function_<std::remove_cvref_t<T>>::value;
+inline constexpr bool is_function = is_function_<remove_cvref_t<T>>::value;
 
 template <typename Signature> struct std_function_signature_;
 
@@ -72,7 +84,7 @@ struct std_function_signature_<std::function<Signature>> {
 };
 
 template <typename F>
-using std_function_signature = std_function_signature_<F>::signature;
+using std_function_signature = typename std_function_signature_<F>::signature;
 
 template <typename T>
 using lower_t = std::conditional_t<is_std_function<T>, Function*, T>;
@@ -81,7 +93,7 @@ template <typename> struct lower_;
 
 template <typename T>
 inline
-std::enable_if_t<!std::is_same_v<std::remove_cvref_t<T>, Function*>, T&>
+std::enable_if_t<!std::is_same_v<remove_cvref_t<T>, Function*>, T&>
 lower(T& x) {
   return x;
 };
@@ -160,7 +172,7 @@ template <typename Result, typename... Args>
 lower_t<Result>
 trampoline(lower_t<Args>... args, std::function<Result (Args...)>* f) {
   try {
-    return lift((*f)(lower<std::remove_cvref_t<Args>>(args)...));
+    return lift((*f)(lower<remove_cvref_t<Args>>(args)...));
   } catch (ForeignError& e) {
     error = e.error();
     return lower_t<Result>();

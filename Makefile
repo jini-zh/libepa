@@ -1,6 +1,6 @@
 CXXFLAGS ?= -O2 -pipe -march=native -fno-stack-protector
 
-cxx = $(CXX) $(CXXFLAGS) -std=gnu++20 -I include
+cxx = $(CXX) $(CXXFLAGS) -std=c++17 -I include
 
 .PHONY: clean install uninstall test all test_all doc ffi
 
