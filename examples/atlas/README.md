@@ -3,29 +3,29 @@ production in ultraperipheral proton-proton collisions.  The fiducial region is
 defined by the cuts on transverse momentum pT and pseudorapidity eta of each
 muon:
 
-pT >  6 GeV for 12 GeV < sqrt(s) < 30 GeV,
-pT > 10 GeV for 30 GeV < sqrt(s) < 70 GeV;
-abs(eta) < 2.4.
+     pT >  6 GeV for 12 GeV < sqrt(s) < 30 GeV,
+     pT > 10 GeV for 30 GeV < sqrt(s) < 70 GeV;
+     abs(eta) < 2.4.
 
 The goal of the calculation is to reproduce the experimental data in
 [1708.04053]. See section 4.4 in [2311.01353] for the discussion and
-[2106.14842, 1806.07238] for previous calculations.
+[2106.14842], [1806.07238] for previous calculations.
 
 Two versions of the program are provided, one is written in C++, the other is
 in Python.
 
 To compile the C++ version, build libepa.so and install it or set the
-environment variable LD_LIBRARY_PATH as
+environment variable `LD_LIBRARY_PATH` as
 
-export LD_LIBRARY_PATH="$PWD/../.."
+    export LD_LIBRARY_PATH="$PWD/../.."
 
 Then execute `make atlas`.
 
-To use the Python version, build libepa.so and the python FFI and install the
-or set the environment variables LD_LIBRARY_PATH --- as above --- and
-PYTHONPATH --- as
+To use the Python version, build `libepa.so` and the python FFI and install the
+or set the environment variables `LD_LIBRARY_PATH` --- as above --- and
+`PYTHONPATH` --- as
 
-export PYTHONPATH="$PWD/../../ffi/python"
+    export PYTHONPATH="$PWD/../../ffi/python"
 
 To run the example, execute `./atlas`. The program will print two columns of
 numbers and a commented line to the standard output. The first column is the
@@ -46,3 +46,8 @@ Run `./atlas --help` for a short description of the program and its arguments.
 Run `make` to produce `atlas.pdf` with the plot of the calculation (texlive and
 gnuplot are required; also it will take a long time to compute the cross
 sections with non-electromagnetic interactions taken into account).
+
+[1708.04053]: https://arxiv.org/abs/1708.04053
+[1806.07238]: https://arxiv.org/abs/1806.07238
+[2106.14842]: https://arxiv.org/abs/2106.14842
+[2311.01353]: https://arxiv.org/abs/2311.01353

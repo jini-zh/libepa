@@ -6,7 +6,6 @@
 *.pdf
 *.so
 *.txt
-!readme.txt
 
 examples/atlas/atlas
 examples/survival/luminosity

@@ -10,18 +10,18 @@ survival in proton-proton collisions.
 Two versions of the program are provided, one is written in C++, the other is
 in Python.
 
-To compile the C++ version, build libepa.so and install it or set the
-environment variable LD_LIBRARY_PATH as
+To compile the C++ version, build `libepa.so` and install it or set the
+environment variable `LD_LIBRARY_PATH` as
 
-export LD_LIBRARY_PATH="$PWD/../.."
+    export LD_LIBRARY_PATH="$PWD/../.."
 
 Then execute `make luminosity`.
 
-To use the Python version, build libepa.so and the python FFI and install the
-or set the environment variables LD_LIBRARY_PATH --- as above --- and
-PYTHONPATH --- as
+To use the Python version, build `libepa.so` and the python FFI and install the
+or set the environment variables `LD_LIBRARY_PATH` --- as above --- and
+`PYTHONPATH` --- as
 
-export PYTHONPATH="$PWD/../../ffi/python"
+    export PYTHONPATH="$PWD/../../ffi/python"
 
 To compute a luminosity neglecting non-electromagnetic interactions, execute
 `./luminosity -f 1 -t 3e3 -n 1000` (`./luminosity.py -f 1 -t 3e3 -n 1000` for
@@ -37,3 +37,6 @@ results to the standard error, allowing you to monitor the process. See
 Run `make` to produce `survival.pdf` with the luminosities and their ratio
 (texlive and gnuplot are required; note that calculation of the luminosity
 taking into account non-electromagnetic interactions will take a long time).
+
+[2106.14842]: https://arxiv.org/abs/2106.14842
+[2311.01353]: https://arxiv.org/abs/2311.01353
