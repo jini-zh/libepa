@@ -53,7 +53,7 @@ test: test/test
 	LD_LIBRARY_PATH=. $< -l success
 
 test/test: test/test.o libepa.so
-	$(cxx) $< -o $@ -L . -lepa `pkg-config --libs gsl` -lboost_unit_test_framework
+	$(cxx) $< -o $@ -L . -lepa `pkg-config --libs gsl` -lboost_unit_test_framework -lgsl
 
 test/test.o: test/test.cpp test/a1.cpp include/epa/proton.hpp \
 	include/epa/epa.hpp include/epa/gsl.hpp include/epa/algorithms.hpp
