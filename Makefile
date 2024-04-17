@@ -2,7 +2,7 @@ CXXFLAGS ?= -O2 -pipe -march=native -fno-stack-protector
 
 cxx = $(CXX) $(CXXFLAGS) -std=c++17 -I include
 
-.PHONY: clean install uninstall test all test_all doc ffi
+.PHONY: clean default install uninstall test all test_all doc ffi
 
 version = $(file < version)
 
@@ -18,6 +18,8 @@ headers := $(addsuffix .hpp,algorithms gsl epa proton)
 
 ffi := ffi epa proton
 ffi := $(foreach object,$(ffi),ffi/c/$(object).o)
+
+default: libepa.so ffi
 
 all: libepa.so doc ffi
 
@@ -69,7 +71,7 @@ clean:
 	rm -rvf $(objects) libepa.so $(ffi) $(addprefix ffi/python/epa/,_epa_cffi.* _epa_function.py epa_epa_vars.py __pycache__)
 	make -C doc clean
 
-install: all
+install: default
 	install -v -D libepa.so $(DESTDIR)$(libdir)/libepa-$(version).so
 	install -vm 644 -Dt $(DESTDIR)$(includedir)/epa/ $(addprefix include/epa/,$(headers))
 	ln -sf libepa-$(version).so $(DESTDIR)$(libdir)/libepa.so
