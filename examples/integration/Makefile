@@ -2,8 +2,6 @@ CXXFLAGS ?= -O2 -pipe -march=native -fno-stack-protector
 
 cxx := $(CXX) $(CXXFLAGS) -std=gnu++17
 
-.NOTPARALLEL: %.txt
-
 integration.pdf: integration.plot ../epslatex2pdf integration.txt
 	gnuplot $<
 	../epslatex2pdf integration-plot.tex -o $@

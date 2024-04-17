@@ -4,7 +4,7 @@ cxx := $(CXX) $(CXXFLAGS) -std=gnu++17
 
 luminosity := LD_LIBRARY_PATH=../.. ./luminosity -v -f 1 -t 3e3 -n 1000
 
-.NOTPARALLEL: %.txt
+.NOTPARALLEL: survival.pdf
 
 survival.pdf: survival.plot ../epslatex2pdf ../reformat-logscale survival.txt luminosity.txt luminosity_b.txt parallel.txt perpendicular.txt
 	gnuplot survival.plot
@@ -24,7 +24,7 @@ parallel.txt: luminosity
 perpendicular.txt: luminosity
 	$(luminosity) -p perpendicular > $@
 
-survival.txt: ../ratio luminosity.txt luminosity_b.txt
+survival.txt: ../ratio luminosity.txt .WAIT luminosity_b.txt
 	$< luminosity_b.txt luminosity.txt > $@
 
 luminosity: luminosity.cpp ../common.cpp ../../libepa.so

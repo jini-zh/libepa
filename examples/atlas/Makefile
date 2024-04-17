@@ -2,9 +2,7 @@ CXXFLAGS ?= -O2 -pipe -march=native -fno-stack-protector
 
 cxx := $(CXX) $(CXXFLAGS) -std=gnu++17
 
-.NOTPARALLEL: %.txt
-
-atlas.pdf: atlas.plot ../epslatex2pdf differential.txt differential_b.txt integrated.txt integrated_b.txt ratio.txt ratio_b.txt
+atlas.pdf: atlas.plot ../epslatex2pdf differential.txt integrated.txt ratio.txt .WAIT differential_b.txt integrated_b.txt ratio_b.txt
 	gnuplot $<
 	../epslatex2pdf atlas-plot.tex -o $@
 	@rm atlas-plot.{tex,pdf}
