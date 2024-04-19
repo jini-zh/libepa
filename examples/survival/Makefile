@@ -9,7 +9,7 @@ luminosity := LD_LIBRARY_PATH=../.. ./luminosity -v -f 1 -t 3e3 -n 1000
 survival.pdf: survival.plot ../epslatex2pdf survival.txt .WAIT parallel.txt .WAIT perpendicular.txt
 	gnuplot survival.plot
 	../epslatex2pdf survival-plot.tex -o $@
-	rm survival-plot.{tex,pdf}
+	@rm survival-plot.tex survival-plot.pdf
 
 luminosity.txt: luminosity
 	$(luminosity) > $@
@@ -30,4 +30,6 @@ luminosity: luminosity.cpp ../common.cpp ../../libepa.so
 	$(cxx) -I ../../include $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
 
 clean:
-	rm luminosity survival.pdf survival-plot.{tex,pdf} {survival,luminosity{,_b},parallel,perpendicular}.txt 2>/dev/null; true
+	rm -f luminosity survival.pdf
+	rm -f survival-plot.tex survival-plot.pdf
+	rm -f survival.txt luminosity.txt luminosity_b.txt parallel.txt perpendicular.txt
