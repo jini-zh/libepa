@@ -5,21 +5,21 @@ into account non-electromagnetic interactions divided by the luminosity
 neglecting them. The program provided here calculates the luminosities, and
 `../ratio` calculates the ratio. See section 4.3 of [2311.01353] for the
 discussion of this example; see [2106.14842] for the discussion of the
-survival in proton-proton collisions.
+survival factor in proton-proton collisions.
 
 Two versions of the program are provided, one is written in C++, the other is
 in Python.
 
-To compile the C++ version, build `libepa.so` and install it or set the
+To compile the C++ version, build `libepa.so`, and install it or set the
 environment variable `LD_LIBRARY_PATH` as
 
     export LD_LIBRARY_PATH="$PWD/../.."
 
 Then execute `make luminosity`.
 
-To use the Python version, build `libepa.so` and the python FFI and install the
-or set the environment variables `LD_LIBRARY_PATH` --- as above --- and
-`PYTHONPATH` --- as
+To use the Python version, build `libepa.so`, and the python FFI and install
+them or set the environment variables `LD_LIBRARY_PATH` &mdash; as above
+&mdash; and `PYTHONPATH` &mdash; as
 
     export PYTHONPATH="$PWD/../../ffi/python"
 

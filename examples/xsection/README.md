@@ -5,16 +5,16 @@ section 4.2 of [2311.01353] for the discussion.
 Two versions of the program are provided, one is written in C++, the other is
 in Python.
 
-To compile the C++ version, build `libepa.so` and install it or set the
+To compile the C++ version, build `libepa.so`, and install it or set the
 environment variable `LD_LIBRARY_PATH` as
 
     export LD_LIBRARY_PATH="$PWD/../.."
 
 Then execute `make xsection`.
 
-To use the Python version, build `libepa.so` and the python FFI and install the
-or set the environment variables `LD_LIBRARY_PATH` --- as above --- and
-`PYTHONPATH` --- as
+To use the Python version, build `libepa.so` and the python FFI, and install
+them or set the environment variables `LD_LIBRARY_PATH` &mdash; as above
+&mdash; and `PYTHONPATH` &mdash; as
 
     export PYTHONPATH="$PWD/../../ffi/python"
 

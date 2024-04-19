@@ -14,23 +14,23 @@ The goal of the calculation is to reproduce the experimental data in
 Two versions of the program are provided, one is written in C++, the other is
 in Python.
 
-To compile the C++ version, build libepa.so and install it or set the
+To compile the C++ version, build libepa.so, and install it or set the
 environment variable `LD_LIBRARY_PATH` as
 
     export LD_LIBRARY_PATH="$PWD/../.."
 
 Then execute `make atlas`.
 
-To use the Python version, build `libepa.so` and the python FFI and install the
-or set the environment variables `LD_LIBRARY_PATH` --- as above --- and
-`PYTHONPATH` --- as
+To use the Python version, build `libepa.so` and the python FFI, and install
+them or set the environment variables `LD_LIBRARY_PATH` &mdash; as above
+&mdash; and `PYTHONPATH` &mdash; as
 
     export PYTHONPATH="$PWD/../../ffi/python"
 
 To run the example, execute `./atlas`. The program will print two columns of
 numbers and a commented line to the standard output. The first column is the
 invariant mass of the muon pair, in GeV. The second column is the differential
-cross sections, in barn/GeV. The commented line provides the integrated cross
+cross section, in barn/GeV. The commented line provides the integrated cross
 section. The calculation by default does not take into account
 non-electromagnetic interactions. To take into account non-electromagnetic
 interactions, execute `./atlas -S`. This will take a long time. With the `-v`
