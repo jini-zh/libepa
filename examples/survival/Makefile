@@ -6,9 +6,8 @@ luminosity := LD_LIBRARY_PATH=../.. ./luminosity -v -f 1 -t 3e3 -n 1000
 
 .NOTPARALLEL: survival.pdf
 
-survival.pdf: survival.plot ../epslatex2pdf ../reformat-logscale survival.txt luminosity.txt luminosity_b.txt parallel.txt perpendicular.txt
+survival.pdf: survival.plot ../epslatex2pdf survival.txt .WAIT parallel.txt .WAIT perpendicular.txt
 	gnuplot survival.plot
-	../reformat-logscale survival-plot.tex
 	../epslatex2pdf survival-plot.tex -o $@
 	rm survival-plot.{tex,pdf}
 
