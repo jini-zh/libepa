@@ -8,6 +8,7 @@
 *.txt
 
 examples/atlas/atlas
+examples/integration/integration
 examples/survival/luminosity
 examples/xsection/xsection
 ffi/python/epa/_epa_*
