@@ -10,10 +10,10 @@ xsection.pdf: xsection.plot ../epslatex2pdf ratio.txt
 	@rm xsection-plot.tex xsection-plot.pdf
 
 xsection.txt: xsection
-	LD_LIBRARY_PATH=../.. ./$< -v -f 90 -t 250 -n 32 > $@ || rm $@
+	LD_LIBRARY_PATH=../.. ./$< -v -f 90 -t 250 -n 32 > $@
 
 xsection_b.txt: xsection
-	LD_LIBRARY_PATH=../.. ./$< -v -f 90 -t 250 -n 32 -S --rs-max=3e3 > $@ || rm $@
+	LD_LIBRARY_PATH=../.. ./$< -v -f 90 -t 250 -n 32 -S --rs-max=3e3 > $@
 
 ratio.txt: ../ratio xsection.txt xsection_b.txt
 	perl $< xsection_b.txt xsection.txt > $@

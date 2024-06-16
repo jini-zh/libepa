@@ -10,22 +10,22 @@ atlas.pdf: atlas.plot ../epslatex2pdf differential.txt integrated.txt ratio.txt 
 	@rm atlas-plot.tex atlas-plot.pdf
 
 differential.txt: atlas
-	LD_LIBRARY_PATH=../.. ./$< -v > $@ || rm $@
+	LD_LIBRARY_PATH=../.. ./$< -n 11 -v > $@
 
 differential_b.txt: atlas
-	LD_LIBRARY_PATH=../.. ./$< -v -S > $@ || rm $@
+	LD_LIBRARY_PATH=../.. ./$< -n 11 -v -S > $@
 
 integrated.txt: integrate differential.txt
-	./$^ > $@ || rm $@
+	./$^ > $@
 
 integrated_b.txt: integrate differential_b.txt
-	./$^ > $@ || rm $@
+	./$^ > $@
 
 ratio.txt: ratio integrated.txt
-	./$^ > $@ || rm $@
+	./$^ > $@
 
 ratio_b.txt: ratio integrated_b.txt
-	./$^ > $@ || rm $@
+	./$^ > $@
 
 atlas: atlas.cpp ../common.cpp ../../libepa.so
 	$(cxx) -I ../../include $< -o $@ -L ../.. -lepa `pkg-config --libs gsl` -lpthread
