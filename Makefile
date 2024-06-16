@@ -75,10 +75,10 @@ install: default
 	install -v -D libepa.so $(DESTDIR)$(libdir)/libepa-$(version).so
 	install -vm 644 -Dt $(DESTDIR)$(includedir)/epa/ $(addprefix include/epa/,$(headers))
 	ln -sf libepa-$(version).so $(DESTDIR)$(libdir)/libepa.so
-	python ffi/python/install.py i $(DESTDIR)$(prefix)
+	python3 ffi/python/install.py i $(DESTDIR)$(prefix)
 
 uninstall:
 	rm -vf $(DESTDIR)$(libdir)/libepa-$(version).so $(DESTDIR)$(libdir)/libepa.so
 	rm -vf $(addprefix $(DESTDIR)$(includedir)/epa/,$(headers))
 	rmdir $(DESTDIR)$(includedir)/epa 2> /dev/null; true
-	python ffi/python/install.py u $(DESTDIR)$(prefix)
+	python3 ffi/python/install.py u $(DESTDIR)$(prefix)
