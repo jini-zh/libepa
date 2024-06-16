@@ -1,4 +1,4 @@
-set term 'cairolatex' dashed lw 2 size 6.8 in, 3.9 in
+set term 'cairolatex' pdf dashed lw 2 size 6.8 in, 3.9 in
 set output 'survival-plot.tex'
 
 set lmargin 8.1

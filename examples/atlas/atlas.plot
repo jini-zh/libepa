@@ -1,4 +1,4 @@
-set term 'cairolatex' dashed lw 2 size 6.8 in, 4.0 in
+set term 'cairolatex' pdf dashed lw 2 size 6.8 in, 4.0 in
 set output 'atlas-plot.tex'
 
 set multiplot

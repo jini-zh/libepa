@@ -1,4 +1,4 @@
-set term 'cairolatex' dashed lw 2 size 6.8 in, 3.7 in
+set term 'cairolatex' pdf dashed lw 2 size 6.8 in, 3.7 in
 set output 'xsection-plot.tex'
 
 set rmargin 8
