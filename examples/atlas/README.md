@@ -22,8 +22,8 @@ environment variable `LD_LIBRARY_PATH` as
 Then execute `make atlas`.
 
 To use the Python version, build `libepa.so` and the python FFI, and install
-them or set the environment variables `LD_LIBRARY_PATH` &mdash; as above
-&mdash; and `PYTHONPATH` &mdash; as
+them or set the environment variables `LD_LIBRARY_PATH` --- as above
+--- and `PYTHONPATH` --- as
 
     export PYTHONPATH="$PWD/../../ffi/python"
 

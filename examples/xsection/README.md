@@ -13,8 +13,8 @@ environment variable `LD_LIBRARY_PATH` as
 Then execute `make xsection`.
 
 To use the Python version, build `libepa.so` and the python FFI, and install
-them or set the environment variables `LD_LIBRARY_PATH` &mdash; as above
-&mdash; and `PYTHONPATH` &mdash; as
+them or set the environment variables `LD_LIBRARY_PATH` --- as above
+--- and `PYTHONPATH` --- as
 
     export PYTHONPATH="$PWD/../../ffi/python"
 
@@ -29,7 +29,7 @@ intermediate results to the standard error, allowing you to monitor the
 process. See `./xsection --help` for more options.
 
 Run `make` to produce `xsection.pdf` with the cross sections and their ratio
-(texlive and gnuplot are require; note that calculation of the cross section
+(texlive and gnuplot are required; note that calculation of the cross section
 taking into account non-electromagnetic interactions will take a long time).
 
 [2311.01353]: https://arxiv.org/abs/2311.01353
