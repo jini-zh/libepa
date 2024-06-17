@@ -40,7 +40,7 @@ ffi/c/ffi.o: ffi/c/ffi.cpp ffi/c/ffi.hpp ffi/c/ffi.h
 
 ffi/python/epa/_epa_cffi.so: ffi/python/build.py ffi/c/ffi.h ffi/c/epa.h \
 	ffi/c/epa_vars.h ffi/c/proton.h | libepa.so
-	cd ffi/python && LD_LIBRARY_PATH=../.. ./build.py
+	cd ffi/python && LD_LIBRARY_PATH=../.. python3 ./build.py
 	mv -v ffi/python/epa/_epa_cffi.cpython-*.so ffi/python/epa/_epa_cffi.so
 
 %.o: %.cpp

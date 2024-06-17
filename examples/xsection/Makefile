@@ -6,7 +6,7 @@ cxx := $(CXX) $(CXXFLAGS) -std=gnu++17
 
 xsection.pdf: xsection.plot ../epslatex2pdf ratio.txt
 	gnuplot $<
-	../epslatex2pdf xsection-plot.tex -o $@
+	bash ../epslatex2pdf xsection-plot.tex -o $@
 	@rm xsection-plot.tex xsection-plot.pdf
 
 xsection.txt: xsection

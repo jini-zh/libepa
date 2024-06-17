@@ -4,7 +4,7 @@ cxx := $(CXX) $(CXXFLAGS) -std=gnu++17
 
 integration.pdf: integration.plot ../epslatex2pdf integration.txt
 	gnuplot $<
-	../epslatex2pdf integration-plot.tex -o $@
+	bash ../epslatex2pdf integration-plot.tex -o $@
 	@rm integration-plot.tex integration-plot.pdf
 
 integration.txt: integration

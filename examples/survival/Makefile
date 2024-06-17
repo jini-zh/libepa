@@ -8,7 +8,7 @@ luminosity := LD_LIBRARY_PATH=../.. ./luminosity -v -f 1 -t 3e3 -n 1000
 
 survival.pdf: survival.plot ../epslatex2pdf survival.txt parallel.txt perpendicular.txt
 	gnuplot survival.plot
-	../epslatex2pdf survival-plot.tex -o $@
+	bash ../epslatex2pdf survival-plot.tex -o $@
 	@rm survival-plot.tex survival-plot.pdf
 
 luminosity.txt: luminosity
