@@ -39,6 +39,7 @@ Requirements:
 * GNU Make.
 * GNU Scientific Library ([GSL][GSL]).
 * Boost [test][boost.test] for tests.
+* pkg-config for tests and examples.
 * Python module [cffi][python-cffi] for the Python interface.
 * TeX Live for the documentation (should be possible to compile manually with
   any other TeX distribution).
