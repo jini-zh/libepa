@@ -10,10 +10,10 @@ atlas.pdf: atlas.plot ../epslatex2pdf differential.txt integrated.txt ratio.txt 
 	@rm atlas-plot.tex atlas-plot.pdf
 
 differential.txt: atlas
-	LD_LIBRARY_PATH=../.. ./$< -n 11 -v > $@
+	LD_LIBRARY_PATH=../.. ./$< -v > $@
 
 differential_b.txt: atlas
-	LD_LIBRARY_PATH=../.. ./$< -n 11 -v -S > $@
+	LD_LIBRARY_PATH=../.. ./$< -v -S > $@
 
 integrated.txt: integrate differential.txt
 	./$^ > $@
