@@ -368,8 +368,7 @@ def luminosity_y_b(
         spectrum1,
         spectrum2 = None,
         integrator_generator = default_integrator,
-        integration_level = 0,
-        integrators = None
+        integration_level = 0
 ):
     return _luminosity_b(
             lib.epa_luminosity_y_b,
@@ -377,8 +376,7 @@ def luminosity_y_b(
             spectrum1,
             spectrum2,
             integrator_generator,
-            integration_level,
-            integrators
+            integration_level
     )
 
 def luminosity_fid_b(
@@ -395,8 +393,7 @@ def luminosity_fid_b(
             spectrum1,
             spectrum2,
             integrator_generator,
-            integration_level,
-            integrators
+            integration_level
     )
 
 def xsection(photons_xsection, luminosity):
