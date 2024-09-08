@@ -66,6 +66,7 @@ math {
       <li>
         <a href="#epa"><code>EPA</code></a>
         <ul>
+          <li><a href="#version">Version</a></li>
           <li><a href="#error-handling">Error handling</a></li>
           <li><a href="#epa-constants">Constants</a></li>
           <li><a href="#epa-integrators">Integrators</a></li>
@@ -585,6 +586,14 @@ Available integrator generators based on GSL routines are
   <math><mi>ħ</mi> <mo>=</mo> <mi>c</mi> <mo>=</mo> <mn>1</mn></math>
   where <math><mi>ħ</mi></math> is the Planck constant, and
   <math><mi>c</mi></math> is the speed of light.
+</p>
+
+<h5 id="version">Version</h5>
+
+<p>
+  Current <code>libepa</code> can be determined through <code>cpp</code> macros
+  <code>EPA_VERSION_MAJOR</code>, <code>EPA_VERSION_MINOR</code> and
+  <code>EPA_VERSION_PATCH</code> which expand to integer literals.
 </p>
 
 <h5 id="error-handling">Error handling</h5>

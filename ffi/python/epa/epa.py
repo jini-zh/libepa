@@ -14,6 +14,13 @@ proton_dipole_form_factor_lambda2 = lib.epa_proton_dipole_form_factor_lambda2()
 
 pp_elastic_slope                  = lib.epa_pp_elastic_slope
 
+def version():
+    with ffi.new('int*') as major, \
+         ffi.new('int*') as minor, \
+         ffi.new('int*') as patch:
+        lib.epa_version(major, minor, patch)
+        return major[0], minor[0], patch[0]
+
 class Error(Exception):
     def __init__(self, message):
         super(Exception, self).__init__(message)

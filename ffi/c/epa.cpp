@@ -9,6 +9,12 @@ extern "C" void epa_init() {
   gsl::init();
 };
 
+extern "C" void epa_version(int* major, int* minor, int* patch) {
+  if (major) *major = EPA_VERSION_MAJOR;
+  if (minor) *minor = EPA_VERSION_MINOR;
+  if (patch) *patch = EPA_VERSION_PATCH;
+};
+
 #define defconst(type, name) extern "C" type epa_ ## name() { return name; }
 #define defvar(type, name) \
   extern "C" type epa_get_ ## name() { return name; }; \

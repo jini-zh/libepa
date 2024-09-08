@@ -45,6 +45,7 @@ defun(epa_xsection_pT_b, epa_polarization, double, double);
 #undef defconst
 
 void epa_init(void);
+void epa_version(int* major, int* minor, int* patch);
 
 int epa_get_default_integration_method(void);
 void epa_set_default_integration_method(int);

@@ -5,6 +5,10 @@
 #include <epa/algorithms.hpp>
 #include <epa/gsl.hpp>
 
+#define EPA_VERSION_MAJOR 1
+#define EPA_VERSION_MINOR 0
+#define EPA_VERSION_PATCH 0
+
 namespace epa {
 
 const double pi              = M_PI;
