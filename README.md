@@ -133,6 +133,7 @@ libepa development was supported by the Russian Science Foundation grant No 19-1
    [arXiv:2106.14842](https://arxiv.org/abs/2106.14842).
 3. E. V. Zhemchugov, S. I. Godunov, E. K. Karkaryan, V. A. Novikov, A. N. Rozanov, M. I. Vysotsky.
    libepa &mdash; a C++/Python library for calculations of cross sections of ultraperipheral collisions.
+   [Computer Physics Communications 305, 109347 (2024)](https://doi.org/10.1016/j.cpc.2024.109347);
    [arxiv:2311.01353](https://arxiv.org/abs/2311.01353).
 
 [GSL]: https://www.gnu.org/software/gsl
